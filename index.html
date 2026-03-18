@@ -838,17 +838,29 @@ function buildVocals(){
     row.appendChild(b);
   });
 }
-// Dil → Suno metatag eşlemesi
-const LANG_TAG={
-  'Turkish':'[Türkçe sözler]','English':'[English lyrics]','Korean':'[한국어 가사]',
-  'Japanese':'[日本語の歌詞]','Spanish':'[Letra en español]','French':'[Paroles en français]',
-  'Arabic':'[كلمات عربية]','German':'[Deutsche Liedtexte]','Italian':'[Testo in italiano]',
-  'Greek':'[Ελληνικοί στίχοι]','Portuguese':'[Letra em português]','Russian':'[Текст на русском]',
-  'Chinese':'[中文歌词]','Hindi':'[हिंदी गीत]',
+// Türkçe tohum sözler (temaya göre) — Suno Türkçe görünce Türkçe devam eder
+const TR_SEEDS={
+  'Aşk':       '[Verse]\nSeni seviyorum, kalbim senin için çarpıyor\nGözlerin yıldız gibi parlıyor gecenin içinde\n[Chorus]\nAşk bu, saf ve derin\nSeninle her an, seninle her gece\n[Bridge]\nSensiz olmaz bu dünya',
+  'Özlem':     '[Verse]\nSeni özledim bu gece de yine\nUzakta olsan da kalbimdesin hep\n[Chorus]\nÖzlem yakar içimi kor gibi\nYolları aşarım, seni bulurum\n[Bridge]\nNeredesin sen, neredesin',
+  'Hüzün':     '[Verse]\nGökyüzü ağlıyor yine bu gece\nYalnızlık sardı içimi derin\n[Chorus]\nHüzün bir yük gibi omuzlarımda\nGeçmez bu dert, geçmez bu acı\n[Bridge]\nSessizce ağlıyorum köşemde',
+  'Mutluluk':  '[Verse]\nBugün çok mutluyum seninle\nGülüşün aydınlatıyor dünyamı\n[Chorus]\nMutluluk bu, saf ve gerçek\nSeninle dans edelim hayatta\n[Bridge]\nHayat güzel, her an güzel',
+  'Umut':      '[Verse]\nYarın daha güzel olacak biliyorum\nUmut var kalbimde hep söndürmem\n[Chorus]\nUmut bir ışık karanlıkta\nİleriye bak, devam et yürümeye\n[Bridge]\nVazgeçmeyeceğim asla',
+  'Kavga':     '[Verse]\nNeden bu kadar zor anlaşmak\nSözler bizi yaralıyor her seferinde\n[Chorus]\nKavga etme benimle, dur bir dakika\nAnla beni, duy sesimi\n[Bridge]\nBarış istiyorum senden',
+  'Yalnızlık': '[Verse]\nBu gece yalnızım yine bir kez daha\nSessizlik konuşuyor benimle sadece\n[Chorus]\nYalnızlık bir arkadaş oldu bana\nGölgem bile terk etti beni\n[Bridge]\nKimse yok bu gecede',
+  'Özgürlük':  '[Verse]\nUçmak istiyorum gökyüzüne doğru\nZincirlerimi kırmak istiyorum artık\n[Chorus]\nÖzgür olmak istiyorum sadece\nRüzgar gibi uçmak, bulut gibi gitmek\n[Bridge]\nKimse durduramaz beni',
+  'Gece':      '[Verse]\nGece indi şehre sessizce yavaşça\nYıldızlar anlatıyor sırları gökyüzünde\n[Chorus]\nGece sonsuz, gece derin\nKaranlıkta kayboluyorum seninle\n[Bridge]\nSabah olmasın bu gece',
+  'Sabah':     '[Verse]\nSabah güneşi vurdu yüzüme hafifçe\nYeni bir gün yeni bir umut doğuyor\n[Chorus]\nSabah güzel, sabah taze\nHer şey yeniden başlıyor şimdi\n[Bridge]\nGüne merhaba derim ben',
+  'Yağmur':    '[Verse]\nYağmur yağıyor dışarıda dinmeden\nIslanıyor yollar, ıslanıyor düşünceler\n[Chorus]\nYağmur gibi ağlıyor gökyüzü\nDamlalar anlatıyor geçmiş zamanı\n[Bridge]\nIslak sokaklar, ıslak anılar',
+  'Bahar':     '[Verse]\nBahar geldi çiçekler açtı her yerde\nDünya yeniden hayat buldu sevinçle\n[Chorus]\nBahar gibi taze, bahar gibi güzel\nYeni bir mevsim, yeni bir başlangıç\n[Bridge]\nÇiçekler gibi açacağım ben de',
+  'Veda':      '[Verse]\nElveda demek zor bugün bu sabah\nGözlerimde yaşlar son kez görürken seni\n[Chorus]\nVeda edelim sessizce şimdi\nBelki bir gün dönersin diye beklerim\n[Bridge]\nGit ama unut beni gitme',
+  'Hasret':    '[Verse]\nHasret yaktı beni içten dıştan\nYıllar geçti göremedim seni bir kez bile\n[Chorus]\nHasret acı, hasret derin\nSeni ararım her yerde hep\n[Bridge]\nNe zaman bitecek bu hasret',
+  'Nostalji':  '[Verse]\nEski günler aklıma geliyor her gece\nO zamanlar ne güzeldi ne de güzeldi\n[Chorus]\nGeri döner miyim o günlere acaba\nAnılar yaşatıyor beni hep\n[Bridge]\nGeçmiş güzel, geçmiş uzak',
+  'Cesaret':   '[Verse]\nKorkmuyorum artık hiçbir şeyden bugün\nYüreğim güçlü, adımlarım sağlam şimdi\n[Chorus]\nCesaretle yürüyorum hayatta\nDüşsem de kalkarım hep\n[Bridge]\nHiçbir engel durduramaz beni',
+  'default':   '[Verse]\nHayat güzel seninle her zaman\nGünler akar, anlar kalır kalpte\n[Chorus]\nBurada seninle olmak güzel\nYeter ki sen yanımda ol hep\n[Bridge]\nSeninle her şey anlamlı',
 };
 function buildPrompt(){
-  // Dil en başa — kie.ai / Suno için öncelik sırası önemli
-  const langTag=LANG_TAG[wiz.langVal]||'['+wiz.langVal+' lyrics]';
+  // Style: dil etiketi en başa
+  const langTag='['+wiz.langVal+' language]';
   const parts=[langTag, wiz.genreStyle||'pop'];
   if(wiz.tema)parts.push('tema: '+wiz.tema);
   if(wiz.duygu)parts.push(wiz.duygu);
@@ -857,13 +869,13 @@ function buildPrompt(){
   const customLyrics=(document.getElementById('customLyrics')?.value||'').trim();
   let prompt;
   if(customLyrics){
-    // Kullanıcının kendi sözleri — direkt gönder, başına dil etiketi ekle
-    prompt=langTag+'\n\n'+customLyrics;
+    prompt=customLyrics; // kullanıcının kendi sözleri aynen gönder
+  }else if(wiz.langVal==='Turkish'){
+    // Gerçek Türkçe tohum sözler — Suno Türkçe görünce Türkçe devam eder
+    prompt=TR_SEEDS[wiz.tema]||TR_SEEDS['default'];
   }else{
-    // Suno prompt'u: talimat değil, yapı — dil etiketiyle başla
-    const temaStr=wiz.tema||'genel';
-    const duyguStr=wiz.duygu||'duygusal';
-    prompt=langTag+'\n[Verse]\n[Chorus]\n[Bridge]\nTema: '+temaStr+' - Duygu: '+duyguStr;
+    // Diğer diller: metatag + tema/duygu bilgisi
+    prompt=langTag+'\n[Verse]\n[Chorus]\n[Bridge]\nTheme: '+(wiz.tema||'general')+'. Mood: '+(wiz.duygu||'emotional')+'.';
   }
   return{prompt,style};
 }
