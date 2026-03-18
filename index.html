@@ -101,6 +101,38 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
 .v2-stat-item .num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#FF6B35;}
 .v2-stat-item .lab{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;}
 
+/* Generate Section */
+.gen-section{padding:80px 48px;border-top:1px solid rgba(255,255,255,0.04);}
+.gen-head{text-align:center;margin-bottom:48px;}
+.gen-head .label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
+.gen-head h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,52px);font-weight:700;}
+.gen-head h2 em{color:#FF6B35;font-style:italic;}
+.gen-form{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
+.gen-field label{display:block;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;font-family:'JetBrains Mono',monospace;}
+.gen-genres{display:flex;flex-wrap:wrap;gap:8px;}
+.gen-genre-btn{padding:8px 18px;border-radius:100px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.5);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.gen-genre-btn:hover{border-color:#FF6B35;color:#FF6B35;}
+.gen-genre-btn.selected{border-color:#FF6B35;background:rgba(255,107,53,0.12);color:#FF6B35;}
+.gen-select{width:100%;padding:12px 16px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;appearance:none;cursor:pointer;}
+.gen-select:focus{border-color:rgba(255,107,53,0.4);}
+.gen-textarea{width:100%;padding:14px 16px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;resize:vertical;min-height:100px;line-height:1.6;}
+.gen-textarea:focus{border-color:rgba(255,107,53,0.4);}
+.gen-textarea::placeholder{color:rgba(255,255,255,0.2);}
+.gen-submit{width:100%;padding:16px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:0.5px;}
+.gen-submit:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(255,107,53,0.4);}
+.gen-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none;}
+.gen-status{text-align:center;padding:24px;border-radius:12px;background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.15);font-size:14px;color:rgba(255,255,255,0.7);display:none;}
+.gen-status.show{display:block;}
+.gen-status .gen-dots::after{content:'';animation:dots 1.5s infinite;}
+@keyframes dots{0%{content:'.';}33%{content:'..';}66%{content:'...';}100%{content:'';}}
+.gen-result{display:none;flex-direction:column;gap:16px;padding:28px;border-radius:12px;background:#111;border:1px solid rgba(255,107,53,0.2);}
+.gen-result.show{display:flex;}
+.gen-result-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;}
+.gen-result audio{width:100%;border-radius:8px;accent-color:#FF6B35;}
+.gen-result-btns{display:flex;gap:10px;}
+.gen-dl-btn{flex:1;padding:12px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Space Grotesk',sans-serif;text-decoration:none;text-align:center;}
+.gen-new-btn{flex:1;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;}
+
 /* Pricing */
 .v2-pricing{padding:80px 48px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.04);}
 .v2-pricing-head{text-align:center;margin-bottom:60px;}
@@ -210,7 +242,7 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
   <a class="v2-logo" href="#">Nova<em>hit</em></a>
   <div class="v2-nav-links">
     <a href="#deneyim">Deneyim</a>
-    <a href="#koleksiyon">Özellikler</a>
+    <a href="#uret">Üret</a>
     <a href="#pricing">Fiyatlar</a>
     <a href="#iletisim">İletişim</a>
   </div>
@@ -225,7 +257,7 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="#deneyim" onclick="toggleMobile()">Deneyim</a>
-  <a href="#koleksiyon" onclick="toggleMobile()">Özellikler</a>
+  <a href="#uret" onclick="toggleMobile()">Üret</a>
   <a href="#pricing" onclick="toggleMobile()">Fiyatlar</a>
   <a href="#iletisim" onclick="toggleMobile()">İletişim</a>
   <div class="mobile-menu-btns">
@@ -312,6 +344,61 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
       <button class="v2-btn-cta" onclick="scrollTo('pricing')">Klip Üret →</button>
     </div>
   </article>
+</section>
+
+<section class="gen-section" id="uret" aria-label="Müzik Üret">
+  <div class="gen-head fade-in">
+    <div class="label">AI Müzik Üretimi</div>
+    <h2>Hayalindeki Şarkıyı<br><em>Şimdi Yarat</em></h2>
+  </div>
+  <div class="gen-form fade-in">
+    <div class="gen-field">
+      <label>Müzik Türü</label>
+      <div class="gen-genres" id="genreButtons">
+        <button class="gen-genre-btn selected" data-style="Turkish pop, emotional, melodic">Türkçe Pop</button>
+        <button class="gen-genre-btn" data-style="Turkish arabesk, emotional, oud, saz">Arabesk</button>
+        <button class="gen-genre-btn" data-style="K-Pop, upbeat, Korean, modern production">K-Pop</button>
+        <button class="gen-genre-btn" data-style="hip hop, rap, urban, modern beats">Hip-Hop</button>
+        <button class="gen-genre-btn" data-style="bossa nova, gentle, acoustic guitar, jazz">Bossa Nova</button>
+        <button class="gen-genre-btn" data-style="electronic, EDM, dance, energetic">Elektronik</button>
+        <button class="gen-genre-btn" data-style="rock, guitar, powerful, energetic">Rock</button>
+        <button class="gen-genre-btn" data-style="classical, orchestral, cinematic, piano">Klasik</button>
+      </div>
+    </div>
+    <div class="gen-field">
+      <label>Şarkı Dili</label>
+      <select class="gen-select" id="langSelect">
+        <option value="Turkish">Türkçe</option>
+        <option value="English">İngilizce</option>
+        <option value="Korean">Korece (한국어)</option>
+        <option value="Japanese">Japonca (日本語)</option>
+        <option value="Spanish">İspanyolca</option>
+        <option value="French">Fransızca</option>
+        <option value="Arabic">Arapça</option>
+        <option value="German">Almanca</option>
+        <option value="Italian">İtalyanca</option>
+        <option value="Greek">Yunanca</option>
+        <option value="Portuguese">Portekizce</option>
+        <option value="Russian">Rusça</option>
+      </select>
+    </div>
+    <div class="gen-field">
+      <label>Şarkı Sözleri <span style="color:rgba(255,255,255,0.25);font-weight:400">(Boş bırakırsan AI yazar)</span></label>
+      <textarea class="gen-textarea" id="lyricsInput" placeholder="Şarkı sözlerini buraya yazabilirsin... Boş bırakırsan AI senin için yazar."></textarea>
+    </div>
+    <button class="gen-submit" id="genSubmit" onclick="generateMusic()">✦ &nbsp;Şimdi Üret</button>
+    <div class="gen-status" id="genStatus">
+      <span class="gen-dots"></span> Müziğin üretiliyor, bu 30-60 saniye sürebilir
+    </div>
+    <div class="gen-result" id="genResult">
+      <div class="gen-result-title" id="genResultTitle">Şarkın Hazır! 🎵</div>
+      <audio id="genAudio" controls></audio>
+      <div class="gen-result-btns">
+        <a class="gen-dl-btn" id="genDownload" download="novahit.mp3">⬇ İndir</a>
+        <button class="gen-new-btn" onclick="resetGen()">↩ Yeni Şarkı</button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="v2-pricing" id="pricing" aria-label="Fiyatlandırma">
@@ -512,6 +599,99 @@ function togglePlay(){
 }
 function nextTrack(){loadTrack((currentTrack+1)%tracks.length);}
 function prevTrack(){loadTrack((currentTrack-1+tracks.length)%tracks.length);}
+
+// ── Genre seçimi ──
+let selectedStyle='Turkish pop, emotional, melodic';
+document.getElementById('genreButtons').addEventListener('click',e=>{
+  const btn=e.target.closest('.gen-genre-btn');
+  if(!btn)return;
+  document.querySelectorAll('.gen-genre-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedStyle=btn.dataset.style;
+});
+
+// ── Müzik üret ──
+let pollInterval=null;
+
+async function generateMusic(){
+  const lang=document.getElementById('langSelect').value;
+  const lyrics=document.getElementById('lyricsInput').value.trim();
+  const btn=document.getElementById('genSubmit');
+  const statusEl=document.getElementById('genStatus');
+  const resultEl=document.getElementById('genResult');
+
+  const prompt=lyrics
+    ? lyrics
+    : `Write original song lyrics in ${lang}. Style: ${selectedStyle}. Make it emotional and authentic.`;
+
+  btn.disabled=true;
+  btn.textContent='⏳ Üretiliyor...';
+  statusEl.classList.add('show');
+  resultEl.classList.remove('show');
+
+  try{
+    const res=await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt,style:selectedStyle+', '+lang,title:'Novahit AI - '+lang}),
+    });
+    const data=await res.json();
+    if(!data.data?.taskId) throw new Error(data.error||'taskId alınamadı');
+    pollStatus(data.data.taskId);
+  }catch(err){
+    showGenError(err.message);
+  }
+}
+
+function pollStatus(taskId){
+  let tries=0;
+  pollInterval=setInterval(async()=>{
+    tries++;
+    if(tries>60){clearInterval(pollInterval);showGenError('Zaman aşımı — lütfen tekrar dene.');return;}
+    try{
+      const res=await fetch('/api/status?taskId='+encodeURIComponent(taskId));
+      const data=await res.json();
+      const status=data.data?.status;
+      if(status==='SUCCESS'||status==='FIRST_SUCCESS'){
+        clearInterval(pollInterval);
+        const track=data.data?.sunoData?.[0];
+        if(track?.audioUrl) showResult(track);
+        else showGenError('Ses dosyası bulunamadı.');
+      }else if(status&&status!=='PENDING'){
+        clearInterval(pollInterval);
+        showGenError('Üretim hatası: '+status);
+      }
+    }catch(e){/* polling devam eder */}
+  },3000);
+}
+
+function showResult(track){
+  const audio=document.getElementById('genAudio');
+  const dl=document.getElementById('genDownload');
+  const title=document.getElementById('genResultTitle');
+  audio.src=track.streamAudioUrl||track.audioUrl;
+  dl.href=track.audioUrl;
+  dl.download=(track.title||'novahit')+'.mp3';
+  title.textContent=(track.title||'Şarkın Hazır')+ ' 🎵';
+  document.getElementById('genStatus').classList.remove('show');
+  document.getElementById('genResult').classList.add('show');
+  document.getElementById('genSubmit').disabled=false;
+  document.getElementById('genSubmit').textContent='✦  Şimdi Üret';
+}
+
+function showGenError(msg){
+  clearInterval(pollInterval);
+  const statusEl=document.getElementById('genStatus');
+  statusEl.innerHTML='❌ '+msg;
+  document.getElementById('genSubmit').disabled=false;
+  document.getElementById('genSubmit').textContent='✦  Tekrar Dene';
+}
+
+function resetGen(){
+  document.getElementById('genResult').classList.remove('show');
+  document.getElementById('genStatus').classList.remove('show');
+  document.getElementById('lyricsInput').value='';
+}
 
 // ── Scroll fade-in ──
 const observer=new IntersectionObserver(entries=>{
