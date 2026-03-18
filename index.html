@@ -657,7 +657,9 @@ function pollStatus(taskId){
         const track=data.data?.sunoData?.[0];
         if(track?.audioUrl) showResult(track);
         else showGenError('Ses dosyası bulunamadı.');
-      }else if(status&&status!=='PENDING'){
+      }else if(status==='PENDING'||status==='TEXT_SUCCESS'||status==='FIRST_SUCCESS'){
+        // hâlâ üretiliyor, polling devam eder
+      }else if(status){
         clearInterval(pollInterval);
         showGenError('Üretim hatası: '+status);
       }
