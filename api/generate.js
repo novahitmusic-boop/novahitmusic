@@ -23,6 +23,7 @@ export default async function handler(req, res) {
         customMode: true,
         instrumental: false,
         model: 'V4_5',
+        callBackUrl: 'https://novahitmusic.vercel.app/api/callback',
       }),
     });
 
