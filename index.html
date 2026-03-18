@@ -101,37 +101,77 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
 .v2-stat-item .num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#FF6B35;}
 .v2-stat-item .lab{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;}
 
-/* Generate Section */
-.gen-section{padding:80px 48px;border-top:1px solid rgba(255,255,255,0.04);}
-.gen-head{text-align:center;margin-bottom:48px;}
-.gen-head .label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
-.gen-head h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,52px);font-weight:700;}
-.gen-head h2 em{color:#FF6B35;font-style:italic;}
-.gen-form{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
-.gen-field label{display:block;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;font-family:'JetBrains Mono',monospace;}
-.gen-genres{display:flex;flex-wrap:wrap;gap:8px;}
-.gen-genre-btn{padding:8px 18px;border-radius:100px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.5);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
-.gen-genre-btn:hover{border-color:#FF6B35;color:#FF6B35;}
-.gen-genre-btn.selected{border-color:#FF6B35;background:rgba(255,107,53,0.12);color:#FF6B35;}
-.gen-select{width:100%;padding:12px 16px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;appearance:none;cursor:pointer;}
-.gen-select:focus{border-color:rgba(255,107,53,0.4);}
-.gen-textarea{width:100%;padding:14px 16px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;resize:vertical;min-height:100px;line-height:1.6;}
-.gen-textarea:focus{border-color:rgba(255,107,53,0.4);}
-.gen-textarea::placeholder{color:rgba(255,255,255,0.2);}
-.gen-submit{width:100%;padding:16px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:0.5px;}
-.gen-submit:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(255,107,53,0.4);}
-.gen-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none;}
-.gen-status{text-align:center;padding:24px;border-radius:12px;background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.15);font-size:14px;color:rgba(255,255,255,0.7);display:none;}
+/* ── Wizard Generator ── */
+.wizard-section{padding:80px 48px;border-top:1px solid rgba(255,255,255,0.04);}
+.wizard-head{text-align:center;margin-bottom:60px;}
+.wizard-head .label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
+.wizard-head h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,52px);font-weight:700;}
+.wizard-head h2 em{color:#FF6B35;font-style:italic;}
+.wizard-body{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
+.wiz-row{display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:start;}
+.wiz-row-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:14px;font-family:'JetBrains Mono',monospace;}
+.wiz-row-label b{color:#FF6B35;}
+.genre-search{width:100%;padding:9px 14px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:6px;color:#fff;font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;margin-bottom:12px;}
+.genre-search:focus{border-color:rgba(255,107,53,0.35);}
+.genre-search::placeholder{color:rgba(255,255,255,0.18);}
+.genre-cloud{display:flex;flex-wrap:wrap;gap:7px;max-height:168px;overflow-y:auto;padding-right:4px;}
+.genre-cloud::-webkit-scrollbar{width:3px;}
+.genre-cloud::-webkit-scrollbar-thumb{background:rgba(255,107,53,0.3);border-radius:3px;}
+.g-tag{padding:7px 15px;border-radius:100px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.42);font-size:12px;cursor:pointer;transition:all 0.18s;font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+.g-tag:hover{border-color:rgba(255,107,53,0.5);color:#FF6B35;background:rgba(255,107,53,0.05);}
+.g-tag.picked{border-color:#FF6B35;background:rgba(255,107,53,0.13);color:#FF6B35;font-weight:600;}
+.chosen-box{border:1px solid rgba(255,255,255,0.07);border-radius:12px;background:#0f0f0f;padding:22px 18px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;transition:border-color 0.35s,background 0.35s;}
+.chosen-box.lit{border-color:rgba(255,107,53,0.38);background:rgba(255,107,53,0.04);}
+.chosen-box-empty{font-size:12px;color:rgba(255,255,255,0.18);font-family:'JetBrains Mono',monospace;}
+.chosen-box-val{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#FF6B35;line-height:1.3;}
+.chosen-box-sub{font-size:10px;color:rgba(255,255,255,0.28);margin-top:6px;font-family:'JetBrains Mono',monospace;}
+.note-particle{position:absolute;font-size:16px;pointer-events:none;animation:notefly 1.3s ease-out forwards;z-index:10;}
+@keyframes notefly{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--nx),var(--ny)) scale(0.4);}}
+.note-ocean{min-height:130px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 4px;}
+.note-lang{display:inline-flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:10px 13px;border-radius:10px;border:1px solid rgba(255,255,255,0.07);background:transparent;transition:all 0.22s;animation:notebob var(--bd) var(--bdl) ease-in-out infinite alternate;font-family:'Space Grotesk',sans-serif;}
+.note-lang:hover{border-color:rgba(255,107,53,0.5);background:rgba(255,107,53,0.07);transform:scale(1.1);}
+.note-lang.picked{border-color:#FF6B35;background:rgba(255,107,53,0.13);}
+.note-lang .ng{font-size:20px;line-height:1;}
+.note-lang .nn{font-size:11px;color:rgba(255,255,255,0.5);white-space:nowrap;}
+.note-lang.picked .nn{color:#FF6B35;}
+@keyframes notebob{from{transform:translateY(0);}to{transform:translateY(-7px);}}
+.wiz-two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.wiz-panel{border:1px solid rgba(255,255,255,0.07);border-radius:12px;background:#0d0d0d;padding:20px;}
+.wiz-panel-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:14px;font-family:'JetBrains Mono',monospace;}
+.wiz-panel-title b{color:#FF6B35;}
+.wiz-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.wiz-chip{padding:7px 14px;border-radius:100px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.42);font-size:12px;cursor:pointer;transition:all 0.18s;font-family:'Space Grotesk',sans-serif;}
+.wiz-chip:hover{border-color:rgba(255,107,53,0.5);color:#FF6B35;}
+.wiz-chip.picked{border-color:#FF6B35;background:rgba(255,107,53,0.13);color:#FF6B35;font-weight:600;}
+.wiz-vocal-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.wiz-vocal-card{padding:16px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.48);font-size:12px;cursor:pointer;transition:all 0.2s;text-align:center;font-family:'Space Grotesk',sans-serif;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.wiz-vocal-card .vc-icon{font-size:24px;}
+.wiz-vocal-card:hover{border-color:rgba(255,107,53,0.5);color:#FF6B35;background:rgba(255,107,53,0.05);}
+.wiz-vocal-card.picked{border-color:#FF6B35;background:rgba(255,107,53,0.12);color:#FF6B35;}
+.wiz-generate-wrap{display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:12px;}
+.wiz-prompt-preview{font-size:11px;color:rgba(255,255,255,0.22);font-family:'JetBrains Mono',monospace;text-align:center;line-height:1.8;max-width:640px;}
+.wiz-generate-btn{padding:18px 72px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:0.5px;position:relative;overflow:hidden;}
+.wiz-generate-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transform:translateX(-100%);transition:transform 0.55s;}
+.wiz-generate-btn:hover::before{transform:translateX(100%);}
+.wiz-generate-btn:hover{transform:translateY(-3px);box-shadow:0 20px 60px rgba(255,107,53,0.45);}
+.wiz-generate-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none;}
+.gen-status{text-align:center;padding:24px;border-radius:12px;background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.15);font-size:14px;color:rgba(255,255,255,0.7);display:none;width:100%;}
 .gen-status.show{display:block;}
 .gen-status .gen-dots::after{content:'';animation:dots 1.5s infinite;}
 @keyframes dots{0%{content:'.';}33%{content:'..';}66%{content:'...';}100%{content:'';}}
-.gen-result{display:none;flex-direction:column;gap:16px;padding:28px;border-radius:12px;background:#111;border:1px solid rgba(255,107,53,0.2);}
+.gen-result{display:none;flex-direction:column;gap:16px;padding:28px;border-radius:12px;background:#111;border:1px solid rgba(255,107,53,0.2);width:100%;}
 .gen-result.show{display:flex;}
 .gen-result-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;}
 .gen-result audio{width:100%;border-radius:8px;accent-color:#FF6B35;}
 .gen-result-btns{display:flex;gap:10px;}
 .gen-dl-btn{flex:1;padding:12px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Space Grotesk',sans-serif;text-decoration:none;text-align:center;}
 .gen-new-btn{flex:1;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;}
+@media(max-width:768px){
+  .wiz-row{grid-template-columns:1fr;}
+  .wiz-two-col{grid-template-columns:1fr;}
+  .wiz-vocal-row{grid-template-columns:repeat(2,1fr);}
+  .wizard-section{padding:60px 24px;}
+}
 
 /* Pricing */
 .v2-pricing{padding:80px 48px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.04);}
@@ -346,58 +386,77 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
   </article>
 </section>
 
-<section class="gen-section" id="uret" aria-label="Müzik Üret">
-  <div class="gen-head fade-in">
+<section class="wizard-section" id="uret" aria-label="Müzik Üret">
+  <div class="wizard-head fade-in">
     <div class="label">AI Müzik Üretimi</div>
     <h2>Hayalindeki Şarkıyı<br><em>Şimdi Yarat</em></h2>
   </div>
-  <div class="gen-form fade-in">
-    <div class="gen-field">
-      <label>Müzik Türü</label>
-      <div class="gen-genres" id="genreButtons">
-        <button class="gen-genre-btn selected" data-style="Turkish pop, emotional, melodic">Türkçe Pop</button>
-        <button class="gen-genre-btn" data-style="Turkish arabesk, emotional, oud, saz">Arabesk</button>
-        <button class="gen-genre-btn" data-style="K-Pop, upbeat, Korean, modern production">K-Pop</button>
-        <button class="gen-genre-btn" data-style="hip hop, rap, urban, modern beats">Hip-Hop</button>
-        <button class="gen-genre-btn" data-style="bossa nova, gentle, acoustic guitar, jazz">Bossa Nova</button>
-        <button class="gen-genre-btn" data-style="electronic, EDM, dance, energetic">Elektronik</button>
-        <button class="gen-genre-btn" data-style="rock, guitar, powerful, energetic">Rock</button>
-        <button class="gen-genre-btn" data-style="classical, orchestral, cinematic, piano">Klasik</button>
+  <div class="wizard-body fade-in">
+
+    <!-- 01 Müzik Türü -->
+    <div class="wiz-row">
+      <div>
+        <div class="wiz-row-label"><b>01</b> &nbsp;Müzik Türü Seç</div>
+        <input class="genre-search" id="genreSearch" type="text" placeholder="Ara: pop, jazz, rock..." oninput="filterGenres(this.value)">
+        <div class="genre-cloud" id="genreCloud"></div>
+      </div>
+      <div>
+        <div class="wiz-row-label" style="visibility:hidden">_</div>
+        <div class="chosen-box" id="chosenGenre">
+          <div class="chosen-box-empty">♩ tür seçilmedi</div>
+        </div>
       </div>
     </div>
-    <div class="gen-field">
-      <label>Şarkı Dili</label>
-      <select class="gen-select" id="langSelect">
-        <option value="Turkish">Türkçe</option>
-        <option value="English">İngilizce</option>
-        <option value="Korean">Korece (한국어)</option>
-        <option value="Japanese">Japonca (日本語)</option>
-        <option value="Spanish">İspanyolca</option>
-        <option value="French">Fransızca</option>
-        <option value="Arabic">Arapça</option>
-        <option value="German">Almanca</option>
-        <option value="Italian">İtalyanca</option>
-        <option value="Greek">Yunanca</option>
-        <option value="Portuguese">Portekizce</option>
-        <option value="Russian">Rusça</option>
-      </select>
-    </div>
-    <div class="gen-field">
-      <label>Şarkı Sözleri <span style="color:rgba(255,255,255,0.25);font-weight:400">(Boş bırakırsan AI yazar)</span></label>
-      <textarea class="gen-textarea" id="lyricsInput" placeholder="Şarkı sözlerini buraya yazabilirsin... Boş bırakırsan AI senin için yazar."></textarea>
-    </div>
-    <button class="gen-submit" id="genSubmit" onclick="generateMusic()">✦ &nbsp;Şimdi Üret</button>
-    <div class="gen-status" id="genStatus">
-      <span class="gen-dots"></span> Müziğin üretiliyor, bu 30-60 saniye sürebilir
-    </div>
-    <div class="gen-result" id="genResult">
-      <div class="gen-result-title" id="genResultTitle">Şarkın Hazır! 🎵</div>
-      <audio id="genAudio" controls></audio>
-      <div class="gen-result-btns">
-        <a class="gen-dl-btn" id="genDownload" download="novahit.mp3">⬇ İndir</a>
-        <button class="gen-new-btn" onclick="resetGen()">↩ Yeni Şarkı</button>
+
+    <!-- 02 Şarkı Dili -->
+    <div class="wiz-row">
+      <div>
+        <div class="wiz-row-label"><b>02</b> &nbsp;Şarkı Dili</div>
+        <div class="note-ocean" id="langOcean"></div>
+      </div>
+      <div>
+        <div class="wiz-row-label" style="visibility:hidden">_</div>
+        <div class="chosen-box" id="chosenLang">
+          <div class="chosen-box-empty">♪ dil seçilmedi</div>
+        </div>
       </div>
     </div>
+
+    <!-- 03+04 Tema & Duygu -->
+    <div class="wiz-two-col">
+      <div class="wiz-panel">
+        <div class="wiz-panel-title"><b>03</b> &nbsp;Tema</div>
+        <div class="wiz-grid" id="temaGrid"></div>
+      </div>
+      <div class="wiz-panel">
+        <div class="wiz-panel-title"><b>04</b> &nbsp;Duygu</div>
+        <div class="wiz-grid" id="duyguGrid"></div>
+      </div>
+    </div>
+
+    <!-- 05 Ses Tipi -->
+    <div>
+      <div class="wiz-row-label"><b>05</b> &nbsp;Ses Tipi</div>
+      <div class="wiz-vocal-row" id="vocalRow"></div>
+    </div>
+
+    <!-- Generate -->
+    <div class="wiz-generate-wrap">
+      <div class="wiz-prompt-preview" id="wizPromptPreview">Seçimlerini tamamla — AI prompt otomatik oluşturulacak ✦</div>
+      <button class="wiz-generate-btn" id="genSubmit" onclick="generateMusic()">✦ &nbsp;Şarkımı Üret</button>
+      <div class="gen-status" id="genStatus">
+        <span class="gen-dots"></span> Müziğin üretiliyor, bu 30–60 saniye sürebilir
+      </div>
+      <div class="gen-result" id="genResult">
+        <div class="gen-result-title" id="genResultTitle">Şarkın Hazır! 🎵</div>
+        <audio id="genAudio" controls></audio>
+        <div class="gen-result-btns">
+          <a class="gen-dl-btn" id="genDownload" download="novahit.mp3">⬇ İndir</a>
+          <button class="gen-new-btn" onclick="resetGen()">↩ Yeni Şarkı</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -600,49 +659,210 @@ function togglePlay(){
 function nextTrack(){loadTrack((currentTrack+1)%tracks.length);}
 function prevTrack(){loadTrack((currentTrack-1+tracks.length)%tracks.length);}
 
-// ── Genre seçimi ──
-let selectedStyle='Turkish pop, emotional, melodic';
-document.getElementById('genreButtons').addEventListener('click',e=>{
-  const btn=e.target.closest('.gen-genre-btn');
-  if(!btn)return;
-  document.querySelectorAll('.gen-genre-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedStyle=btn.dataset.style;
-});
+// ── Wizard Data ──
+const GENRES=[
+  {label:'Türkçe Pop',style:'Turkish pop, emotional, melodic'},
+  {label:'Arabesk',style:'Turkish arabesk, emotional, oud, saz'},
+  {label:'K-Pop',style:'K-Pop, upbeat, Korean, modern production'},
+  {label:'Hip-Hop',style:'hip hop, rap, urban, modern beats'},
+  {label:'Bossa Nova',style:'bossa nova, gentle, acoustic guitar, jazz'},
+  {label:'Elektronik',style:'electronic, EDM, dance, energetic'},
+  {label:'Rock',style:'rock, guitar, powerful, energetic'},
+  {label:'Klasik',style:'classical, orchestral, cinematic, piano'},
+  {label:'Jazz',style:'jazz, smooth, saxophone, piano'},
+  {label:'R&B',style:'R&B, soul, groove, rhythm'},
+  {label:'Soul',style:'soul, emotional, vocal, powerful'},
+  {label:'Reggae',style:'reggae, Caribbean, relaxed, bass'},
+  {label:'Country',style:'country, acoustic, storytelling, guitar'},
+  {label:'Metal',style:'heavy metal, guitar riffs, powerful, aggressive'},
+  {label:'Punk',style:'punk rock, fast, aggressive, raw'},
+  {label:'Folk',style:'folk, acoustic, storytelling, gentle'},
+  {label:'Indie',style:'indie pop, alternative, modern, atmospheric'},
+  {label:'Blues',style:'blues, guitar, soulful, emotional'},
+  {label:'Funk',style:'funk, groove, bass, rhythm'},
+  {label:'Gospel',style:'gospel, choir, spiritual, powerful'},
+  {label:'Salsa',style:'salsa, Latin, dance, vibrant'},
+  {label:'Flamenco',style:'flamenco, Spanish guitar, passionate'},
+  {label:'Tango',style:'tango, Argentine, passionate, dramatic'},
+  {label:'Samba',style:'samba, Brazilian, festive, percussion'},
+  {label:'Afrobeats',style:'Afrobeats, African, rhythmic, modern'},
+  {label:'Trap',style:'trap, hip hop, 808, dark beats'},
+  {label:'Lo-fi',style:'lo-fi, chill, relaxed, ambient'},
+  {label:'Ambient',style:'ambient, atmospheric, cinematic, ethereal'},
+  {label:'Synthwave',style:'synthwave, retro, 80s, electronic'},
+  {label:'Dubstep',style:'dubstep, electronic, bass drop, energetic'},
+  {label:'House',style:'house music, dance, 4/4, electronic'},
+  {label:'Techno',style:'techno, electronic, industrial, hypnotic'},
+  {label:'Trance',style:'trance, euphoric, electronic, uplifting'},
+  {label:'Ballad',style:'ballad, slow, emotional, piano'},
+  {label:'Pop Punk',style:'pop punk, energetic, guitar, youthful'},
+  {label:'Grunge',style:'grunge, guitar, raw, 90s'},
+  {label:'Disco',style:'disco, dance, 70s, groovy'},
+  {label:'Türk Halk',style:'Turkish folk, traditional, saz, authentic'},
+  {label:'Türk Sanat',style:'Turkish art music, classical, emotional, makam'},
+  {label:'Türkü',style:'türkü, traditional Turkish, saz, heartfelt'},
+  {label:'Cumbia',style:'cumbia, Latin, dance, accordion'},
+  {label:'Latin Pop',style:'Latin pop, modern, upbeat, Spanish'},
+  {label:'Psikedelik',style:'psychedelic rock, guitar, trippy, 60s'},
+  {label:'New Wave',style:'new wave, 80s, synth, post-punk'},
+];
+const LANGS=[
+  {name:'Türkçe',g:'♩',val:'Turkish'},
+  {name:'English',g:'♪',val:'English'},
+  {name:'한국어',g:'♫',val:'Korean'},
+  {name:'日本語',g:'♬',val:'Japanese'},
+  {name:'Español',g:'♩',val:'Spanish'},
+  {name:'Français',g:'♪',val:'French'},
+  {name:'العربية',g:'♫',val:'Arabic'},
+  {name:'Deutsch',g:'♬',val:'German'},
+  {name:'Italiano',g:'♩',val:'Italian'},
+  {name:'Ελληνικά',g:'♪',val:'Greek'},
+  {name:'Português',g:'♫',val:'Portuguese'},
+  {name:'Русский',g:'♬',val:'Russian'},
+  {name:'中文',g:'♩',val:'Chinese'},
+  {name:'हिन्दी',g:'♪',val:'Hindi'},
+];
+const TEMAS=['Aşk','Özlem','Hüzün','Mutluluk','Umut','Kavga','Yalnızlık','Özgürlük','Gece','Sabah','Yağmur','Bahar','Veda','Hasret','Nostalji','Cesaret'];
+const DUYGULAR=['Duygusal','Enerjik','Sakin','Melankolik','Coşkulu','Romantik','Gizemli','Güçlü','Hüzünlü','Neşeli','Derin','Hafif'];
+const VOCALS=[
+  {icon:'👩',label:'Kadın',val:'female vocals, soprano'},
+  {icon:'👨',label:'Erkek',val:'male vocals, baritone'},
+  {icon:'👫',label:'Düet',val:'duet, male and female vocals'},
+  {icon:'🎸',label:'Enstrümantal',val:'instrumental, no vocals'},
+];
+const wiz={genre:null,genreStyle:null,lang:'Türkçe',langVal:'Turkish',tema:null,duygu:null,vocal:VOCALS[0]};
+
+function buildGenres(filter=''){
+  const cloud=document.getElementById('genreCloud');
+  cloud.innerHTML='';
+  GENRES.filter(g=>g.label.toLowerCase().includes(filter.toLowerCase())).forEach(g=>{
+    const b=document.createElement('button');
+    b.className='g-tag'+(wiz.genreStyle===g.style?' picked':'');
+    b.textContent=g.label;
+    b.onclick=()=>pickGenre(g);
+    cloud.appendChild(b);
+  });
+}
+function filterGenres(v){buildGenres(v);}
+function pickGenre(g){
+  wiz.genre=g.label;wiz.genreStyle=g.style;
+  buildGenres(document.getElementById('genreSearch').value);
+  const box=document.getElementById('chosenGenre');
+  box.classList.add('lit');
+  box.innerHTML=`<div class="chosen-box-val">${g.label}</div><div class="chosen-box-sub">seçildi ✓</div>`;
+  spawnNotes(box);updatePromptPreview();
+}
+function spawnNotes(el){
+  const notes=['♩','♪','♫','♬'],cols=['#FF6B35','#E8175D','#ff9966','#ffffffaa'];
+  for(let i=0;i<8;i++){
+    const n=document.createElement('span');
+    n.className='note-particle';
+    n.textContent=notes[Math.floor(Math.random()*4)];
+    n.style.color=cols[Math.floor(Math.random()*4)];
+    n.style.left=(15+Math.random()*70)+'%';
+    n.style.top=(15+Math.random()*70)+'%';
+    const a=Math.random()*Math.PI*2,d=40+Math.random()*55;
+    n.style.setProperty('--nx',Math.cos(a)*d+'px');
+    n.style.setProperty('--ny',Math.sin(a)*d+'px');
+    n.style.fontSize=(11+Math.random()*11)+'px';
+    n.style.animationDelay=(Math.random()*0.25)+'s';
+    el.appendChild(n);
+    setTimeout(()=>n.remove(),1600);
+  }
+}
+function buildLangs(){
+  const ocean=document.getElementById('langOcean');
+  ocean.innerHTML='';
+  LANGS.forEach(l=>{
+    const b=document.createElement('button');
+    b.className='note-lang'+(wiz.langVal===l.val?' picked':'');
+    b.style.setProperty('--bd',(2+Math.random()*2).toFixed(1)+'s');
+    b.style.setProperty('--bdl',(Math.random()).toFixed(1)+'s');
+    b.innerHTML=`<span class="ng">${l.g}</span><span class="nn">${l.name}</span>`;
+    b.onclick=(e)=>pickLang(l,e.currentTarget);
+    ocean.appendChild(b);
+  });
+}
+function pickLang(l,el){
+  wiz.lang=l.name;wiz.langVal=l.val;
+  document.querySelectorAll('.note-lang').forEach(b=>b.classList.remove('picked'));
+  el.classList.add('picked');
+  const box=document.getElementById('chosenLang');
+  box.classList.add('lit');
+  box.innerHTML=`<div class="chosen-box-val">${l.g} ${l.name}</div><div class="chosen-box-sub">seçildi ✓</div>`;
+  spawnNotes(box);updatePromptPreview();
+}
+function buildTema(){
+  const grid=document.getElementById('temaGrid');
+  TEMAS.forEach(t=>{
+    const b=document.createElement('button');
+    b.className='wiz-chip';b.textContent=t;
+    b.onclick=()=>{wiz.tema=t;document.querySelectorAll('#temaGrid .wiz-chip').forEach(x=>x.classList.remove('picked'));b.classList.add('picked');updatePromptPreview();};
+    grid.appendChild(b);
+  });
+}
+function buildDuygu(){
+  const grid=document.getElementById('duyguGrid');
+  DUYGULAR.forEach(d=>{
+    const b=document.createElement('button');
+    b.className='wiz-chip';b.textContent=d;
+    b.onclick=()=>{wiz.duygu=d;document.querySelectorAll('#duyguGrid .wiz-chip').forEach(x=>x.classList.remove('picked'));b.classList.add('picked');updatePromptPreview();};
+    grid.appendChild(b);
+  });
+}
+function buildVocals(){
+  const row=document.getElementById('vocalRow');
+  VOCALS.forEach(v=>{
+    const b=document.createElement('button');
+    b.className='wiz-vocal-card'+(wiz.vocal===v?' picked':'');
+    b.innerHTML=`<span class="vc-icon">${v.icon}</span><span>${v.label}</span>`;
+    b.onclick=()=>{wiz.vocal=v;document.querySelectorAll('.wiz-vocal-card').forEach(x=>x.classList.remove('picked'));b.classList.add('picked');updatePromptPreview();};
+    row.appendChild(b);
+  });
+}
+function buildPrompt(){
+  const parts=[wiz.genreStyle||'pop'];
+  if(wiz.tema)parts.push('theme: '+wiz.tema);
+  if(wiz.duygu)parts.push(wiz.duygu);
+  if(wiz.vocal)parts.push(wiz.vocal.val);
+  const style=parts.join(', ');
+  const prompt=`Write original song lyrics in ${wiz.langVal}. ${wiz.tema?'Theme: '+wiz.tema+'. ':''}${wiz.duygu?'Mood: '+wiz.duygu+'. ':''}Make it authentic and emotional.`;
+  return{prompt,style};
+}
+function updatePromptPreview(){
+  document.getElementById('wizPromptPreview').textContent=
+    `Tür: ${wiz.genre||'—'} · Dil: ${wiz.lang||'—'} · Tema: ${wiz.tema||'—'} · Duygu: ${wiz.duygu||'—'} · Ses: ${wiz.vocal?.label||'—'}`;
+}
+
+// Init wizard
+buildGenres();buildLangs();buildTema();buildDuygu();buildVocals();
+// Default: Türkçe Pop + Türkçe seçili
+wiz.genreStyle=GENRES[0].style;wiz.genre=GENRES[0].label;
+buildGenres();
+const _cg=document.getElementById('chosenGenre');
+_cg.classList.add('lit');_cg.innerHTML=`<div class="chosen-box-val">${GENRES[0].label}</div><div class="chosen-box-sub">seçildi ✓</div>`;
+const _cl=document.getElementById('chosenLang');
+_cl.classList.add('lit');_cl.innerHTML=`<div class="chosen-box-val">♩ Türkçe</div><div class="chosen-box-sub">seçildi ✓</div>`;
+updatePromptPreview();
 
 // ── Müzik üret ──
 let pollInterval=null;
-
 async function generateMusic(){
-  const lang=document.getElementById('langSelect').value;
-  const lyrics=document.getElementById('lyricsInput').value.trim();
+  if(!wiz.genreStyle){alert('Lütfen bir müzik türü seç!');return;}
+  const{prompt,style}=buildPrompt();
   const btn=document.getElementById('genSubmit');
   const statusEl=document.getElementById('genStatus');
   const resultEl=document.getElementById('genResult');
-
-  const prompt=lyrics
-    ? lyrics
-    : `Write original song lyrics in ${lang}. Style: ${selectedStyle}. Make it emotional and authentic.`;
-
-  btn.disabled=true;
-  btn.textContent='⏳ Üretiliyor...';
-  statusEl.classList.add('show');
-  resultEl.classList.remove('show');
-
+  btn.disabled=true;btn.textContent='⏳ Üretiliyor...';
+  statusEl.classList.add('show');resultEl.classList.remove('show');
   try{
-    const res=await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({prompt,style:selectedStyle+', '+lang,title:'Novahit AI - '+lang}),
-    });
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt,style,title:'Novahit AI - '+wiz.lang})});
     const data=await res.json();
-    if(!data.data?.taskId) throw new Error(data.error||'taskId alınamadı');
+    if(!data.data?.taskId)throw new Error(data.error||'taskId alınamadı');
     pollStatus(data.data.taskId);
-  }catch(err){
-    showGenError(err.message);
-  }
+  }catch(err){showGenError(err.message);}
 }
-
 function pollStatus(taskId){
   let tries=0;
   pollInterval=setInterval(async()=>{
@@ -654,49 +874,38 @@ function pollStatus(taskId){
       const status=data.data?.status;
       if(status==='SUCCESS'||status==='FIRST_SUCCESS'){
         clearInterval(pollInterval);
-        const d=data.data;
-        const resp=d?.response;
+        const d=data.data,resp=d?.response;
         const sunoData=resp?.sunoData||d?.sunoData||[];
         const track=Array.isArray(sunoData)?sunoData[0]:null;
         const audioUrl=track?.audioUrl||track?.streamAudioUrl;
-        if(audioUrl) showResult({...track,audioUrl});
+        if(audioUrl)showResult({...track,audioUrl});
         else showGenError('Ses bulunamadı.');
-      }else if(status==='PENDING'||status==='TEXT_SUCCESS'||status==='FIRST_SUCCESS'){
-        // hâlâ üretiliyor, polling devam eder
-      }else if(status){
-        clearInterval(pollInterval);
-        showGenError('Üretim hatası: '+status);
-      }
-    }catch(e){/* polling devam eder */}
+      }else if(status==='PENDING'||status==='TEXT_SUCCESS'){
+        // hâlâ üretiliyor
+      }else if(status){clearInterval(pollInterval);showGenError('Üretim hatası: '+status);}
+    }catch(e){}
   },3000);
 }
-
 function showResult(track){
-  const audio=document.getElementById('genAudio');
-  const dl=document.getElementById('genDownload');
-  const title=document.getElementById('genResultTitle');
+  const audio=document.getElementById('genAudio'),dl=document.getElementById('genDownload'),title=document.getElementById('genResultTitle');
   audio.src=track.streamAudioUrl||track.audioUrl;
-  dl.href=track.audioUrl;
-  dl.download=(track.title||'novahit')+'.mp3';
-  title.textContent=(track.title||'Şarkın Hazır')+ ' 🎵';
+  dl.href=track.audioUrl;dl.download=(track.title||'novahit')+'.mp3';
+  title.textContent=(track.title||'Şarkın Hazır')+' 🎵';
   document.getElementById('genStatus').classList.remove('show');
   document.getElementById('genResult').classList.add('show');
   document.getElementById('genSubmit').disabled=false;
-  document.getElementById('genSubmit').textContent='✦  Şimdi Üret';
+  document.getElementById('genSubmit').textContent='✦  Şarkımı Üret';
 }
-
 function showGenError(msg){
   clearInterval(pollInterval);
-  const statusEl=document.getElementById('genStatus');
-  statusEl.innerHTML='❌ '+msg;
+  document.getElementById('genStatus').innerHTML='❌ '+msg;
   document.getElementById('genSubmit').disabled=false;
   document.getElementById('genSubmit').textContent='✦  Tekrar Dene';
 }
-
 function resetGen(){
   document.getElementById('genResult').classList.remove('show');
   document.getElementById('genStatus').classList.remove('show');
-  document.getElementById('lyricsInput').value='';
+  document.getElementById('genSubmit').textContent='✦  Şarkımı Üret';
 }
 
 // ── Scroll fade-in ──
