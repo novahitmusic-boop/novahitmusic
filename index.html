@@ -656,10 +656,11 @@ function pollStatus(taskId){
         clearInterval(pollInterval);
         const d=data.data;
         const resp=d?.response;
-        const track=Array.isArray(resp)?resp[0]:(typeof resp==='object'?resp:null);
-        const audioUrl=track?.audioUrl||track?.audio_url||track?.url||track?.streamAudioUrl;
+        const sunoData=resp?.sunoData||d?.sunoData||[];
+        const track=Array.isArray(sunoData)?sunoData[0]:null;
+        const audioUrl=track?.audioUrl||track?.streamAudioUrl;
         if(audioUrl) showResult({...track,audioUrl});
-        else showGenError('Ses yok. Response: '+JSON.stringify(resp));
+        else showGenError('Ses bulunamadı.');
       }else if(status==='PENDING'||status==='TEXT_SUCCESS'||status==='FIRST_SUCCESS'){
         // hâlâ üretiliyor, polling devam eder
       }else if(status){
