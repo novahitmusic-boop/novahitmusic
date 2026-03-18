@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https:;">
+<meta name="description" content="Novahit — AI ile profesyonel müzik üretimi. 125 müzik türü, 50+ dil, kendi sesinle şarkı.">
+<meta property="og:title" content="Novahit — AI Music Studio">
+<meta property="og:type" content="website">
+<title>Novahit — AI Music Studio | 3 Tasarım Varyasyonu</title>
+
+<!-- JSON-LD Schema -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"WebSite","name":"Novahit","url":"https://novahit.com","potentialAction":{"@type":"SearchAction","target":"https://novahit.com/search?q={search_term_string}","query-input":"required name=search_term_string"}},
+    {"@type":"MusicGroup","name":"Novahit AI Studio","description":"AI ile profesyonel müzik üretimi","url":"https://novahit.com","genre":["Pop","Rock","Hip-Hop","Classical"]},
+    {"@type":"Product","name":"Novahit Pro Plan","description":"125 müzik türü, 50+ dil, günde 10 şarkı","offers":{"@type":"Offer","price":"9.99","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+/* ═══ VARIANT SWITCHER ═══ */
+.vswitcher{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  padding:0 24px;
+  display:flex;align-items:center;gap:0;
+  height:52px;
+}
+.vs-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-right:20px;white-space:nowrap;}
+.vs-tabs{display:flex;gap:4px;flex:1;}
+.vs-tab{
+  padding:7px 20px;border-radius:6px;border:none;
+  font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all 0.25s;letter-spacing:0.5px;
+  background:transparent;color:rgba(255,255,255,0.4);
+}
+.vs-tab:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.06);}
+.vs-tab.active{background:#fff;color:#000;}
+.vs-tab.v1.active{background:linear-gradient(135deg,#1DB954,#158a3e);color:#fff;}
+.vs-tab.v2.active{background:linear-gradient(135deg,#FF6B35,#E8175D);color:#fff;}
+.vs-tab.v3.active{background:#000;color:#fff;border:1px solid rgba(255,255,255,0.2);}
+.vs-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px;}
+.v1-dot{background:#1DB954;}
+.v2-dot{background:#FF6B35;}
+.v3-dot{background:#fff;}
+
+.variant{display:none;padding-top:52px;}
+.variant.active{display:block;}
+
+/* ══════════════════════════════════════════
+   VARIANT 1 — THE STOREFRONT
+══════════════════════════════════════════ */
+.v1-body{background:#121212;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;}
+
+/* V1 Nav */
+.v1-nav{
+  background:#000;padding:0 32px;height:64px;
+  display:flex;align-items:center;gap:32px;
+  border-bottom:1px solid #1a1a1a;
+  position:sticky;top:52px;z-index:100;
+}
+.v1-logo{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#1DB954;letter-spacing:-0.5px;}
+.v1-logo span{color:#fff;}
+.v1-search{
+  flex:1;max-width:480px;
+  display:flex;align-items:center;gap:10px;
+  background:#242424;border-radius:24px;padding:8px 16px;
+  border:1px solid transparent;transition:border-color 0.2s;
+}
+.v1-search:focus-within{border-color:#1DB954;}
+.v1-search input{
+  background:transparent;border:none;outline:none;
+  color:#fff;font-family:'Inter',sans-serif;font-size:14px;flex:1;
+}
+.v1-search input::placeholder{color:#737373;}
+.v1-search svg{opacity:0.4;flex-shrink:0;}
+.v1-nav-r{display:flex;align-items:center;gap:12px;margin-left:auto;}
+.v1-cart-btn{
+  position:relative;background:#1DB954;border:none;color:#000;
+  width:40px;height:40px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  transition:transform 0.2s;
+}
+.v1-cart-btn:hover{transform:scale(1.08);}
+.v1-cart-count{
+  position:absolute;top:-4px;right:-4px;
+  background:#E8175D;color:#fff;width:18px;height:18px;
+  border-radius:50%;font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+}
+.v1-signin{padding:8px 20px;background:transparent;border:1px solid #727272;color:#fff;border-radius:24px;font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;}
+.v1-signin:hover{border-color:#fff;}
+.v1-signup{padding:8px 20px;background:#fff;border:none;color:#000;border-radius:24px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.v1-signup:hover{background:#f0f0f0;transform:scale(1.02);}
+
+/* V1 Hero */
+.v1-hero{
+  background:linear-gradient(135deg,#0a3d1f 0%,#1a1a2e 50%,#16213e 100%);
+  padding:64px 32px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+}
+.v1-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(29,185,84,0.15);border:1px solid rgba(29,185,84,0.3);border-radius:100px;padding:6px 16px;font-size:12px;color:#1DB954;font-weight:600;margin-bottom:20px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
+.v1-hero h1{font-size:clamp(32px,4vw,52px);font-weight:800;line-height:1.1;margin-bottom:16px;}
+.v1-hero h1 span{color:#1DB954;}
+.v1-hero p{font-size:16px;color:#b3b3b3;line-height:1.7;margin-bottom:32px;}
+.v1-hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.v1-btn-primary{padding:14px 32px;background:#1DB954;border:none;color:#000;border-radius:24px;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.v1-btn-primary:hover{background:#1ed760;transform:scale(1.04);}
+.v1-btn-ghost{padding:14px 32px;background:transparent;border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:24px;font-size:14px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.v1-btn-ghost:hover{border-color:#fff;}
+.v1-hero-visual{
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;padding:24px;
+}
+.v1-now-playing{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.v1-album{width:64px;height:64px;border-radius:8px;background:linear-gradient(135deg,#1DB954,#0a3d1f);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.v1-track-info h4{font-size:16px;font-weight:600;}
+.v1-track-info p{font-size:13px;color:#b3b3b3;}
+.v1-progress{background:#333;border-radius:2px;height:4px;margin:16px 0;}
+.v1-progress-fill{background:#1DB954;height:4px;border-radius:2px;width:35%;position:relative;}
+.v1-progress-fill::after{content:'';position:absolute;right:-6px;top:-4px;width:12px;height:12px;background:#fff;border-radius:50%;}
+.v1-controls{display:flex;justify-content:center;gap:24px;align-items:center;}
+.v1-ctrl-btn{background:none;border:none;color:#b3b3b3;cursor:pointer;font-size:18px;transition:color 0.2s;}
+.v1-ctrl-btn:hover{color:#fff;}
+.v1-ctrl-play{width:40px;height:40px;background:#fff;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform 0.2s;}
+.v1-ctrl-play:hover{transform:scale(1.08);}
+
+/* V1 Categories */
+.v1-section{padding:40px 32px;}
+.v1-section-title{font-size:22px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+.v1-see-all{font-size:13px;font-weight:600;color:#b3b3b3;cursor:pointer;transition:color 0.2s;}
+.v1-see-all:hover{color:#fff;}
+.v1-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;}
+.v1-cat{padding:8px 20px;border-radius:24px;border:1px solid #333;color:#b3b3b3;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;}
+.v1-cat:hover,.v1-cat.on{background:#1DB954;border-color:#1DB954;color:#000;font-weight:600;}
+
+/* V1 Cards */
+.v1-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.v1-card{
+  background:#181818;border-radius:8px;padding:16px;
+  transition:background 0.3s;cursor:pointer;position:relative;
+}
+.v1-card:hover{background:#282828;}
+.v1-card-img{
+  width:100%;padding-bottom:100%;border-radius:6px;
+  position:relative;overflow:hidden;margin-bottom:16px;
+}
+.v1-card-cover{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;font-size:52px;
+}
+.v1-play-over{
+  position:absolute;bottom:8px;right:8px;
+  width:40px;height:40px;background:#1DB954;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.5);
+  transform:translateY(4px);opacity:0;transition:all 0.2s;
+}
+.v1-card:hover .v1-play-over{opacity:1;transform:translateY(0);}
+.v1-card h4{font-size:14px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.v1-card p{font-size:12px;color:#b3b3b3;}
+.v1-card-price{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding-top:12px;border-top:1px solid #282828;
+}
+.v1-price{font-size:14px;font-weight:700;color:#1DB954;}
+.v1-add-btn{
+  padding:6px 14px;background:#1DB954;border:none;color:#000;
+  border-radius:24px;font-size:11px;font-weight:700;cursor:pointer;
+  transition:all 0.2s;font-family:'Inter',sans-serif;
+}
+.v1-add-btn:hover{background:#1ed760;transform:scale(1.05);}
+.v1-add-btn.added{background:#282828;color:#1DB954;border:1px solid #1DB954;}
+
+/* V1 Cart Sidebar */
+.v1-cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:none;}
+.v1-cart-overlay.open{display:block;}
+.v1-cart-panel{
+  position:fixed;right:0;top:0;bottom:0;width:360px;
+  background:#121212;border-left:1px solid #333;z-index:1001;
+  transform:translateX(100%);transition:transform 0.3s;padding:24px;
+  overflow-y:auto;
+}
+.v1-cart-panel.open{transform:translateX(0);}
+.v1-cart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.v1-cart-head h3{font-size:18px;font-weight:700;}
+.v1-cart-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;}
+.v1-cart-item{display:flex;gap:12px;padding:16px 0;border-bottom:1px solid #282828;}
+.v1-cart-thumb{width:48px;height:48px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.v1-cart-item-info h5{font-size:13px;font-weight:600;}
+.v1-cart-item-info p{font-size:11px;color:#b3b3b3;margin-top:2px;}
+.v1-cart-item-price{margin-left:auto;font-size:14px;font-weight:700;color:#1DB954;white-space:nowrap;}
+.v1-cart-total{padding:20px 0;border-top:1px solid #333;margin-top:8px;}
+.v1-cart-total-row{display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-bottom:16px;}
+.v1-checkout-btn{
+  width:100%;padding:14px;background:#1DB954;border:none;color:#000;
+  border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;
+  transition:background 0.2s;font-family:'Inter',sans-serif;
+}
+.v1-checkout-btn:hover{background:#1ed760;}
+
+/* V1 Featured */
+.v1-featured{
+  background:linear-gradient(135deg,#450af5,#c15bdb);
+  margin:0 32px;border-radius:12px;padding:32px;
+  display:flex;align-items:center;gap:32px;margin-bottom:40px;
+}
+.v1-featured-text h2{font-size:28px;font-weight:800;margin-bottom:8px;}
+.v1-featured-text p{font-size:14px;opacity:0.85;line-height:1.6;margin-bottom:20px;}
+.v1-featured-img{width:140px;height:140px;border-radius:12px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:60px;flex-shrink:0;margin-left:auto;}
+
+/* V1 Footer */
+.v1-footer{background:#000;padding:40px 32px;margin-top:60px;border-top:1px solid #1a1a1a;}
+.v1-footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px;}
+.v1-ft-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#1DB954;margin-bottom:12px;}
+.v1-ft-logo span{color:#fff;}
+.v1-ft-desc{font-size:13px;color:#727272;line-height:1.7;}
+.v1-ft-col h4{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#727272;margin-bottom:16px;}
+.v1-ft-col ul{list-style:none;}
+.v1-ft-col ul li{margin-bottom:10px;}
+.v1-ft-col ul a{color:#b3b3b3;text-decoration:none;font-size:13px;transition:color 0.2s;}
+.v1-ft-col ul a:hover{color:#fff;}
+.v1-trust-row{display:flex;gap:12px;flex-wrap:wrap;padding:20px 0;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;margin-bottom:20px;}
+.v1-trust-badge{display:flex;align-items:center;gap:8px;padding:8px 16px;background:#1a1a1a;border-radius:8px;font-size:12px;color:#b3b3b3;}
+.v1-trust-badge .icon{font-size:16px;}
+.v1-ft-bottom{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#535353;}
+
+/* ══════════════════════════════════════════
+   VARIANT 2 — THE ARTIST EXPERIENCE
+══════════════════════════════════════════ */
+.v2-body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-height:100vh;}
+
+/* V2 Nav */
+.v2-nav{
+  position:sticky;top:52px;z-index:100;
+  padding:0 48px;height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,10,0.85);backdrop-filter:blur(32px);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.v2-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;letter-spacing:2px;}
+.v2-logo em{color:#FF6B35;font-style:italic;}
+.v2-nav-links{display:flex;gap:32px;}
+.v2-nav-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.5px;transition:color 0.2s;}
+.v2-nav-links a:hover{color:#fff;}
+.v2-nav-r{display:flex;gap:10px;}
+.v2-btn-outline{padding:9px 24px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:4px;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.v2-btn-outline:hover{border-color:#FF6B35;color:#FF6B35;}
+.v2-btn-cta{padding:9px 24px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.v2-btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,107,53,0.4);}
+
+/* V2 Hero */
+.v2-hero{
+  min-height:92vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;text-align:center;padding:80px 48px;
+}
+.v2-hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(255,107,53,0.12) 0%,transparent 70%),
+             radial-gradient(ellipse 60% 80% at 80% 70%,rgba(232,23,93,0.08) 0%,transparent 70%),
+             #0a0a0a;
+}
+.v2-hero-content{position:relative;z-index:2;max-width:800px;}
+.v2-hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(255,107,53,0.3);border-radius:100px;
+  padding:6px 18px;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:#FF6B35;margin-bottom:40px;font-family:'JetBrains Mono',monospace;
+  background:rgba(255,107,53,0.06);
+}
+.v2-hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,7vw,96px);font-weight:900;line-height:1;
+  letter-spacing:-2px;margin-bottom:24px;
+}
+.v2-hero h1 em{color:#FF6B35;font-style:italic;}
+.v2-hero p{font-size:16px;color:rgba(255,255,255,0.55);line-height:1.8;max-width:480px;margin:0 auto 48px;}
+.v2-hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.v2-btn-big{
+  padding:18px 48px;background:linear-gradient(135deg,#FF6B35,#E8175D);
+  border:none;color:#fff;border-radius:4px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:1px;
+}
+.v2-btn-big:hover{transform:translateY(-3px);box-shadow:0 20px 60px rgba(255,107,53,0.5);}
+.v2-btn-big-ghost{
+  padding:18px 48px;background:transparent;border:1px solid rgba(255,255,255,0.15);
+  color:#fff;border-radius:4px;font-size:14px;cursor:pointer;
+  transition:all 0.3s;font-family:'Space Grotesk',sans-serif;
+}
+.v2-btn-big-ghost:hover{border-color:#fff;}
+
+/* V2 Waveform */
+.v2-waveform-section{padding:80px 48px;text-align:center;position:relative;}
+.v2-waveform-section::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,107,53,0.03),rgba(232,23,93,0.03));
+}
+.v2-wf-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:20px;font-family:'JetBrains Mono',monospace;}
+.v2-wf-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,48px);font-weight:700;margin-bottom:48px;}
+.v2-wf-title em{color:#FF6B35;font-style:italic;}
+.v2-waveform{
+  display:flex;align-items:center;justify-content:center;gap:3px;
+  height:100px;margin:0 auto 40px;max-width:800px;
+}
+.v2-wf-bar{
+  width:4px;border-radius:4px;
+  background:linear-gradient(to top,#FF6B35,#E8175D);
+  animation:wfAnim var(--d) ease-in-out var(--dl) infinite alternate;
+  opacity:0.7;
+}
+@keyframes wfAnim{from{height:var(--min);}to{height:var(--max);}}
+.v2-wf-controls{display:flex;align-items:center;justify-content:center;gap:20px;}
+.v2-wf-btn{
+  width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  transition:all 0.2s;
+}
+.v2-wf-play{background:linear-gradient(135deg,#FF6B35,#E8175D);}
+.v2-wf-play:hover{transform:scale(1.1);box-shadow:0 12px 40px rgba(255,107,53,0.5);}
+.v2-wf-skip{background:rgba(255,255,255,0.08);color:#fff;}
+.v2-wf-skip:hover{background:rgba(255,255,255,0.12);}
+.v2-track-name{font-size:18px;font-weight:600;margin-bottom:4px;}
+.v2-track-artist{font-size:13px;color:rgba(255,255,255,0.4);}
+
+/* V2 Stories */
+.v2-stories{padding:80px 48px;}
+.v2-story{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+  margin-bottom:120px;
+}
+.v2-story:nth-child(even){direction:rtl;}
+.v2-story:nth-child(even)>*{direction:ltr;}
+.v2-story-visual{
+  aspect-ratio:4/3;border-radius:12px;overflow:hidden;
+  position:relative;
+}
+.v2-story-bg{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:100px;
+}
+.v2-story-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,107,53,0.3),rgba(232,23,93,0.2));
+  display:flex;align-items:flex-end;padding:24px;
+}
+.v2-story-badge{
+  padding:6px 16px;border-radius:100px;
+  background:rgba(255,107,53,0.9);font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+}
+.v2-story-content .label{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:#FF6B35;margin-bottom:16px;font-family:'JetBrains Mono',monospace;
+  display:flex;align-items:center;gap:10px;
+}
+.v2-story-content .label::before{content:'';width:24px;height:1px;background:#FF6B35;}
+.v2-story-content h2{
+  font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,44px);
+  font-weight:700;line-height:1.1;margin-bottom:20px;
+}
+.v2-story-content p{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.9;margin-bottom:28px;}
+.v2-story-stats{display:flex;gap:32px;margin-bottom:28px;}
+.v2-stat-item .num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#FF6B35;}
+.v2-stat-item .lab{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;}
+
+/* V2 Pricing */
+.v2-pricing{padding:80px 48px;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.04);}
+.v2-pricing-head{text-align:center;margin-bottom:60px;}
+.v2-pricing-head .label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
+.v2-pricing-head h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:700;}
+.v2-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);}
+.v2-plan{background:#0a0a0a;padding:44px 32px;transition:background 0.3s;}
+.v2-plan:hover{background:#111;}
+.v2-plan.featured{background:#111;border:1px solid rgba(255,107,53,0.3);margin:-1px;z-index:1;position:relative;}
+.v2-plan-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:4px 16px;background:linear-gradient(135deg,#FF6B35,#E8175D);border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;white-space:nowrap;}
+.v2-plan-name{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:20px;font-family:'JetBrains Mono',monospace;}
+.v2-plan-price{font-family:'Playfair Display',serif;font-size:56px;font-weight:700;line-height:1;margin-bottom:4px;}
+.v2-plan-price sup{font-size:22px;vertical-align:super;}
+.v2-plan-per{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:28px;}
+.v2-plan-features{list-style:none;margin-bottom:32px;}
+.v2-plan-features li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:10px;}
+.v2-plan-features li::before{content:'→';color:#FF6B35;flex-shrink:0;}
+.v2-plan-btn{
+  width:100%;padding:13px;background:transparent;
+  border:1px solid rgba(255,107,53,0.4);color:#FF6B35;
+  border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:all 0.2s;font-family:'Space Grotesk',sans-serif;
+}
+.v2-plan-btn:hover,.v2-plan.featured .v2-plan-btn{background:linear-gradient(135deg,#FF6B35,#E8175D);border-color:transparent;color:#fff;}
+
+/* V2 Footer */
+.v2-footer{padding:60px 48px;border-top:1px solid rgba(255,255,255,0.04);}
+.v2-footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.v2-ft-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;margin-bottom:12px;}
+.v2-ft-logo em{color:#FF6B35;font-style:italic;}
+.v2-ft-desc{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.8;}
+.v2-ft-col h4{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
+.v2-ft-col ul{list-style:none;}
+.v2-ft-col ul li{margin-bottom:10px;}
+.v2-ft-col ul a{font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.2s;}
+.v2-ft-col ul a:hover{color:#FF6B35;}
+.v2-trust-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+.v2-tb{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(255,255,255,0.06);border-radius:8px;font-size:11px;color:rgba(255,255,255,0.4);}
+.v2-ft-bot{display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.2);padding-top:28px;border-top:1px solid rgba(255,255,255,0.04);}
+
+/* ══════════════════════════════════════════
+   VARIANT 3 — THE MINIMALIST
+══════════════════════════════════════════ */
+.v3-body{background:#fff;color:#000;font-family:'Inter',sans-serif;min-height:100vh;}
+
+/* V3 Nav */
+.v3-nav{
+  position:sticky;top:52px;z-index:100;
+  padding:0 40px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#fff;border-bottom:1px solid #f0f0f0;
+}
+.v3-logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#000;}
+.v3-logo em{color:#000;font-style:normal;}
+.v3-logo span{color:#999;}
+.v3-nav-links{display:flex;gap:28px;}
+.v3-nav-links a{color:#666;text-decoration:none;font-size:13px;font-weight:500;transition:color 0.2s;}
+.v3-nav-links a:hover{color:#000;}
+.v3-nav-r{display:flex;gap:8px;}
+.v3-btn-text{padding:8px 16px;background:transparent;border:none;color:#666;font-size:13px;cursor:pointer;border-radius:8px;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.v3-btn-text:hover{background:#f5f5f5;color:#000;}
+.v3-btn-dark{padding:8px 20px;background:#000;border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.v3-btn-dark:hover{background:#222;}
+
+/* V3 Hero */
+.v3-hero{padding:100px 40px 80px;max-width:900px;margin:0 auto;}
+.v3-hero-eyebrow{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:24px;}
+.v3-hero h1{font-size:clamp(40px,6vw,80px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:24px;color:#000;}
+.v3-hero h1 span{color:#999;}
+.v3-hero p{font-size:17px;color:#666;line-height:1.7;max-width:560px;margin-bottom:40px;}
+.v3-hero-btns{display:flex;gap:12px;align-items:center;}
+.v3-hero-btn-main{padding:14px 32px;background:#000;border:none;color:#fff;border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.v3-hero-btn-main:hover{background:#222;transform:translateY(-1px);}
+.v3-hero-btn-sec{padding:14px 32px;background:transparent;border:1.5px solid #e0e0e0;color:#000;border-radius:10px;font-size:15px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.v3-hero-btn-sec:hover{border-color:#000;}
+.v3-hero-note{font-size:12px;color:#999;margin-top:12px;display:flex;align-items:center;gap:6px;}
+.v3-hero-note::before{content:'✓';color:#000;font-weight:700;}
+
+/* V3 Stats */
+.v3-stats{display:flex;border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;margin:0;}
+.v3-stat{flex:1;padding:32px 40px;border-right:1px solid #f0f0f0;}
+.v3-stat:last-child{border-right:none;}
+.v3-stat-n{font-size:36px;font-weight:800;letter-spacing:-1px;margin-bottom:4px;}
+.v3-stat-l{font-size:13px;color:#999;font-weight:500;}
+
+/* V3 Features */
+.v3-features{padding:80px 40px;max-width:1100px;margin:0 auto;}
+.v3-features-header{margin-bottom:60px;}
+.v3-features-header h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1px;margin-bottom:12px;}
+.v3-features-header p{font-size:15px;color:#666;}
+.v3-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid #f0f0f0;}
+.v3-feat{padding:40px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;transition:background 0.2s;}
+.v3-feat:hover{background:#fafafa;}
+.v3-feat:nth-child(3n){border-right:none;}
+.v3-feat-icon{width:44px;height:44px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px;}
+.v3-feat h3{font-size:16px;font-weight:700;margin-bottom:8px;}
+.v3-feat p{font-size:13px;color:#666;line-height:1.7;}
+
+/* V3 Tracks */
+.v3-tracks{padding:0 40px 80px;max-width:1100px;margin:0 auto;}
+.v3-tracks h2{font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:32px;}
+.v3-track-list{border:1px solid #f0f0f0;border-radius:12px;overflow:hidden;}
+.v3-track{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;border-bottom:1px solid #f0f0f0;
+  transition:background 0.15s;cursor:pointer;
+}
+.v3-track:last-child{border-bottom:none;}
+.v3-track:hover{background:#fafafa;}
+.v3-track-num{width:24px;font-size:13px;color:#999;text-align:center;flex-shrink:0;}
+.v3-track-thumb{width:44px;height:44px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.v3-track-info{flex:1;}
+.v3-track-info h4{font-size:14px;font-weight:600;}
+.v3-track-info p{font-size:12px;color:#999;margin-top:2px;}
+.v3-track-dur{font-size:13px;color:#999;font-family:'JetBrains Mono',monospace;flex-shrink:0;}
+.v3-track-price{font-size:14px;font-weight:700;flex-shrink:0;min-width:60px;text-align:right;}
+.v3-track-buy{
+  padding:7px 16px;background:#000;border:none;color:#fff;
+  border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;
+  transition:all 0.2s;flex-shrink:0;font-family:'Inter',sans-serif;
+}
+.v3-track-buy:hover{background:#333;}
+
+/* V3 Payment */
+.v3-payment{background:#000;padding:80px 40px;color:#fff;}
+.v3-pay-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.v3-pay-left h2{font-size:clamp(28px,3vw,42px);font-weight:800;letter-spacing:-1px;margin-bottom:16px;}
+.v3-pay-left p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.8;margin-bottom:32px;}
+.v3-pay-features{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:32px;}
+.v3-pay-features li{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,0.7);}
+.v3-pay-features li::before{content:'✓';color:#fff;font-weight:700;font-size:12px;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.v3-pay-trust{display:flex;gap:8px;flex-wrap:wrap;}
+.v3-pay-trust-item{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.4);}
+
+/* V3 Form */
+.v3-form{background:#111;border-radius:16px;padding:32px;}
+.v3-form-title{font-size:18px;font-weight:700;margin-bottom:4px;}
+.v3-form-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:24px;}
+.v3-field{margin-bottom:16px;}
+.v3-field label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;font-family:'JetBrains Mono',monospace;}
+.v3-input{
+  width:100%;padding:12px 14px;
+  background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;
+  outline:none;transition:border-color 0.2s;
+}
+.v3-input:focus{border-color:rgba(255,255,255,0.3);}
+.v3-input.error{border-color:#ef4444;}
+.v3-input::placeholder{color:rgba(255,255,255,0.2);}
+.v3-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.v3-err-msg{font-size:11px;color:#ef4444;margin-top:4px;display:none;}
+.v3-err-msg.show{display:block;}
+.v3-submit{
+  width:100%;padding:14px;background:#fff;border:none;color:#000;
+  border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;
+  transition:all 0.2s;font-family:'Inter',sans-serif;margin-top:8px;
+}
+.v3-submit:hover{background:#f0f0f0;transform:translateY(-1px);}
+.v3-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.v3-pay-secure-note{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-size:11px;color:rgba(255,255,255,0.3);}
+.v3-card-icons{display:flex;gap:8px;margin-top:16px;}
+.v3-card-icon{padding:4px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:4px;font-size:10px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.4);}
+
+/* V3 Plans */
+.v3-plans{padding:80px 40px;max-width:1100px;margin:0 auto;}
+.v3-plans h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1px;margin-bottom:12px;}
+.v3-plans-sub{font-size:15px;color:#666;margin-bottom:48px;}
+.v3-plan-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid #f0f0f0;}
+.v3-plan{padding:36px 28px;border-right:1px solid #f0f0f0;position:relative;transition:background 0.2s;}
+.v3-plan:last-child{border-right:none;}
+.v3-plan:hover{background:#fafafa;}
+.v3-plan.featured{background:#000;color:#fff;}
+.v3-plan.featured:hover{background:#111;}
+.v3-plan-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#999;margin-bottom:20px;font-family:'JetBrains Mono',monospace;}
+.v3-plan.featured .v3-plan-label{color:rgba(255,255,255,0.4);}
+.v3-plan-price-wrap{margin-bottom:24px;}
+.v3-plan-price{font-size:40px;font-weight:800;letter-spacing:-1px;}
+.v3-plan-price sup{font-size:16px;vertical-align:super;}
+.v3-plan-mo{font-size:12px;color:#999;margin-top:4px;}
+.v3-plan.featured .v3-plan-mo{color:rgba(255,255,255,0.4);}
+.v3-plan-features{list-style:none;margin-bottom:28px;}
+.v3-plan-features li{font-size:13px;color:#666;padding:7px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;gap:8px;}
+.v3-plan.featured .v3-plan-features li{color:rgba(255,255,255,0.6);border-bottom-color:rgba(255,255,255,0.05);}
+.v3-plan-features li::before{content:'—';color:#ccc;}
+.v3-plan.featured .v3-plan-features li::before{color:rgba(255,255,255,0.2);}
+.v3-plan-cta{width:100%;padding:11px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.v3-plan:not(.featured) .v3-plan-cta{background:transparent;border:1.5px solid #e0e0e0;color:#000;}
+.v3-plan:not(.featured) .v3-plan-cta:hover{border-color:#000;}
+.v3-plan.featured .v3-plan-cta{background:#fff;border:none;color:#000;}
+.v3-plan.featured .v3-plan-cta:hover{background:#f0f0f0;}
+
+/* V3 Footer */
+.v3-footer{padding:48px 40px;border-top:1px solid #f0f0f0;}
+.v3-footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.v3-ft-logo{font-size:18px;font-weight:800;letter-spacing:-0.5px;margin-bottom:10px;}
+.v3-ft-desc{font-size:13px;color:#999;line-height:1.7;}
+.v3-ft-col h4{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#ccc;margin-bottom:14px;}
+.v3-ft-col ul{list-style:none;}
+.v3-ft-col ul li{margin-bottom:8px;}
+.v3-ft-col ul a{font-size:13px;color:#666;text-decoration:none;transition:color 0.2s;}
+.v3-ft-col ul a:hover{color:#000;}
+.v3-trust-row{display:flex;gap:10px;flex-wrap:wrap;padding:20px 0;border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;margin-bottom:20px;}
+.v3-trust-badge{display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid #e8e8e8;border-radius:100px;font-size:11px;color:#666;font-weight:500;}
+.v3-ft-bottom{display:flex;justify-content:space-between;font-size:12px;color:#999;}
+
+/* ══════ RESPONSIVE ══════ */
+@media(max-width:900px){
+  .vswitcher{padding:0 12px;}
+  .vs-label{display:none;}
+  .vs-tab{padding:7px 12px;font-size:11px;}
+  /* V1 */
+  .v1-hero{grid-template-columns:1fr;padding:40px 20px;}
+  .v1-hero-visual{display:none;}
+  .v1-section{padding:32px 20px;}
+  .v1-featured{margin:0 20px;padding:24px;flex-direction:column;}
+  .v1-featured-img{margin-left:0;}
+  .v1-footer{padding:32px 20px;}
+  .v1-footer-top{grid-template-columns:1fr 1fr;}
+  .v1-cart-panel{width:100%;}
+  /* V2 */
+  .v2-nav{padding:0 20px;}
+  .v2-nav-links{display:none;}
+  .v2-hero{padding:60px 20px;}
+  .v2-waveform-section{padding:60px 20px;}
+  .v2-stories{padding:40px 20px;}
+  .v2-story{grid-template-columns:1fr;gap:32px;margin-bottom:60px;}
+  .v2-story:nth-child(even){direction:ltr;}
+  .v2-pricing{padding:60px 20px;}
+  .v2-plans{grid-template-columns:1fr;}
+  .v2-footer{padding:40px 20px;}
+  .v2-footer-top{grid-template-columns:1fr 1fr;}
+  /* V3 */
+  .v3-nav{padding:0 20px;}
+  .v3-nav-links{display:none;}
+  .v3-hero{padding:60px 20px 48px;}
+  .v3-stats{flex-wrap:wrap;}
+  .v3-stat{flex:0 0 50%;}
+  .v3-features{padding:48px 20px;}
+  .v3-feat-grid{grid-template-columns:1fr 1fr;}
+  .v3-tracks{padding:0 20px 48px;}
+  .v3-payment{padding:48px 20px;}
+  .v3-pay-inner{grid-template-columns:1fr;}
+  .v3-plans{padding:48px 20px;}
+  .v3-plan-grid{grid-template-columns:1fr 1fr;}
+  .v3-footer{padding:32px 20px;}
+  .v3-footer-top{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .v3-plan-grid{grid-template-columns:1fr;}
+  .v3-feat-grid{grid-template-columns:1fr;}
+  .v1-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ VARIANT SWITCHER ═══ -->
+<div class="vswitcher">
+  <span class="vs-label">Tasarım</span>
+  <div class="vs-tabs">
+    <button class="vs-tab v1 active" onclick="switchVariant(1)">
+      <span class="vs-dot v1-dot"></span>The Storefront
+    </button>
+    <button class="vs-tab v2" onclick="switchVariant(2)">
+      <span class="vs-dot v2-dot"></span>Artist Experience
+    </button>
+    <button class="vs-tab v3" onclick="switchVariant(3)">
+      <span class="vs-dot v3-dot"></span>The Minimalist
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     VARIANT 1 — THE STOREFRONT
+══════════════════════════════════════════ -->
+<div class="variant active" id="v1">
+<main class="v1-body">
+
+  <!-- Cart Overlay -->
+  <div class="v1-cart-overlay" id="v1CartOverlay" onclick="closeCart()"></div>
+  <div class="v1-cart-panel" id="v1CartPanel">
+    <div class="v1-cart-head">
+      <h3>🛒 Sepetim (<span id="cartCountPanel">0</span>)</h3>
+      <button class="v1-cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="v1-cart-total" id="cartTotalArea" style="display:none">
+      <div class="v1-cart-total-row">
+        <span>Toplam</span>
+        <span id="cartTotal" style="color:#1DB954">$0.00</span>
+      </div>
+      <button class="v1-checkout-btn" onclick="alert('Ödeme sayfasına yönlendiriliyor...')">Satın Al →</button>
+    </div>
+    <div id="cartEmpty" style="text-align:center;padding:48px 0;color:#535353;font-size:14px;">
+      <div style="font-size:48px;margin-bottom:12px;">🛒</div>
+      Sepetiniz boş
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="v1-nav" role="navigation" aria-label="Ana navigasyon">
+    <div class="v1-logo">Nova<span>hit</span></div>
+    <div class="v1-search" role="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" placeholder="Sanatçı, albüm veya müzik türü ara..." aria-label="Müzik ara">
+    </div>
+    <div class="v1-nav-r">
+      <button class="v1-signin">Giriş Yap</button>
+      <button class="v1-signup">Üye Ol</button>
+      <button class="v1-cart-btn" onclick="openCart()" aria-label="Sepeti aç">
+        🛒
+        <div class="v1-cart-count" id="cartBadge">0</div>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="v1-hero" aria-labelledby="v1-h1">
+    <div>
+      <div class="v1-hero-badge">✦ &nbsp;125 Müzik Türü • 50+ Dil • AI Üretim</div>
+      <h1 id="v1-h1">Müziğin<br><span>Geleceği</span><br>Burada.</h1>
+      <p>Spotify kalitesinde, AI gücüyle üretilmiş profesyonel müzikler. Saniyeler içinde satın al, anında indir.</p>
+      <div class="v1-hero-btns">
+        <button class="v1-btn-primary" onclick="document.getElementById('v1tracks').scrollIntoView({behavior:'smooth'})">✦ Keşfet</button>
+        <button class="v1-btn-ghost">▶ Demo Dinle</button>
+      </div>
+    </div>
+    <div class="v1-hero-visual" aria-label="Müzik çalar">
+      <div class="v1-now-playing">
+        <div class="v1-album">🎵</div>
+        <div class="v1-track-info">
+          <h4>Anahtarı Masaya Bıraktım</h4>
+          <p>Novahit AI · Türkçe Pop</p>
+        </div>
+      </div>
+      <div class="v1-progress"><div class="v1-progress-fill"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#535353;margin-bottom:16px;font-family:'JetBrains Mono',monospace"><span>1:24</span><span>3:45</span></div>
+      <div class="v1-controls">
+        <button class="v1-ctrl-btn" aria-label="Önceki">⏮</button>
+        <button class="v1-ctrl-play" aria-label="Oynat/Duraklat">▶</button>
+        <button class="v1-ctrl-btn" aria-label="Sonraki">⏭</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="v1-section" aria-label="Müzik kategorileri">
+    <div class="v1-cats" role="group" aria-label="Müzik türü filtrele">
+      <button class="v1-cat on" onclick="filterCat(this,'hepsi')">Hepsi</button>
+      <button class="v1-cat" onclick="filterCat(this,'pop')">Türkçe Pop</button>
+      <button class="v1-cat" onclick="filterCat(this,'arabesk')">Arabesk</button>
+      <button class="v1-cat" onclick="filterCat(this,'kpop')">K-Pop</button>
+      <button class="v1-cat" onclick="filterCat(this,'hiphop')">Hip-Hop</button>
+      <button class="v1-cat" onclick="filterCat(this,'elektronik')">Elektronik</button>
+      <button class="v1-cat" onclick="filterCat(this,'folk')">Folk</button>
+      <button class="v1-cat" onclick="filterCat(this,'latin')">Latin</button>
+    </div>
+  </section>
+
+  <!-- Featured Banner -->
+  <div class="v1-featured" role="banner" aria-label="Öne çıkan içerik">
+    <div class="v1-featured-text">
+      <h2>🎙️ Kendi Sesinle Üret</h2>
+      <p>30 saniye ses yükle. AI sesin klonlasın, şarkını kendi sesinle söylesin. Üstüne otomatik video klibi.</p>
+      <button class="v1-btn-primary">Voice Studio'ya Geç →</button>
+    </div>
+    <div class="v1-featured-img">🎤</div>
+  </div>
+
+  <!-- Track Cards -->
+  <section class="v1-section" id="v1tracks" aria-label="Müzik listesi">
+    <h2 class="v1-section-title">
+      Öne Çıkan Parçalar
+      <span class="v1-see-all">Tümünü Gör →</span>
+    </h2>
+    <div class="v1-grid" id="v1Grid"></div>
+  </section>
+
+  <!-- Trust + Footer -->
+  <footer class="v1-footer" role="contentinfo">
+    <div class="v1-trust-row" aria-label="Güvenlik sertifikaları">
+      <div class="v1-trust-badge"><span class="icon">🔒</span> 256-bit SSL Şifreleme</div>
+      <div class="v1-trust-badge"><span class="icon">✅</span> PCI DSS Uyumlu</div>
+      <div class="v1-trust-badge"><span class="icon">🛡️</span> 3D Secure</div>
+      <div class="v1-trust-badge"><span class="icon">↩️</span> 30 Gün İade Garantisi</div>
+      <div class="v1-trust-badge"><span class="icon">🏆</span> Ticari Lisans Dahil</div>
+    </div>
+    <div class="v1-footer-top">
+      <div>
+        <div class="v1-ft-logo">Nova<span>hit</span></div>
+        <p class="v1-ft-desc">125 müzik türü, 50+ dil, 15 uzman AI ajan. Profesyonel müzik saniyeler içinde.</p>
+      </div>
+      <div class="v1-ft-col">
+        <h4>Ürün</h4>
+        <ul><li><a href="#">Nasıl Çalışır</a></li><li><a href="#">Müzik Türleri</a></li><li><a href="#">Voice Studio</a></li><li><a href="#">API</a></li></ul>
+      </div>
+      <div class="v1-ft-col">
+        <h4>Şirket</h4>
+        <ul><li><a href="#">Hakkımızda</a></li><li><a href="#">Blog</a></li><li><a href="#">Kariyer</a></li><li><a href="#">İletişim</a></li></ul>
+      </div>
+      <div class="v1-ft-col">
+        <h4>Yasal</h4>
+        <ul><li><a href="#">Gizlilik</a></li><li><a href="#">Kullanım Koşulları</a></li><li><a href="#">KVKK</a></li><li><a href="#">Telif</a></li></ul>
+      </div>
+    </div>
+    <div class="v1-ft-bottom">
+      <span>© 2025 Novahit. Tüm hakları saklıdır.</span>
+      <span>Powered by Claude AI & ElevenLabs</span>
+    </div>
+  </footer>
+</main>
+</div>
+
+<!-- ══════════════════════════════════════════
+     VARIANT 2 — THE ARTIST EXPERIENCE
+══════════════════════════════════════════ -->
+<div class="variant" id="v2">
+<main class="v2-body">
+
+  <nav class="v2-nav" role="navigation" aria-label="Ana navigasyon">
+    <div class="v2-logo">Nova<em>hit</em></div>
+    <div class="v2-nav-links">
+      <a href="#">Deneyim</a>
+      <a href="#">Koleksiyon</a>
+      <a href="#">Sanatçılar</a>
+      <a href="#">Fiyatlar</a>
+    </div>
+    <div class="v2-nav-r">
+      <button class="v2-btn-outline">Giriş Yap</button>
+      <button class="v2-btn-cta">✦ Başla</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="v2-hero" aria-labelledby="v2-h1">
+    <div class="v2-hero-bg"></div>
+    <div class="v2-hero-content">
+      <div class="v2-hero-tag">● Live — 15 Uzman AI Ajan Çalışıyor</div>
+      <h1 id="v2-h1">Müziğin<br><em>Ruhu</em> Var</h1>
+      <p>Her nota, her söz — binlerce sanatçının mirasından öğrenmiş 15 AI ajan tarafından özenle yaratılıyor. Sadece müzik değil, sanat.</p>
+      <div class="v2-hero-btns">
+        <button class="v2-btn-big">✦ &nbsp;Şimdi Yarat</button>
+        <button class="v2-btn-big-ghost">Koleksiyonu Keşfet</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waveform Player -->
+  <section class="v2-waveform-section" aria-label="Müzik çalar">
+    <div class="v2-wf-label">— Şu An Çalıyor —</div>
+    <h2 class="v2-wf-title">Canlı <em>Deneyim</em></h2>
+    <div class="v2-waveform" id="v2Waveform" aria-label="Ses dalgası görselleştirmesi"></div>
+    <div style="margin-bottom:24px;">
+      <div class="v2-track-name">Anahtarı Masaya Bıraktım</div>
+      <div class="v2-track-artist">Novahit AI · Türkçe Pop · 118 BPM</div>
+    </div>
+    <div class="v2-wf-controls">
+      <button class="v2-wf-btn v2-wf-skip" aria-label="Önceki">⏮</button>
+      <button class="v2-wf-btn v2-wf-play" id="v2PlayBtn" onclick="togglePlay()" aria-label="Oynat">▶</button>
+      <button class="v2-wf-btn v2-wf-skip" aria-label="Sonraki">⏭</button>
+    </div>
+  </section>
+
+  <!-- Stories -->
+  <section class="v2-stories" aria-label="Özellikler">
+    <article class="v2-story">
+      <div class="v2-story-visual">
+        <div class="v2-story-bg" style="background:linear-gradient(135deg,#1a0a2e,#2d1b69)">🎼</div>
+        <div class="v2-story-overlay"><span class="v2-story-badge">125 TÜR</span></div>
+      </div>
+      <div class="v2-story-content">
+        <div class="label">Dünya Müziği</div>
+        <h2>Her Kültürden<br>Her Dilden</h2>
+        <p>Türkçe pop'tan K-Pop'a, Arabeskten Bossa Nova'ya — her kültürün müzik ruhunu bilen sistemimiz, o dilin içinden üretir.</p>
+        <div class="v2-story-stats">
+          <div class="v2-stat-item"><div class="num">125</div><div class="lab">Müzik Türü</div></div>
+          <div class="v2-stat-item"><div class="num">50+</div><div class="lab">Şarkı Dili</div></div>
+        </div>
+        <button class="v2-btn-cta">Tüm Türleri Keşfet →</button>
+      </div>
+    </article>
+
+    <article class="v2-story">
+      <div class="v2-story-visual">
+        <div class="v2-story-bg" style="background:linear-gradient(135deg,#2a0a0a,#6b1a1a)">🎤</div>
+        <div class="v2-story-overlay"><span class="v2-story-badge">SES KLONLAMA</span></div>
+      </div>
+      <div class="v2-story-content">
+        <div class="label">Kendi Sesinle</div>
+        <h2>Sesini<br>Ölümsüzleştir</h2>
+        <p>30 saniye ses yükle. ElevenLabs teknolojisiyle sesin klonlanır, 15 ajan şarkıyı yazar ve kendi sesinle söyler.</p>
+        <div class="v2-story-stats">
+          <div class="v2-stat-item"><div class="num">30s</div><div class="lab">Yeterli Ses</div></div>
+          <div class="v2-stat-item"><div class="num">15</div><div class="lab">AI Ajan</div></div>
+        </div>
+        <button class="v2-btn-cta">Voice Studio →</button>
+      </div>
+    </article>
+
+    <article class="v2-story">
+      <div class="v2-story-visual">
+        <div class="v2-story-bg" style="background:linear-gradient(135deg,#0a2a1a,#1a6b2a)">🎬</div>
+        <div class="v2-story-overlay"><span class="v2-story-badge">OTOMATİK KLİP</span></div>
+      </div>
+      <div class="v2-story-content">
+        <div class="label">Video Prodüksiyon</div>
+        <h2>Şarkı Bitti,<br>Klip Hazır</h2>
+        <p>Müzik üretilirken AI otomatik görsel klip de oluşturur. YouTube, TikTok, Instagram Reels için ayrı formatlar.</p>
+        <div class="v2-story-stats">
+          <div class="v2-stat-item"><div class="num">MP4</div><div class="lab">Video Format</div></div>
+          <div class="v2-stat-item"><div class="num">4K</div><div class="lab">Çözünürlük</div></div>
+        </div>
+        <button class="v2-btn-cta">Klip Üret →</button>
+      </div>
+    </article>
+  </section>
+
+  <!-- Pricing -->
+  <section class="v2-pricing" id="v2pricing" aria-label="Fiyatlandırma">
+    <div class="v2-pricing-head">
+      <div class="label">Fiyatlandırma</div>
+      <h2>Sanat İçin<br><em>Adil Fiyat</em></h2>
+    </div>
+    <div class="v2-plans">
+      <div class="v2-plan">
+        <div class="v2-plan-name">Ücretsiz</div>
+        <div class="v2-plan-price"><sup>$</sup>0</div>
+        <div class="v2-plan-per">/ ay — Kredi kartı gerekmez</div>
+        <ul class="v2-plan-features">
+          <li>Ayda 3 şarkı</li>
+          <li>5 müzik türü</li>
+          <li>MP3 indirme</li>
+          <li>Temel platform paketi</li>
+        </ul>
+        <button class="v2-plan-btn">Ücretsiz Başla</button>
+      </div>
+      <div class="v2-plan featured" aria-label="En popüler plan">
+        <div class="v2-plan-tag">En Popüler</div>
+        <div class="v2-plan-name">Pro</div>
+        <div class="v2-plan-price"><sup>$</sup>9.99</div>
+        <div class="v2-plan-per">/ ay — İptal garantili</div>
+        <ul class="v2-plan-features">
+          <li>Günde 10 şarkı</li>
+          <li>125 müzik türü</li>
+          <li>50+ şarkı dili</li>
+          <li>Ticari haklar dahil</li>
+          <li>Gelir projeksiyonu</li>
+          <li>Tam platform paketi</li>
+        </ul>
+        <button class="v2-plan-btn">Pro'ya Geç →</button>
+      </div>
+      <div class="v2-plan">
+        <div class="v2-plan-name">Voice Studio</div>
+        <div class="v2-plan-price"><sup>$</sup>24.99</div>
+        <div class="v2-plan-per">/ ay — Tüm özellikler</div>
+        <ul class="v2-plan-features">
+          <li>10 ses klonlama / ay</li>
+          <li>10 şarkı + 10 klip</li>
+          <li>Özel gün şarkıları</li>
+          <li>MP4 klip indirme</li>
+          <li>Ticari haklar dahil</li>
+          <li>Tüm diller</li>
+        </ul>
+        <button class="v2-plan-btn">Voice Studio →</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="v2-footer" role="contentinfo">
+    <div class="v2-footer-top">
+      <div>
+        <div class="v2-ft-logo">Nova<em>hit</em></div>
+        <p class="v2-ft-desc">125 müzik türü, 50+ dil, 15 uzman AI ajan. Sanatı yapay zeka ile yeniden keşfet.</p>
+        <div class="v2-trust-badges" aria-label="Güvenlik rozetleri">
+          <div class="v2-tb">🔒 SSL</div>
+          <div class="v2-tb">✅ PCI DSS</div>
+          <div class="v2-tb">🛡️ 3D Secure</div>
+          <div class="v2-tb">↩️ 30g İade</div>
+        </div>
+      </div>
+      <div class="v2-ft-col"><h4>Ürün</h4><ul><li><a href="#">Deneyim</a></li><li><a href="#">Voice Studio</a></li><li><a href="#">Klip Üretimi</a></li><li><a href="#">API</a></li></ul></div>
+      <div class="v2-ft-col"><h4>Şirket</h4><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">Blog</a></li><li><a href="#">Kariyer</a></li></ul></div>
+      <div class="v2-ft-col"><h4>Yasal</h4><ul><li><a href="#">Gizlilik</a></li><li><a href="#">Koşullar</a></li><li><a href="#">KVKK</a></li></ul></div>
+    </div>
+    <div class="v2-ft-bot">
+      <span>© 2025 Novahit. All rights reserved.</span>
+      <span>Powered by Claude AI & ElevenLabs</span>
+    </div>
+  </footer>
+</main>
+</div>
+
+<!-- ══════════════════════════════════════════
+     VARIANT 3 — THE MINIMALIST
+══════════════════════════════════════════ -->
+<div class="variant" id="v3">
+<main class="v3-body">
+
+  <nav class="v3-nav" role="navigation" aria-label="Ana navigasyon">
+    <div class="v3-logo">Nova<span>hit</span></div>
+    <div class="v3-nav-links">
+      <a href="#">Özellikler</a>
+      <a href="#">Fiyatlar</a>
+      <a href="#">API</a>
+      <a href="#">Destek</a>
+    </div>
+    <div class="v3-nav-r">
+      <button class="v3-btn-text">Giriş Yap</button>
+      <button class="v3-btn-dark">Ücretsiz Başla</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="v3-hero" aria-labelledby="v3-h1">
+    <div class="v3-hero-eyebrow">AI Music Studio · 2025</div>
+    <h1 id="v3-h1">Müzik üret.<br><span>Saniyeler içinde.</span></h1>
+    <p>125 müzik türü, 50'den fazla dil, kendi sesinle şarkı. Karmaşık değil — sadece çalışıyor.</p>
+    <div class="v3-hero-btns">
+      <button class="v3-hero-btn-main" onclick="document.getElementById('v3payment').scrollIntoView({behavior:'smooth'})">Ücretsiz Başla</button>
+      <button class="v3-hero-btn-sec">Demo Dinle</button>
+    </div>
+    <div class="v3-hero-note">İlk 3 şarkı ücretsiz. Kredi kartı gerekmez.</div>
+  </section>
+
+  <!-- Stats -->
+  <div class="v3-stats" role="region" aria-label="İstatistikler">
+    <div class="v3-stat"><div class="v3-stat-n">125</div><div class="v3-stat-l">Müzik türü</div></div>
+    <div class="v3-stat"><div class="v3-stat-n">50+</div><div class="v3-stat-l">Şarkı dili</div></div>
+    <div class="v3-stat"><div class="v3-stat-n">15</div><div class="v3-stat-l">AI ajan</div></div>
+    <div class="v3-stat"><div class="v3-stat-n">$0.05</div><div class="v3-stat-l">Şarkı başı</div></div>
+  </div>
+
+  <!-- Features -->
+  <section class="v3-features" aria-label="Özellikler">
+    <div class="v3-features-header">
+      <h2>Neden Novahit?</h2>
+      <p>Karmaşık arayüzler değil. Sonuç.</p>
+    </div>
+    <div class="v3-feat-grid">
+      <div class="v3-feat">
+        <div class="v3-feat-icon">🎵</div>
+        <h3>125 Müzik Türü</h3>
+        <p>Türkçe pop'tan Arabesk'e, K-Pop'tan Bossa Nova'ya. Her kültürün müzik ruhu içinde.</p>
+      </div>
+      <div class="v3-feat">
+        <div class="v3-feat-icon">🌍</div>
+        <h3>50+ Dil</h3>
+        <p>Rusça arabesk, Japonca folk, Almanca pop. Sistem o dilin müzik anlayışını bilir.</p>
+      </div>
+      <div class="v3-feat">
+        <div class="v3-feat-icon">🎤</div>
+        <h3>Ses Klonlama</h3>
+        <p>30 saniye ses yükle. ElevenLabs teknolojisiyle şarkı kendi sesinle söylenir.</p>
+      </div>
+      <div class="v3-feat">
+        <div class="v3-feat-icon">🎬</div>
+        <h3>Otomatik Klip</h3>
+        <p>Şarkıyla birlikte MP4 video klip. YouTube, TikTok, Reels formatı.</p>
+      </div>
+      <div class="v3-feat">
+        <div class="v3-feat-icon">⚡</div>
+        <h3>15 AI Ajan</h3>
+        <p>Pazar araştırması, söz yazımı, makam, ritim, melodi — hepsi otomatik.</p>
+      </div>
+      <div class="v3-feat">
+        <div class="v3-feat-icon">📄</div>
+        <h3>Ticari Haklar</h3>
+        <p>Tüm üretilen müzikler ticari lisanslı. Spotify, YouTube, reklam — sorunsuz kullan.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tracks -->
+  <section class="v3-tracks" id="v3tracks" aria-label="Müzik listesi">
+    <h2>Öne Çıkan Parçalar</h2>
+    <div class="v3-track-list" id="v3TrackList" role="list"></div>
+  </section>
+
+  <!-- Plans -->
+  <section class="v3-plans" aria-label="Fiyatlandırma">
+    <h2>Basit fiyat.</h2>
+    <div class="v3-plans-sub">Sürpriz yok. İstediğinde iptal.</div>
+    <div class="v3-plan-grid">
+      <div class="v3-plan">
+        <div class="v3-plan-label">Ücretsiz</div>
+        <div class="v3-plan-price-wrap"><div class="v3-plan-price"><sup>$</sup>0</div><div class="v3-plan-mo">/ ay · Sonsuza kadar</div></div>
+        <ul class="v3-plan-features"><li>Ayda 3 şarkı</li><li>5 tür</li><li>MP3 indirme</li></ul>
+        <button class="v3-plan-cta">Başla</button>
+      </div>
+      <div class="v3-plan">
+        <div class="v3-plan-label">Starter</div>
+        <div class="v3-plan-price-wrap"><div class="v3-plan-price"><sup>$</sup>4.99</div><div class="v3-plan-mo">/ ay</div></div>
+        <ul class="v3-plan-features"><li>Ayda 20 şarkı</li><li>50 tür</li><li>MP3 + WAV</li><li>YouTube paketi</li></ul>
+        <button class="v3-plan-cta">Başla</button>
+      </div>
+      <div class="v3-plan featured" aria-label="Önerilen plan">
+        <div class="v3-plan-label">Pro</div>
+        <div class="v3-plan-price-wrap"><div class="v3-plan-price"><sup>$</sup>9.99</div><div class="v3-plan-mo">/ ay · En popüler</div></div>
+        <ul class="v3-plan-features"><li>Günde 10 şarkı</li><li>125 tür · 50+ dil</li><li>Ticari haklar</li><li>Gelir projeksiyonu</li></ul>
+        <button class="v3-plan-cta">Pro'ya Geç</button>
+      </div>
+      <div class="v3-plan">
+        <div class="v3-plan-label">Voice Studio</div>
+        <div class="v3-plan-price-wrap"><div class="v3-plan-price"><sup>$</sup>24.99</div><div class="v3-plan-mo">/ ay</div></div>
+        <ul class="v3-plan-features"><li>10 ses klonu / ay</li><li>10 şarkı + klip</li><li>MP4 video</li><li>Tüm diller</li></ul>
+        <button class="v3-plan-cta">Başla</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Payment -->
+  <section class="v3-payment" id="v3payment" aria-label="Güvenli ödeme">
+    <div class="v3-pay-inner">
+      <div class="v3-pay-left">
+        <h2>Güvenli. Hızlı. Basit.</h2>
+        <p>Ödeme bilgileriniz 256-bit SSL şifreleme ile korunuyor. PCI DSS uyumlu altyapı. İstediğin zaman iptal.</p>
+        <ul class="v3-pay-features">
+          <li>Anında erişim — ödeme sonrası</li>
+          <li>İstediğinde iptal, ücret yok</li>
+          <li>İlk 3 şarkı ücretsiz, iade garantili</li>
+          <li>Fatura otomatik gönderilir</li>
+        </ul>
+        <div class="v3-pay-trust">
+          <div class="v3-pay-trust-item">🔒 256-bit SSL</div>
+          <div class="v3-pay-trust-item">✅ PCI DSS</div>
+          <div class="v3-pay-trust-item">🛡️ 3D Secure</div>
+        </div>
+      </div>
+      <div class="v3-form" role="form" aria-label="Ödeme formu">
+        <div class="v3-form-title">Pro Plana Başla</div>
+        <div class="v3-form-sub">$9.99 / ay · İptal garantili</div>
+
+        <div class="v3-field">
+          <label for="v3Email">E-posta</label>
+          <input class="v3-input" id="v3Email" type="email" placeholder="ornek@email.com" autocomplete="email">
+          <div class="v3-err-msg" id="v3EmailErr">Geçerli bir e-posta girin</div>
+        </div>
+
+        <div class="v3-field">
+          <label for="v3Card">Kart Numarası</label>
+          <input class="v3-input" id="v3Card" type="text" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+          <div class="v3-err-msg" id="v3CardErr">16 haneli kart numarası girin</div>
+        </div>
+
+        <div class="v3-field-row">
+          <div class="v3-field">
+            <label for="v3Exp">Son Kullanma</label>
+            <input class="v3-input" id="v3Exp" type="text" placeholder="AA/YY" maxlength="5" autocomplete="cc-exp">
+            <div class="v3-err-msg" id="v3ExpErr">Geçersiz tarih</div>
+          </div>
+          <div class="v3-field">
+            <label for="v3CVV">CVV</label>
+            <input class="v3-input" id="v3CVV" type="text" placeholder="123" maxlength="4" autocomplete="cc-csc">
+            <div class="v3-err-msg" id="v3CVVErr">3-4 haneli CVV girin</div>
+          </div>
+        </div>
+
+        <button class="v3-submit" id="v3SubmitBtn" onclick="v3Submit()">🔒 &nbsp;Güvenli Öde — $9.99/ay</button>
+        <div class="v3-pay-secure-note">🔒 256-bit SSL ile korunuyor</div>
+        <div class="v3-card-icons">
+          <div class="v3-card-icon">VISA</div>
+          <div class="v3-card-icon">MC</div>
+          <div class="v3-card-icon">AMEX</div>
+          <div class="v3-card-icon">PAYPAL</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="v3-footer" role="contentinfo">
+    <div class="v3-trust-row" aria-label="Güven rozetleri">
+      <div class="v3-trust-badge">🔒 256-bit SSL Şifreleme</div>
+      <div class="v3-trust-badge">✅ PCI DSS Uyumlu</div>
+      <div class="v3-trust-badge">🛡️ 3D Secure</div>
+      <div class="v3-trust-badge">↩️ 30 Gün İade</div>
+      <div class="v3-trust-badge">🏆 Ticari Lisans</div>
+    </div>
+    <div class="v3-footer-top">
+      <div>
+        <div class="v3-ft-logo">Novahit</div>
+        <p class="v3-ft-desc">AI müzik üretimi. Basit, hızlı, güvenilir.</p>
+      </div>
+      <div class="v3-ft-col"><h4>Ürün</h4><ul><li><a href="#">Özellikler</a></li><li><a href="#">Fiyatlar</a></li><li><a href="#">API</a></li></ul></div>
+      <div class="v3-ft-col"><h4>Şirket</h4><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">Blog</a></li><li><a href="#">İletişim</a></li></ul></div>
+      <div class="v3-ft-col"><h4>Yasal</h4><ul><li><a href="#">Gizlilik</a></li><li><a href="#">Koşullar</a></li><li><a href="#">KVKK</a></li></ul></div>
+    </div>
+    <div class="v3-ft-bottom">
+      <span>© 2025 Novahit. Tüm hakları saklıdır.</span>
+      <span>Powered by Claude AI</span>
+    </div>
+  </footer>
+</main>
+</div>
+
+<script>
+// ═══ VARIANT SWITCHER ═══
+function switchVariant(n){
+  document.querySelectorAll('.variant').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.vs-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('v'+n).classList.add('active');
+  document.querySelectorAll('.vs-tab')[n-1].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══ V1: STOREFRONT — CART ═══
+const v1Tracks=[
+  {id:1,emoji:'🌟',title:'Anahtarı Masaya Bıraktım',artist:'Novahit AI',genre:'Türkçe Pop',price:1.99,bg:'linear-gradient(135deg,#1a3a1a,#2d6b2d)'},
+  {id:2,emoji:'🎸',title:'Kader Beni Böyle Yazdı',artist:'Novahit AI',genre:'Arabesk',price:1.99,bg:'linear-gradient(135deg,#3a1a1a,#6b2d2d)'},
+  {id:3,emoji:'⭐',title:'Neon Galaxy',artist:'Novahit AI',genre:'K-Pop',price:2.49,bg:'linear-gradient(135deg,#1a1a3a,#2d2d8b)'},
+  {id:4,emoji:'🔥',title:'Sokak Dersi',artist:'Novahit AI',genre:'Hip-Hop',price:1.99,bg:'linear-gradient(135deg,#2a1a00,#6b4200)'},
+  {id:5,emoji:'🌊',title:'Saudade do Mar',artist:'Novahit AI',genre:'Bossa Nova',price:2.49,bg:'linear-gradient(135deg,#001a3a,#00428b)'},
+  {id:6,emoji:'💃',title:'Alma de Fuego',artist:'Novahit AI',genre:'Flamenco',price:2.49,bg:'linear-gradient(135deg,#3a001a,#8b0042)'},
+  {id:7,emoji:'🎋',title:'夜の星',artist:'Novahit AI',genre:'J-Pop',price:2.49,bg:'linear-gradient(135deg,#1a003a,#42008b)'},
+  {id:8,emoji:'🌙',title:'Neon Drive',artist:'Novahit AI',genre:'Synthwave',price:1.99,bg:'linear-gradient(135deg,#001a3a,#004b6b)'},
+];
+
+let cart=[];
+const gridEl=document.getElementById('v1Grid');
+v1Tracks.forEach(t=>{
+  const card=document.createElement('article');
+  card.className='v1-card';
+  card.setAttribute('role','listitem');
+  card.innerHTML=`
+    <div class="v1-card-img">
+      <div class="v1-card-cover" style="background:${t.bg}">${t.emoji}</div>
+      <div class="v1-play-over" aria-hidden="true">▶</div>
+    </div>
+    <h4>${t.title}</h4>
+    <p>${t.genre}</p>
+    <div class="v1-card-price">
+      <span class="v1-price">$${t.price.toFixed(2)}</span>
+      <button class="v1-add-btn" id="btn${t.id}" onclick="addToCart(${t.id})" aria-label="${t.title} sepete ekle">+ Sepet</button>
+    </div>`;
+  gridEl.appendChild(card);
+});
+
+function addToCart(id){
+  const t=v1Tracks.find(x=>x.id===id);
+  if(!t)return;
+  if(cart.find(x=>x.id===id)){
+    const b=document.getElementById('btn'+id);
+    b.textContent='✓ Eklendi';b.classList.add('added');return;
+  }
+  cart.push(t);
+  updateCart();
+  const b=document.getElementById('btn'+id);
+  b.textContent='✓ Eklendi';b.classList.add('added');
+}
+
+function updateCart(){
+  const count=cart.length;
+  document.getElementById('cartBadge').textContent=count;
+  document.getElementById('cartCountPanel').textContent=count;
+  const total=cart.reduce((s,x)=>s+x.price,0);
+  document.getElementById('cartTotal').textContent='$'+total.toFixed(2);
+  const itemsEl=document.getElementById('cartItems');
+  itemsEl.innerHTML='';
+  cart.forEach(t=>{
+    itemsEl.innerHTML+=`<div class="v1-cart-item">
+      <div class="v1-cart-thumb" style="background:${t.bg}">${t.emoji}</div>
+      <div class="v1-cart-item-info"><h5>${t.title}</h5><p>${t.genre}</p></div>
+      <div class="v1-cart-item-price">$${t.price.toFixed(2)}</div>
+    </div>`;
+  });
+  document.getElementById('cartEmpty').style.display=count?'none':'block';
+  document.getElementById('cartTotalArea').style.display=count?'block':'none';
+}
+
+function openCart(){document.getElementById('v1CartOverlay').classList.add('open');document.getElementById('v1CartPanel').classList.add('open');}
+function closeCart(){document.getElementById('v1CartOverlay').classList.remove('open');document.getElementById('v1CartPanel').classList.remove('open');}
+function filterCat(el){document.querySelectorAll('.v1-cat').forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+
+// ═══ V2: WAVEFORM ═══
+const wfEl=document.getElementById('v2Waveform');
+for(let i=0;i<80;i++){
+  const bar=document.createElement('div');
+  bar.className='v2-wf-bar';
+  const min=Math.random()*10+4;
+  const max=Math.random()*70+20;
+  bar.style.cssText=`--min:${min}px;--max:${max}px;--d:${Math.random()*1.5+0.4}s;--dl:${Math.random()*1.5}s;height:${min}px;`;
+  wfEl.appendChild(bar);
+}
+
+let playing=false;
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('v2PlayBtn').textContent=playing?'⏸':'▶';
+  document.querySelectorAll('.v2-wf-bar').forEach(b=>{
+    b.style.animationPlayState=playing?'running':'paused';
+  });
+}
+// Start bars paused
+document.querySelectorAll('.v2-wf-bar').forEach(b=>b.style.animationPlayState='paused');
+
+// ═══ V3: TRACKS ═══
+const v3TracksData=[
+  {num:'01',emoji:'🌟',bg:'#f0fdf4',title:'Anahtarı Masaya Bıraktım',artist:'Novahit AI · Türkçe Pop',dur:'3:45',price:'$1.99'},
+  {num:'02',emoji:'🎸',bg:'#fef2f2',title:'Kader Beni Böyle Yazdı',artist:'Novahit AI · Arabesk',dur:'4:12',price:'$1.99'},
+  {num:'03',emoji:'⭐',bg:'#eff6ff',title:'Neon Galaxy',artist:'Novahit AI · K-Pop',dur:'3:28',price:'$2.49'},
+  {num:'04',emoji:'🔥',bg:'#fff7ed',title:'Sokak Dersi',artist:'Novahit AI · Hip-Hop',dur:'3:55',price:'$1.99'},
+  {num:'05',emoji:'🌊',bg:'#f0f9ff',title:'Saudade do Mar',artist:'Novahit AI · Bossa Nova',dur:'4:30',price:'$2.49'},
+  {num:'06',emoji:'💃',bg:'#fdf4ff',title:'Alma de Fuego',artist:'Novahit AI · Flamenco',dur:'3:18',price:'$2.49'},
+];
+const tlEl=document.getElementById('v3TrackList');
+v3TracksData.forEach(t=>{
+  const row=document.createElement('div');
+  row.className='v3-track';
+  row.setAttribute('role','listitem');
+  row.innerHTML=`
+    <span class="v3-track-num">${t.num}</span>
+    <div class="v3-track-thumb" style="background:${t.bg}">${t.emoji}</div>
+    <div class="v3-track-info"><h4>${t.title}</h4><p>${t.artist}</p></div>
+    <span class="v3-track-dur">${t.dur}</span>
+    <span class="v3-track-price">${t.price}</span>
+    <button class="v3-track-buy" aria-label="${t.title} satın al">Satın Al</button>`;
+  tlEl.appendChild(row);
+});
+
+// ═══ V3: PAYMENT VALIDATION ═══
+function fmt(id,fn){
+  const el=document.getElementById(id);
+  el.addEventListener('input',()=>{el.value=fn(el.value);});
+}
+fmt('v3Card',v=>{
+  const d=v.replace(/\D/g,'').slice(0,16);
+  return d.replace(/(.{4})/g,'$1 ').trim();
+});
+fmt('v3Exp',v=>{
+  const d=v.replace(/\D/g,'').slice(0,4);
+  if(d.length>=3)return d.slice(0,2)+'/'+d.slice(2);
+  return d;
+});
+fmt('v3CVV',v=>v.replace(/\D/g,'').slice(0,4));
+
+function showErr(id,errId,show){
+  const inp=document.getElementById(id);
+  const err=document.getElementById(errId);
+  inp.classList.toggle('error',show);
+  err.classList.toggle('show',show);
+  return show;
+}
+
+function v3Submit(){
+  const email=document.getElementById('v3Email').value.trim();
+  const card=document.getElementById('v3Card').value.replace(/\s/g,'');
+  const exp=document.getElementById('v3Exp').value;
+  const cvv=document.getElementById('v3CVV').value;
+
+  const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const cardOk=card.length===16;
+  const expOk=/^\d{2}\/\d{2}$/.test(exp)&&(()=>{
+    const [m,y]=exp.split('/').map(Number);
+    const now=new Date();
+    const ey=2000+y,em=m-1;
+    return m>=1&&m<=12&&(ey>now.getFullYear()||(ey===now.getFullYear()&&em>=now.getMonth()));
+  })();
+  const cvvOk=cvv.length>=3;
+
+  let err=false;
+  if(showErr('v3Email','v3EmailErr',!emailOk))err=true;
+  if(showErr('v3Card','v3CardErr',!cardOk))err=true;
+  if(showErr('v3Exp','v3ExpErr',!expOk))err=true;
+  if(showErr('v3CVV','v3CVVErr',!cvvOk))err=true;
+
+  if(!err){
+    const btn=document.getElementById('v3SubmitBtn');
+    btn.disabled=true;btn.textContent='⏳ İşleniyor...';
+    setTimeout(()=>{btn.textContent='✓ Hoş Geldiniz! Yönlendiriliyor...';},2000);
+  }
+}
+
+// ═══ INTERSECTION OBSERVER (animation trigger) ═══
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:0.1});
+document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
