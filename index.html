@@ -166,6 +166,14 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
 .gen-result-btns{display:flex;gap:10px;}
 .gen-dl-btn{flex:1;padding:12px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Space Grotesk',sans-serif;text-decoration:none;text-align:center;}
 .gen-new-btn{flex:1;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;font-size:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;}
+.wiz-lyrics-toggle{width:100%;padding:13px 18px;background:transparent;border:1px dashed rgba(255,255,255,0.12);border-radius:10px;color:rgba(255,255,255,0.45);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;text-align:left;}
+.wiz-lyrics-toggle:hover{border-color:rgba(255,107,53,0.4);color:#FF6B35;}
+.wiz-lyrics-toggle.open{border-color:rgba(255,107,53,0.35);color:#FF6B35;border-style:solid;}
+.wiz-lyrics-box{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
+.wiz-lyrics-box.open{max-height:240px;}
+.wiz-lyrics-area{width:100%;margin-top:12px;padding:14px 16px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;resize:none;height:160px;line-height:1.7;}
+.wiz-lyrics-area:focus{border-color:rgba(255,107,53,0.4);}
+.wiz-lyrics-area::placeholder{color:rgba(255,255,255,0.18);}
 @media(max-width:768px){
   .wiz-row{grid-template-columns:1fr;}
   .wiz-two-col{grid-template-columns:1fr;}
@@ -438,6 +446,16 @@ body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;min-he
     <div>
       <div class="wiz-row-label"><b>05</b> &nbsp;Ses Tipi</div>
       <div class="wiz-vocal-row" id="vocalRow"></div>
+    </div>
+
+    <!-- 06 Kendi Sözlerin (opsiyonel) -->
+    <div>
+      <button class="wiz-lyrics-toggle" id="lyricsToggleBtn" onclick="toggleLyricsBox()">
+        <span id="lyricsToggleIcon">＋</span> &nbsp;Kendi sözlerini / şiirini ekle <span style="opacity:0.4;font-size:11px;font-weight:400">(opsiyonel)</span>
+      </button>
+      <div class="wiz-lyrics-box" id="lyricsBox">
+        <textarea class="wiz-lyrics-area" id="customLyrics" placeholder="Şarkı sözlerini veya şiirini buraya yapıştır. AI bunları kullanarak müzik üretecek. Boş bırakırsan AI seçimlerine göre yazar."></textarea>
+      </div>
     </div>
 
     <!-- Generate -->
@@ -822,12 +840,28 @@ function buildVocals(){
 }
 function buildPrompt(){
   const parts=[wiz.genreStyle||'pop'];
+  // Dili style'a da ekle — kie.ai'nin anlaması için kritik
+  parts.push(wiz.langVal+' language lyrics');
   if(wiz.tema)parts.push('theme: '+wiz.tema);
   if(wiz.duygu)parts.push(wiz.duygu);
   if(wiz.vocal)parts.push(wiz.vocal.val);
   const style=parts.join(', ');
-  const prompt=`Write original song lyrics in ${wiz.langVal}. ${wiz.tema?'Theme: '+wiz.tema+'. ':''}${wiz.duygu?'Mood: '+wiz.duygu+'. ':''}Make it authentic and emotional.`;
+  const customLyrics=(document.getElementById('customLyrics')?.value||'').trim();
+  let prompt;
+  if(customLyrics){
+    prompt=`Use these lyrics as the song. Language: ${wiz.langVal}. Style: ${wiz.genreStyle||'pop'}.\n\n${customLyrics}`;
+  }else{
+    prompt=`Write ONLY in ${wiz.langVal} language. Every single word must be ${wiz.langVal}. ${wiz.tema?'Theme: '+wiz.tema+'. ':''}${wiz.duygu?'Mood: '+wiz.duygu+'. ':''}Style: ${wiz.genreStyle||'pop'}. Make it authentic and emotional.`;
+  }
   return{prompt,style};
+}
+function toggleLyricsBox(){
+  const box=document.getElementById('lyricsBox');
+  const btn=document.getElementById('lyricsToggleBtn');
+  const icon=document.getElementById('lyricsToggleIcon');
+  const open=box.classList.toggle('open');
+  btn.classList.toggle('open',open);
+  icon.textContent=open?'−':'＋';
 }
 function updatePromptPreview(){
   document.getElementById('wizPromptPreview').textContent=
