@@ -838,20 +838,32 @@ function buildVocals(){
     row.appendChild(b);
   });
 }
+// Dil → Suno metatag eşlemesi
+const LANG_TAG={
+  'Turkish':'[Türkçe sözler]','English':'[English lyrics]','Korean':'[한국어 가사]',
+  'Japanese':'[日本語の歌詞]','Spanish':'[Letra en español]','French':'[Paroles en français]',
+  'Arabic':'[كلمات عربية]','German':'[Deutsche Liedtexte]','Italian':'[Testo in italiano]',
+  'Greek':'[Ελληνικοί στίχοι]','Portuguese':'[Letra em português]','Russian':'[Текст на русском]',
+  'Chinese':'[中文歌词]','Hindi':'[हिंदी गीत]',
+};
 function buildPrompt(){
-  const parts=[wiz.genreStyle||'pop'];
-  // Dili style'a da ekle — kie.ai'nin anlaması için kritik
-  parts.push(wiz.langVal+' language lyrics');
-  if(wiz.tema)parts.push('theme: '+wiz.tema);
+  // Dil en başa — kie.ai / Suno için öncelik sırası önemli
+  const langTag=LANG_TAG[wiz.langVal]||'['+wiz.langVal+' lyrics]';
+  const parts=[langTag, wiz.genreStyle||'pop'];
+  if(wiz.tema)parts.push('tema: '+wiz.tema);
   if(wiz.duygu)parts.push(wiz.duygu);
   if(wiz.vocal)parts.push(wiz.vocal.val);
   const style=parts.join(', ');
   const customLyrics=(document.getElementById('customLyrics')?.value||'').trim();
   let prompt;
   if(customLyrics){
-    prompt=`Use these lyrics as the song. Language: ${wiz.langVal}. Style: ${wiz.genreStyle||'pop'}.\n\n${customLyrics}`;
+    // Kullanıcının kendi sözleri — direkt gönder, başına dil etiketi ekle
+    prompt=langTag+'\n\n'+customLyrics;
   }else{
-    prompt=`Write ONLY in ${wiz.langVal} language. Every single word must be ${wiz.langVal}. ${wiz.tema?'Theme: '+wiz.tema+'. ':''}${wiz.duygu?'Mood: '+wiz.duygu+'. ':''}Style: ${wiz.genreStyle||'pop'}. Make it authentic and emotional.`;
+    // Suno prompt'u: talimat değil, yapı — dil etiketiyle başla
+    const temaStr=wiz.tema||'genel';
+    const duyguStr=wiz.duygu||'duygusal';
+    prompt=langTag+'\n[Verse]\n[Chorus]\n[Bridge]\nTema: '+temaStr+' - Duygu: '+duyguStr;
   }
   return{prompt,style};
 }
