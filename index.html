@@ -654,9 +654,11 @@ function pollStatus(taskId){
       const status=data.data?.status;
       if(status==='SUCCESS'||status==='FIRST_SUCCESS'){
         clearInterval(pollInterval);
-        const track=data.data?.sunoData?.[0];
-        if(track?.audioUrl) showResult(track);
-        else showGenError('Ses dosyası bulunamadı.');
+        const d=data.data;
+        const track=(d?.sunoData||d?.response||d?.data||[])[0]||d;
+        const audioUrl=track?.audioUrl||track?.audio_url||track?.url;
+        if(audioUrl) showResult({...track,audioUrl});
+        else showGenError('Ses yok. Yapı: '+JSON.stringify(Object.keys(d||{})));
       }else if(status==='PENDING'||status==='TEXT_SUCCESS'||status==='FIRST_SUCCESS'){
         // hâlâ üretiliyor, polling devam eder
       }else if(status){
