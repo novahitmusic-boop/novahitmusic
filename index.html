@@ -655,10 +655,11 @@ function pollStatus(taskId){
       if(status==='SUCCESS'||status==='FIRST_SUCCESS'){
         clearInterval(pollInterval);
         const d=data.data;
-        const track=(d?.sunoData||d?.response||d?.data||[])[0]||d;
-        const audioUrl=track?.audioUrl||track?.audio_url||track?.url;
+        const resp=d?.response;
+        const track=Array.isArray(resp)?resp[0]:(typeof resp==='object'?resp:null);
+        const audioUrl=track?.audioUrl||track?.audio_url||track?.url||track?.streamAudioUrl;
         if(audioUrl) showResult({...track,audioUrl});
-        else showGenError('Ses yok. Yapı: '+JSON.stringify(Object.keys(d||{})));
+        else showGenError('Ses yok. Response: '+JSON.stringify(resp));
       }else if(status==='PENDING'||status==='TEXT_SUCCESS'||status==='FIRST_SUCCESS'){
         // hâlâ üretiliyor, polling devam eder
       }else if(status){
