@@ -28,8 +28,10 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(response.status).json({ error: data.msg || 'API hatası' });
+    console.log('kie.ai response:', JSON.stringify(data));
+
+    if (!response.ok || data.code !== 200) {
+      return res.status(200).json({ error: data.msg || data.message || ('kie.ai hata kodu: ' + data.code), raw: data });
     }
 
     return res.status(200).json(data);
