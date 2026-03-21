@@ -1,7 +1,8 @@
-// Ses klonlama — fish.audio
-// POST /api/voice  { text, reference_audio_url?, voice_id? }
+// Ses klonlama — Replicate XTTS-v2
+// POST /api/voice  { text, speaker_url? }
+// speaker_url: 30 sn ses kaydı URL'si (opsiyonel, yoksa varsayılan ses)
 
-const FISH_KEY = process.env.FISH_API_KEY;
+const REPLICATE_TOKEN = process.env.REPLICATE_API_TOKEN;
 const UPSTASH_URL = process.env.UPSTASH_REDIS_URL;
 const UPSTASH_TOK = process.env.UPSTASH_REDIS_TOKEN;
 
@@ -21,7 +22,7 @@ async function redisIncr(key, ex = 86400) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { text, voice_id, reference_audio_url } = req.body || {};
+  const { text, speaker_url, language } = req.body || {};
   if (!text) return res.status(400).json({ error: 'text gerekli' });
 
   // IP rate limit: günde 5 klonlama
@@ -30,37 +31,37 @@ export default async function handler(req, res) {
   if (count > 5) return res.status(429).json({ error: 'Günlük ses klonlama limitin doldu.' });
 
   try {
-    const payload = {
+    const input = {
       text,
-      format: 'mp3',
-      mp3_bitrate: 128,
-      latency: 'normal',
-      // voice_id varsa klonlanmış ses kullan, yoksa varsayılan
-      ...(voice_id ? { voice_id } : {}),
-      ...(reference_audio_url ? {
-        references: [{ audio: reference_audio_url }]
-      } : {})
+      language: language || 'tr',
+      cleanup_voice: true,
+      ...(speaker_url ? { speaker: speaker_url } : {})
     };
 
-    const r = await fetch('https://api.fish.audio/v1/tts', {
+    // Replicate prediction başlat
+    const startRes = await fetch('https://api.replicate.com/v1/models/lucataco/xtts-v2/predictions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${FISH_KEY}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${REPLICATE_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'wait=60'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ input })
     });
 
-    if (!r.ok) {
-      const err = await r.text();
-      return res.status(500).json({ error: 'fish.audio hata: ' + err });
+    const prediction = await startRes.json();
+
+    if (prediction.error) {
+      return res.status(500).json({ error: prediction.error });
     }
 
-    // Audio binary döner — direkt ilet
-    const audioBuffer = await r.arrayBuffer();
-    res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Content-Disposition', 'inline; filename="novahit-voice.mp3"');
-    return res.send(Buffer.from(audioBuffer));
+    // Eğer hemen tamamlandıysa (wait=60 ile)
+    if (prediction.status === 'succeeded' && prediction.output) {
+      return res.json({ audio_url: prediction.output, status: 'completed' });
+    }
+
+    // Yoksa prediction ID döndür — client polling yapar
+    return res.json({ prediction_id: prediction.id, status: prediction.status });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
