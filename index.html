@@ -1715,6 +1715,34 @@ Her gece seni düşünüp uyudum
             </div>
           </div>
 
+          <!-- DİL SEÇİMİ -->
+          <div class="custom-field">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span class="custom-field-label" style="margin:0;">🌍 Dil</span>
+              <button onclick="openLangModal()" style="background:none;border:1px solid rgba(255,107,53,0.3);border-radius:8px;color:rgba(255,107,53,0.9);font-size:12px;padding:5px 12px;cursor:pointer;font-family:var(--font-body);">Tüm Diller +</button>
+            </div>
+            <div class="style-tags" id="langTags" role="group" aria-label="Dil seçimi">
+              <button class="style-tag on" data-lang="Turkish" onclick="selectLang(this)">🇹🇷 Türkçe</button>
+              <button class="style-tag" data-lang="English" onclick="selectLang(this)">🇬🇧 İngilizce</button>
+              <button class="style-tag" data-lang="German" onclick="selectLang(this)">🇩🇪 Almanca</button>
+              <button class="style-tag" data-lang="French" onclick="selectLang(this)">🇫🇷 Fransızca</button>
+              <button class="style-tag" data-lang="Italian" onclick="selectLang(this)">🇮🇹 İtalyanca</button>
+              <button class="style-tag" data-lang="Spanish" onclick="selectLang(this)">🇪🇸 İspanyolca</button>
+              <button class="style-tag" data-lang="Greek" onclick="selectLang(this)">🇬🇷 Yunanca</button>
+            </div>
+          </div>
+
+          <!-- DİL MODAL -->
+          <div id="langModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;">
+            <div style="background:#1a1a2e;border:1px solid rgba(255,107,53,0.3);border-radius:20px;padding:32px;max-width:560px;width:92%;max-height:80vh;overflow-y:auto;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h3 style="margin:0;color:#fff;font-size:18px;">🌍 Dil Seç</h3>
+                <button onclick="closeLangModal()" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:22px;cursor:pointer;">×</button>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;" id="langModalGrid"></div>
+            </div>
+          </div>
+
           <div class="custom-accordion">
             <button class="accordion-btn" onclick="toggleAccordionMain(this)" aria-expanded="false">
               <span>📌 &nbsp;Şarkı Başlığı & Gelişmiş Ayarlar</span>
@@ -2728,6 +2756,7 @@ Her gece seni düşünüp uyudum
           lyrics: document.getElementById('lyrics-input').value,
           chorus: wizardState.chorus,
           email: email,
+          language: _selectedLang || 'Turkish',
         };
 
         var data = null;
@@ -2878,6 +2907,70 @@ Her gece seni düşünüp uyudum
       btn.classList.add('active');
       document.getElementById('wizSimple').style.display = mode === 'simple' ? '' : 'none';
       document.getElementById('wizCustom').style.display  = mode === 'custom' ? '' : 'none';
+    }
+
+    // ─── DİL SEÇİMİ ─────────────────────────────────────────────
+    var _selectedLang = 'Turkish';
+
+    var _allLangs = [
+      {code:'Turkish',label:'🇹🇷 Türkçe'},{code:'English',label:'🇬🇧 İngilizce'},
+      {code:'German',label:'🇩🇪 Almanca'},{code:'French',label:'🇫🇷 Fransızca'},
+      {code:'Italian',label:'🇮🇹 İtalyanca'},{code:'Spanish',label:'🇪🇸 İspanyolca'},
+      {code:'Greek',label:'🇬🇷 Yunanca'},{code:'Arabic',label:'🇸🇦 Arapça'},
+      {code:'Russian',label:'🇷🇺 Rusça'},{code:'Japanese',label:'🇯🇵 Japonca'},
+      {code:'Korean',label:'🇰🇷 Korece'},{code:'Portuguese',label:'🇵🇹 Portekizce'},
+      {code:'Dutch',label:'🇳🇱 Hollandaca'},{code:'Polish',label:'🇵🇱 Lehçe'},
+      {code:'Swedish',label:'🇸🇪 İsveççe'},{code:'Norwegian',label:'🇳🇴 Norveçce'},
+      {code:'Danish',label:'🇩🇰 Danimarkaca'},{code:'Finnish',label:'🇫🇮 Fince'},
+      {code:'Czech',label:'🇨🇿 Çekçe'},{code:'Romanian',label:'🇷🇴 Romence'},
+      {code:'Hungarian',label:'🇭🇺 Macarca'},{code:'Bulgarian',label:'🇧🇬 Bulgarca'},
+      {code:'Croatian',label:'🇭🇷 Hırvatça'},{code:'Serbian',label:'🇷🇸 Sırpça'},
+      {code:'Ukrainian',label:'🇺🇦 Ukraynaca'},{code:'Hebrew',label:'🇮🇱 İbranice'},
+      {code:'Persian',label:'🇮🇷 Farsça'},{code:'Hindi',label:'🇮🇳 Hintçe'},
+      {code:'Bengali',label:'🇧🇩 Bengalce'},{code:'Urdu',label:'🇵🇰 Urduca'},
+      {code:'Thai',label:'🇹🇭 Tayca'},{code:'Vietnamese',label:'🇻🇳 Vietnamca'},
+      {code:'Indonesian',label:'🇮🇩 Endonezyaca'},{code:'Malay',label:'🇲🇾 Malayca'},
+      {code:'Chinese',label:'🇨🇳 Çince'},{code:'Cantonese',label:'🇭🇰 Kantonca'},
+      {code:'Swahili',label:'🇰🇪 Svahilice'},{code:'Amharic',label:'🇪🇹 Amharca'},
+      {code:'Yoruba',label:'🇳🇬 Yorubaca'},{code:'Hausa',label:'🇳🇬 Hausa'},
+      {code:'Zulu',label:'🇿🇦 Zuluca'},{code:'Afrikaans',label:'🇿🇦 Afrikaans'},
+      {code:'Catalan',label:'🏴 Katalanca'},{code:'Basque',label:'🏴 Baskça'},
+      {code:'Galician',label:'🏴 Galiçyaca'},{code:'Latin',label:'🏛 Latince'},
+      {code:'Esperanto',label:'🌐 Esperanto'},{code:'Azerbaijani',label:'🇦🇿 Azerbaycanca'},
+      {code:'Kazakh',label:'🇰🇿 Kazakça'},{code:'Uzbek',label:'🇺🇿 Özbekçe'},
+    ];
+
+    function selectLang(btn) {
+      document.querySelectorAll('#langTags .style-tag').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      _selectedLang = btn.dataset.lang;
+    }
+
+    function openLangModal() {
+      var grid = document.getElementById('langModalGrid');
+      grid.innerHTML = '';
+      _allLangs.forEach(function(l) {
+        var b = document.createElement('button');
+        b.className = 'style-tag' + (l.code === _selectedLang ? ' on' : '');
+        b.textContent = l.label;
+        b.onclick = function() {
+          _selectedLang = l.code;
+          // Kısa dillerde tag güncelle
+          document.querySelectorAll('#langTags .style-tag').forEach(function(t){ t.classList.remove('on'); });
+          var match = document.querySelector('#langTags [data-lang="'+l.code+'"]');
+          if (match) match.classList.add('on');
+          closeLangModal();
+        };
+        grid.appendChild(b);
+      });
+      var m = document.getElementById('langModal');
+      m.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLangModal() {
+      document.getElementById('langModal').style.display = 'none';
+      document.body.style.overflow = '';
     }
 
     var _aiLyricsTyping = null;
