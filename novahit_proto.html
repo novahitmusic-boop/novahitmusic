@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novahit — 3 Konsept Prototipi</title>
+
+<!-- SEO JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Novahit",
+      "url": "https://novahitmusic.vercel.app",
+      "applicationCategory": "MusicApplication",
+      "operatingSystem": "Web",
+      "description": "Yapay zeka ile 30 saniyede hit şarkı üret. Kendi sesinle veya sıfırdan.",
+      "offers": [
+        {"@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Ücretsiz"},
+        {"@type": "Offer", "price": "9.99", "priceCurrency": "USD", "name": "Pro"},
+        {"@type": "Offer", "price": "24.99", "priceCurrency": "USD", "name": "Voice Studio"}
+      ]
+    },
+    {
+      "@type": "Product",
+      "name": "Novahit Pro",
+      "brand": {"@type": "Brand", "name": "Novahit"},
+      "offers": {"@type": "Offer", "price": "9.99", "priceCurrency": "USD"}
+    }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#080808;color:#fff;font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ===== TAB SWITCHER ===== */
+.proto-tabs{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(8,8,8,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;padding:0 40px;height:60px;gap:4px;}
+.proto-logo{font-family:'Playfair Display',serif;font-weight:900;font-size:18px;letter-spacing:2px;margin-right:32px;color:#fff;}
+.proto-logo em{color:#FF6B35;font-style:italic;}
+.tab-btn{padding:8px 20px;border:1px solid transparent;border-radius:6px;background:transparent;color:rgba(255,255,255,0.4);font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.25s;white-space:nowrap;}
+.tab-btn:hover{color:#fff;border-color:rgba(255,255,255,0.1);}
+.tab-btn.active{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.4);color:#FF6B35;}
+.tab-divider{width:1px;height:24px;background:rgba(255,255,255,0.08);margin:0 8px;}
+.proto-badge{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.25);font-family:'JetBrains Mono',monospace;margin-left:auto;}
+
+/* ===== CONCEPT PANELS ===== */
+.concept{display:none;padding-top:60px;}
+.concept.active{display:block;}
+
+/* ========================================
+   KONSEPT 1: SATIŞ ODAKLI
+   Ton: Agresif, dönüşüm odaklı, sosyal kanıt
+======================================== */
+.c1-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;text-align:center;padding:80px 24px;}
+.c1-bg{position:absolute;inset:0;background:#080808;}
+.c1-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 50% 0%,rgba(255,107,53,0.18) 0%,transparent 60%);}
+.c1-bg::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;background:radial-gradient(ellipse 80% 60% at 30% 100%,rgba(232,23,93,0.12) 0%,transparent 70%);}
+
+/* Floating particles */
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:float linear infinite;}
+@keyframes float{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-100px) rotate(360deg);opacity:0;}}
+
+.c1-content{position:relative;z-index:2;max-width:900px;}
+.c1-eyebrow{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,107,53,0.35);border-radius:100px;padding:7px 20px;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#FF6B35;margin-bottom:36px;font-family:'JetBrains Mono',monospace;background:rgba(255,107,53,0.07);}
+.c1-eyebrow::before{content:'';width:6px;height:6px;background:#FF6B35;border-radius:50%;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
+.c1-h1{font-family:'Playfair Display',serif;font-size:clamp(44px,7.5vw,108px);font-weight:900;line-height:0.95;letter-spacing:-3px;margin-bottom:28px;}
+.c1-h1 .line1{display:block;color:#fff;}
+.c1-h1 .line2{display:block;color:#FF6B35;font-style:italic;}
+.c1-h1 .line3{display:block;color:rgba(255,255,255,0.25);font-size:0.55em;font-family:'Space Grotesk',sans-serif;font-weight:300;letter-spacing:0;margin-top:8px;font-style:normal;}
+.c1-sub{font-size:17px;color:rgba(255,255,255,0.5);line-height:1.75;max-width:520px;margin:0 auto 52px;}
+.c1-sub strong{color:#fff;}
+.c1-cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;}
+.c1-btn-main{padding:19px 56px;background:linear-gradient(135deg,#FF6B35 0%,#E8175D 100%);border:none;color:#fff;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:0.5px;position:relative;overflow:hidden;}
+.c1-btn-main::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transform:translateX(-100%);transition:transform 0.6s;}
+.c1-btn-main:hover::after{transform:translateX(100%);}
+.c1-btn-main:hover{transform:translateY(-3px);box-shadow:0 24px 60px rgba(255,107,53,0.55);}
+.c1-btn-ghost{padding:19px 40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#fff;border-radius:6px;font-size:15px;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;}
+.c1-btn-ghost:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.08);}
+
+/* Social proof bar */
+.c1-proof{display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;}
+.c1-proof-item{display:flex;flex-direction:column;align-items:center;}
+.c1-proof-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#FF6B35;}
+.c1-proof-label{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+.c1-proof-sep{width:1px;height:40px;background:rgba(255,255,255,0.08);}
+
+/* Hit Power Section */
+.c1-section{padding:100px 48px;max-width:1200px;margin:0 auto;}
+.c1-sec-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
+.c1-sec-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,56px);font-weight:900;margin-bottom:16px;line-height:1.05;}
+.c1-sec-title em{color:#FF6B35;font-style:italic;}
+.c1-sec-sub{font-size:15px;color:rgba(255,255,255,0.45);max-width:480px;line-height:1.8;margin-bottom:60px;}
+
+/* Hit Power Cards */
+.c1-power-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:60px;}
+.c1-power-card{border-radius:12px;padding:32px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;border:2px solid transparent;}
+.c1-power-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;}
+.c1-power-card.std{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);}
+.c1-power-card.std::before{background:radial-gradient(ellipse at top,rgba(255,255,255,0.06),transparent);}
+.c1-power-card.hit{background:rgba(255,107,53,0.06);border-color:rgba(255,107,53,0.2);}
+.c1-power-card.hit::before{background:radial-gradient(ellipse at top,rgba(255,107,53,0.12),transparent);}
+.c1-power-card.viral{background:rgba(232,23,93,0.06);border-color:rgba(232,23,93,0.2);}
+.c1-power-card.viral::before{background:radial-gradient(ellipse at top,rgba(232,23,93,0.12),transparent);}
+.c1-power-card:hover::before,.c1-power-card.selected::before{opacity:1;}
+.c1-power-card.selected.hit{border-color:rgba(255,107,53,0.6);box-shadow:0 0 40px rgba(255,107,53,0.2);}
+.c1-power-card.selected.viral{border-color:rgba(232,23,93,0.6);box-shadow:0 0 40px rgba(232,23,93,0.2);}
+.c1-power-icon{font-size:36px;margin-bottom:16px;}
+.c1-power-name{font-size:18px;font-weight:700;margin-bottom:8px;}
+.c1-power-desc{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;}
+.c1-power-badge{display:inline-block;margin-top:16px;padding:4px 12px;border-radius:100px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.std .c1-power-badge{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);}
+.hit .c1-power-badge{background:rgba(255,107,53,0.15);color:#FF6B35;}
+.viral .c1-power-badge{background:rgba(232,23,93,0.15);color:#E8175D;}
+
+/* Wizard / Generate Form */
+/* ===== SIMPLE/CUSTOM WIZARD ===== */
+.c1-wizard{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:40px;max-width:780px;position:relative;overflow:hidden;}
+/* Piyano tuşu arka plan deseni */
+.c1-wizard::before{
+  content:'';position:absolute;bottom:0;right:0;width:220px;height:120px;
+  background:repeating-linear-gradient(90deg,
+    rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 18px,
+    transparent 18px, transparent 26px,
+    rgba(255,255,255,0.025) 26px, rgba(255,255,255,0.025) 44px,
+    transparent 44px, transparent 52px
+  );
+  mask:linear-gradient(to left, black 60%, transparent 100%);
+  -webkit-mask:linear-gradient(to left, black 60%, transparent 100%);
+  pointer-events:none;border-bottom-right-radius:20px;
+}
+.c1-wizard::after{
+  content:'🎹';position:absolute;bottom:16px;right:24px;font-size:28px;opacity:0.12;pointer-events:none;
+}
+/* Mode tabs */
+.wiz-mode-tabs{display:flex;gap:0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:4px;margin-bottom:32px;width:fit-content;}
+.wiz-mode-tab{padding:9px 28px;border-radius:7px;border:none;background:transparent;color:rgba(255,255,255,0.4);font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.25s;letter-spacing:0.3px;}
+.wiz-mode-tab.active{background:linear-gradient(135deg,#FF6B35,#E8175D);color:#fff;box-shadow:0 4px 20px rgba(255,107,53,0.35);}
+/* Custom mode elements */
+.custom-field{margin-bottom:28px;}
+.custom-field-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.custom-field-label{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;}
+.custom-textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;line-height:1.7;resize:vertical;min-height:110px;outline:none;transition:border-color 0.2s;}
+.custom-textarea:focus{border-color:rgba(255,107,53,0.4);}
+.custom-textarea::placeholder{color:rgba(255,255,255,0.18);}
+/* AI söz yazma butonu */
+.btn-ai-lyrics{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-radius:8px;color:#FF6B35;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.25s;margin-top:10px;}
+.btn-ai-lyrics:hover{background:rgba(255,107,53,0.15);border-color:rgba(255,107,53,0.5);box-shadow:0 0 20px rgba(255,107,53,0.2);}
+/* Style tags glassmorphism */
+.style-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.style-tag{padding:7px 16px;border-radius:100px;background:rgba(255,255,255,0.05);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.55);font-size:12px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.style-tag:hover,.style-tag.on{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.4);color:#FF6B35;}
+/* Accordion */
+.custom-accordion{border:1px solid rgba(255,255,255,0.07);border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.accordion-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(255,255,255,0.03);border:none;color:rgba(255,255,255,0.6);font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.2s;}
+.accordion-btn:hover{background:rgba(255,255,255,0.06);}
+.accordion-arrow{font-size:12px;transition:transform 0.3s;}
+.accordion-body{display:none;padding:20px 18px;border-top:1px solid rgba(255,255,255,0.06);}
+.accordion-body.open{display:block;}
+.accordion-btn.open .accordion-arrow{transform:rotate(180deg);}
+/* Accordion form fields */
+.acc-field{margin-bottom:16px;}
+.acc-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.acc-input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:11px 14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
+.acc-input:focus{border-color:rgba(255,107,53,0.4);}
+.acc-slider{width:100%;appearance:none;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;cursor:pointer;}
+.acc-slider::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#E8175D);box-shadow:0 0 12px rgba(255,107,53,0.5);cursor:pointer;}
+.acc-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+/* Big generate button */
+.c1-gen-btn-v2{width:100%;padding:22px;background:linear-gradient(135deg,#FF6B35 0%,#E8175D 100%);border:none;color:#fff;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:1px;margin-top:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:12px;}
+.c1-gen-btn-v2::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transform:translateX(-100%);transition:transform 0.7s;}
+.c1-gen-btn-v2:hover::before{transform:translateX(100%);}
+.c1-gen-btn-v2:hover{box-shadow:0 24px 60px rgba(255,107,53,0.55);transform:translateY(-3px);}
+.gen-btn-icons{display:flex;gap:4px;font-size:20px;}
+.c1-wiz-step{margin-bottom:32px;}
+.c1-wiz-label{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;margin-bottom:14px;}
+.c1-wiz-label em{color:#FF6B35;font-style:normal;}
+.c1-feel-chips{display:flex;gap:10px;flex-wrap:wrap;}
+.feel-chip{padding:10px 20px;border-radius:100px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.5);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.feel-chip:hover,.feel-chip.on{border-color:#FF6B35;color:#FF6B35;background:rgba(255,107,53,0.1);}
+
+/* Chorus slider */
+.c1-slider-wrap{position:relative;}
+.c1-slider{width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;appearance:none;outline:none;cursor:pointer;}
+.c1-slider::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#E8175D);cursor:pointer;box-shadow:0 0 16px rgba(255,107,53,0.6);}
+.c1-slider-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:rgba(255,255,255,0.3);}
+
+/* Toggle */
+.c1-toggle-row{display:flex;align-items:center;gap:16px;}
+.c1-toggle{position:relative;width:52px;height:28px;cursor:pointer;}
+.c1-toggle input{opacity:0;width:0;height:0;}
+.c1-toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:14px;transition:all 0.3s;}
+.c1-toggle-slider::before{content:'';position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:all 0.3s;}
+.c1-toggle input:checked + .c1-toggle-slider{background:linear-gradient(135deg,#FF6B35,#E8175D);}
+.c1-toggle input:checked + .c1-toggle-slider::before{transform:translateX(24px);}
+.c1-toggle-label{font-size:14px;color:rgba(255,255,255,0.6);}
+.c1-toggle-label strong{color:#fff;}
+
+/* Lyrics input */
+.c1-lyrics-area{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;resize:vertical;min-height:100px;outline:none;transition:border-color 0.2s;}
+.c1-lyrics-area:focus{border-color:rgba(255,107,53,0.4);}
+.c1-lyrics-area::placeholder{color:rgba(255,255,255,0.2);}
+
+/* Chorus Preview Cards */
+.c1-chorus-previews{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px;}
+.chorus-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:20px;cursor:pointer;transition:all 0.2s;}
+.chorus-card:hover{border-color:rgba(255,107,53,0.4);background:rgba(255,107,53,0.05);}
+.chorus-card.selected{border-color:#FF6B35;background:rgba(255,107,53,0.08);}
+.chorus-card-num{font-size:10px;letter-spacing:2px;color:#FF6B35;font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.chorus-card-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;font-style:italic;}
+.chorus-card-play{margin-top:12px;font-size:11px;color:rgba(255,107,53,0.7);}
+
+/* Generate button */
+.c1-gen-btn{width:100%;padding:20px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:1px;margin-top:8px;position:relative;overflow:hidden;}
+.c1-gen-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transform:translateX(-100%);transition:transform 0.7s;}
+.c1-gen-btn:hover::after{transform:translateX(100%);}
+.c1-gen-btn:hover{box-shadow:0 20px 60px rgba(255,107,53,0.5);transform:translateY(-2px);}
+
+/* BENTO - Voice Feature */
+.c1-bento{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:16px;margin-bottom:80px;}
+.bento-card{border-radius:16px;padding:32px;position:relative;overflow:hidden;}
+.bento-voice{grid-column:1/3;grid-row:1/2;background:linear-gradient(135deg,rgba(255,107,53,0.15) 0%,rgba(232,23,93,0.1) 100%);border:1px solid rgba(255,107,53,0.25);}
+.bento-voice-inner{display:flex;align-items:center;gap:32px;}
+.bento-voice-text h3{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;margin-bottom:12px;}
+.bento-voice-text h3 em{color:#FF6B35;font-style:italic;}
+.bento-voice-text p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:20px;}
+.bento-voice-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:140px;min-height:140px;border:2px dashed rgba(255,107,53,0.4);border-radius:12px;cursor:pointer;transition:all 0.3s;background:rgba(255,107,53,0.05);}
+.bento-voice-upload:hover{border-color:#FF6B35;background:rgba(255,107,53,0.1);transform:scale(1.02);}
+.bento-voice-upload-icon{font-size:32px;}
+.bento-voice-upload-label{font-size:12px;color:rgba(255,107,53,0.8);text-align:center;}
+.bento-stat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);}
+.bento-stat-num{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:#FF6B35;line-height:1;}
+.bento-stat-label{font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px;}
+.bento-speed{grid-column:2/3;grid-row:2/3;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);}
+.bento-speed h4{font-size:14px;font-weight:600;margin-bottom:12px;}
+.speed-bar-wrap{display:flex;flex-direction:column;gap:8px;}
+.speed-bar-item{display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.4);}
+.speed-bar{flex:1;height:4px;border-radius:2px;position:relative;}
+.speed-bar-fill{height:100%;border-radius:2px;transition:width 1s ease;}
+.speed-bar-item.novo .speed-bar-fill{background:linear-gradient(90deg,#FF6B35,#E8175D);}
+.speed-bar-item.suno .speed-bar-fill{background:rgba(255,255,255,0.15);}
+.speed-bar-item.udio .speed-bar-fill{background:rgba(255,255,255,0.12);}
+.bento-lang{grid-column:3/4;grid-row:1/3;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);}
+.bento-lang h4{font-size:14px;font-weight:600;margin-bottom:16px;}
+.lang-flags{display:flex;flex-wrap:wrap;gap:8px;}
+.lang-flag{font-size:22px;cursor:pointer;transition:transform 0.2s;}
+.lang-flag:hover{transform:scale(1.3);}
+
+/* Result Screen */
+.c1-result{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:32px;display:none;}
+.c1-result.visible{display:block;}
+.result-track{display:flex;align-items:center;gap:20px;margin-bottom:28px;}
+.result-art{width:80px;height:80px;border-radius:12px;background:linear-gradient(135deg,#FF6B35,#E8175D);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;}
+.result-info h3{font-size:20px;font-weight:700;margin-bottom:4px;}
+.result-info p{font-size:13px;color:rgba(255,255,255,0.4);}
+.result-waveform{height:60px;display:flex;align-items:center;gap:2px;margin-bottom:24px;}
+.result-wf-bar{flex:1;border-radius:2px;background:linear-gradient(to top,rgba(255,107,53,0.3),rgba(232,23,93,0.6));animation:wfA var(--d,0.5s) ease-in-out infinite alternate;}
+@keyframes wfA{from{height:20%;}to{height:var(--h,80%);}}
+.result-actions{display:grid;grid-template-columns:1fr 1fr 1fr 1.4fr;gap:10px;}
+.result-btn{padding:14px 10px;border-radius:8px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.result-btn.listen{background:linear-gradient(135deg,#FF6B35,#E8175D);color:#fff;}
+.result-btn.listen:hover{box-shadow:0 12px 32px rgba(255,107,53,0.5);}
+.result-btn.dl{background:rgba(255,255,255,0.07);color:#fff;border:1px solid rgba(255,255,255,0.1);}
+.result-btn.dl:hover{background:rgba(255,255,255,0.12);}
+.result-btn.share{background:rgba(255,255,255,0.07);color:#fff;border:1px solid rgba(255,255,255,0.1);}
+.result-btn.shorts{background:linear-gradient(135deg,#FF0050,#FF6B35);color:#fff;animation:glow 2s ease-in-out infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,0,80,0.3);}50%{box-shadow:0 0 40px rgba(255,0,80,0.6);}}
+
+/* Pricing */
+.c1-pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;}
+.price-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:32px;position:relative;transition:all 0.3s;}
+.price-card.pro{background:rgba(255,107,53,0.06);border-color:rgba(255,107,53,0.25);transform:scale(1.03);}
+.price-card.pro::before{content:'EN POPÜLER';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#FF6B35,#E8175D);padding:4px 16px;border-radius:100px;font-size:10px;letter-spacing:2px;font-family:'JetBrains Mono',monospace;}
+.price-tier{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.price-amount{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;line-height:1;}
+.price-amount sup{font-size:20px;vertical-align:top;margin-top:12px;display:inline-block;}
+.price-amount span{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:400;color:rgba(255,255,255,0.4);}
+.price-desc{font-size:13px;color:rgba(255,255,255,0.4);margin:12px 0 24px;line-height:1.6;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.price-features li{font-size:13px;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:10px;}
+.price-features li::before{content:'✓';color:#FF6B35;font-weight:700;flex-shrink:0;}
+.price-features li.locked{color:rgba(255,255,255,0.2);}
+.price-features li.locked::before{content:'—';color:rgba(255,255,255,0.15);}
+.price-cta{width:100%;padding:13px;border-radius:6px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;transition:all 0.2s;}
+.price-card:not(.pro) .price-cta{background:rgba(255,255,255,0.07);color:#fff;border:1px solid rgba(255,255,255,0.1);}
+.price-card:not(.pro) .price-cta:hover{background:rgba(255,255,255,0.12);}
+.price-card.pro .price-cta{background:linear-gradient(135deg,#FF6B35,#E8175D);color:#fff;}
+.price-card.pro .price-cta:hover{box-shadow:0 12px 40px rgba(255,107,53,0.5);}
+
+/* Security Footer */
+.c1-security{border-top:1px solid rgba(255,255,255,0.06);padding:40px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;gap:24px;}
+.security-seals{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.seal{display:flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;font-size:11px;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;}
+.seal-icon{font-size:16px;}
+.payment-icons{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.pay-badge{padding:6px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:6px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);font-family:'JetBrains Mono',monospace;}
+
+/* ========================================
+   KONSEPT 2: SANATÇI DENEYİMİ
+   Ton: Duygusal, stüdyo atmosferi, immersif
+======================================== */
+.c2{background:#04040a;}
+.c2-hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;position:relative;overflow:hidden;padding:80px;}
+.c2-bg{position:absolute;inset:0;background:#04040a;}
+.c2-bg-orb1{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(99,60,255,0.15),transparent 70%);top:-200px;left:-100px;animation:orbFloat 8s ease-in-out infinite;}
+.c2-bg-orb2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,0.1),transparent 70%);bottom:-100px;right:-50px;animation:orbFloat 10s ease-in-out infinite reverse;}
+@keyframes orbFloat{0%,100%{transform:translate(0,0);}33%{transform:translate(30px,-20px);}66%{transform:translate(-20px,30px);}}
+
+.c2-left{position:relative;z-index:2;}
+.c2-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(180,160,255,0.7);font-family:'JetBrains Mono',monospace;margin-bottom:32px;display:flex;align-items:center;gap:12px;}
+.c2-eyebrow::before{content:'';width:32px;height:1px;background:rgba(180,160,255,0.4);}
+.c2-h1{font-family:'Playfair Display',serif;font-size:clamp(40px,5vw,72px);font-weight:900;line-height:1.0;letter-spacing:-2px;margin-bottom:24px;}
+.c2-h1 .accent{background:linear-gradient(135deg,#a78bfa,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.c2-sub{font-size:16px;color:rgba(255,255,255,0.45);line-height:1.85;margin-bottom:48px;max-width:440px;}
+.c2-input-wrap{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px;margin-bottom:20px;transition:border-color 0.3s;}
+.c2-input-wrap:focus-within{border-color:rgba(167,139,250,0.4);}
+.c2-input-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(167,139,250,0.6);font-family:'JetBrains Mono',monospace;margin-bottom:12px;}
+.c2-textarea{width:100%;background:transparent;border:none;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.7;resize:none;outline:none;min-height:80px;}
+.c2-textarea::placeholder{color:rgba(255,255,255,0.2);}
+.c2-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.c2-tag{padding:8px 16px;border-radius:100px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);color:rgba(167,139,250,0.8);font-size:12px;cursor:pointer;transition:all 0.2s;}
+.c2-tag:hover,.c2-tag.on{background:rgba(167,139,250,0.15);border-color:rgba(167,139,250,0.5);color:#a78bfa;}
+.c2-gen-btn{width:100%;padding:18px;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;color:#fff;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;position:relative;overflow:hidden;}
+.c2-gen-btn::before{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,#7c3aed,#FF6B35,#a78bfa);border-radius:10px;z-index:-1;opacity:0;transition:opacity 0.3s;}
+.c2-gen-btn:hover::before{opacity:1;}
+.c2-gen-btn:hover{box-shadow:0 20px 60px rgba(124,58,237,0.5);transform:translateY(-2px);}
+
+/* Vinyl/Studio Visual */
+.c2-right{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;}
+.c2-vinyl-wrap{position:relative;width:380px;height:380px;}
+.c2-vinyl{width:100%;height:100%;border-radius:50%;background:conic-gradient(from 0deg,#0a0a14,#1a0a2e,#0d0a1f,#1a0a2e,#0a0a14,#1a1428,#0a0a14);animation:spin 8s linear infinite;box-shadow:0 0 80px rgba(99,60,255,0.3),0 0 160px rgba(99,60,255,0.1);}
+.c2-vinyl-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#1a0a2e,#0a0a14);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;}
+.c2-vinyl-label-text{font-family:'Playfair Display',serif;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(167,139,250,0.9);}
+.c2-vinyl-grooves{position:absolute;inset:15px;border-radius:50%;border:1px solid rgba(167,139,250,0.05);}
+.c2-vinyl-grooves::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(167,139,250,0.04);}
+.c2-vinyl-grooves::after{content:'';position:absolute;inset:16px;border-radius:50%;border:1px solid rgba(167,139,250,0.03);}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.c2-vinyl-note{position:absolute;font-size:24px;animation:noteFloat 3s ease-in-out infinite;}
+.n1{top:10%;right:5%;animation-delay:0s;}
+.n2{bottom:20%;right:0;animation-delay:1s;}
+.n3{top:30%;left:0;animation-delay:2s;}
+@keyframes noteFloat{0%,100%{transform:translateY(0) rotate(-10deg);opacity:0.6;}50%{transform:translateY(-20px) rotate(10deg);opacity:1;}}
+
+/* C2 Stats row */
+.c2-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.06);margin:80px 0;max-width:1200px;margin-left:auto;margin-right:auto;}
+.c2-stat{background:#04040a;padding:48px 40px;text-align:center;}
+.c2-stat-num{font-family:'Playfair Display',serif;font-size:56px;font-weight:900;background:linear-gradient(135deg,#a78bfa,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.c2-stat-label{font-size:13px;color:rgba(255,255,255,0.35);margin-top:8px;letter-spacing:1px;}
+
+/* C2 Features */
+.c2-features{padding:0 80px 100px;max-width:1200px;margin:0 auto;}
+.c2-feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:rgba(255,255,255,0.05);}
+.c2-feat{background:#04040a;padding:48px;position:relative;overflow:hidden;cursor:pointer;transition:background 0.3s;}
+.c2-feat:hover{background:rgba(167,139,250,0.04);}
+.c2-feat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7c3aed,#FF6B35);transform:scaleX(0);transition:transform 0.4s;}
+.c2-feat:hover::after{transform:scaleX(1);}
+.c2-feat-icon{font-size:40px;margin-bottom:20px;}
+.c2-feat h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:12px;}
+.c2-feat p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.8;}
+
+/* ========================================
+   KONSEPT 3: MİNİMALİST PREMİUM
+   Ton: Apple tarzı, beyaz/gri/altın, bold tipografi
+======================================== */
+.c3{background:#fafafa;color:#0a0a0a;}
+.c3-nav{background:rgba(250,250,250,0.9);border-bottom:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:64px;position:sticky;top:60px;z-index:100;backdrop-filter:blur(20px);}
+.c3-nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;letter-spacing:2px;color:#0a0a0a;}
+.c3-nav-logo em{color:#B8860B;font-style:italic;}
+.c3-nav-links{display:flex;gap:40px;}
+.c3-nav-links a{font-size:13px;color:rgba(0,0,0,0.45);text-decoration:none;font-weight:500;letter-spacing:0.3px;transition:color 0.2s;}
+.c3-nav-links a:hover{color:#0a0a0a;}
+.c3-nav-cta{padding:10px 28px;background:#0a0a0a;color:#fff;border:none;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.c3-nav-cta:hover{background:#1a1a1a;transform:translateY(-1px);}
+
+/* C3 Hero */
+.c3-hero{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 48px;position:relative;overflow:hidden;}
+.c3-hero-lines{position:absolute;inset:0;overflow:hidden;}
+.c3-line{position:absolute;background:rgba(0,0,0,0.04);border-radius:1px;}
+.c3-line.h{height:1px;left:0;right:0;}
+.c3-line.v{width:1px;top:0;bottom:0;}
+.c3-hero-content{position:relative;z-index:2;max-width:900px;}
+.c3-eyebrow{display:inline-block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#B8860B;font-family:'JetBrains Mono',monospace;margin-bottom:40px;padding:6px 20px;border:1px solid rgba(184,134,11,0.25);border-radius:100px;}
+.c3-h1{font-family:'Playfair Display',serif;font-size:clamp(48px,7vw,100px);font-weight:900;line-height:0.95;letter-spacing:-3px;margin-bottom:32px;color:#0a0a0a;}
+.c3-h1 em{font-style:italic;color:#B8860B;}
+.c3-sub{font-size:18px;color:rgba(0,0,0,0.45);line-height:1.75;max-width:520px;margin:0 auto 56px;font-weight:300;}
+.c3-cta-row{display:flex;gap:12px;justify-content:center;margin-bottom:80px;}
+.c3-btn-main{padding:18px 56px;background:#0a0a0a;color:#fff;border:none;border-radius:100px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:0.5px;}
+.c3-btn-main:hover{background:#1a1a1a;transform:translateY(-2px);box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.c3-btn-ghost{padding:18px 40px;background:transparent;color:#0a0a0a;border:1px solid rgba(0,0,0,0.15);border-radius:100px;font-size:14px;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;}
+.c3-btn-ghost:hover{border-color:#0a0a0a;}
+.c3-social-proof{display:flex;align-items:center;justify-content:center;gap:48px;}
+.c3-proof-item{text-align:center;}
+.c3-proof-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:#0a0a0a;}
+.c3-proof-label{font-size:11px;color:rgba(0,0,0,0.35);letter-spacing:1.5px;text-transform:uppercase;}
+.c3-proof-sep{width:1px;height:48px;background:rgba(0,0,0,0.1);}
+
+/* C3 Product section */
+.c3-product{padding:120px 64px;max-width:1200px;margin:0 auto;}
+.c3-section-chip{display:inline-block;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#B8860B;font-family:'JetBrains Mono',monospace;margin-bottom:24px;}
+.c3-section-title{font-family:'Playfair Display',serif;font-size:clamp(36px,4.5vw,60px);font-weight:900;color:#0a0a0a;letter-spacing:-2px;line-height:1.0;margin-bottom:16px;}
+.c3-section-title em{color:#B8860B;font-style:italic;}
+.c3-section-sub{font-size:16px;color:rgba(0,0,0,0.4);max-width:480px;line-height:1.8;font-weight:300;margin-bottom:72px;}
+
+/* C3 Feature grid */
+.c3-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.06);}
+.c3-feat{background:#fafafa;padding:48px 40px;transition:background 0.2s;}
+.c3-feat:hover{background:#f0f0f0;}
+.c3-feat-icon{font-size:32px;margin-bottom:24px;}
+.c3-feat h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#0a0a0a;margin-bottom:12px;}
+.c3-feat p{font-size:13px;color:rgba(0,0,0,0.45);line-height:1.8;}
+
+/* C3 Wizard */
+.c3-wizard-wrap{background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:20px;padding:56px;max-width:720px;box-shadow:0 40px 120px rgba(0,0,0,0.06);}
+.c3-wiz-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:#0a0a0a;margin-bottom:8px;}
+.c3-wiz-sub{font-size:14px;color:rgba(0,0,0,0.4);margin-bottom:40px;}
+.c3-wiz-field{margin-bottom:28px;}
+.c3-wiz-field-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,0,0,0.35);font-family:'JetBrains Mono',monospace;margin-bottom:12px;}
+.c3-feel-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.c3-chip{padding:9px 18px;border-radius:100px;border:1px solid rgba(0,0,0,0.1);background:transparent;color:rgba(0,0,0,0.45);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.c3-chip:hover,.c3-chip.on{border-color:#B8860B;color:#B8860B;background:rgba(184,134,11,0.05);}
+.c3-textarea{width:100%;border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:16px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#0a0a0a;resize:none;outline:none;min-height:80px;transition:border-color 0.2s;}
+.c3-textarea:focus{border-color:rgba(184,134,11,0.5);}
+.c3-textarea::placeholder{color:rgba(0,0,0,0.2);}
+.c3-power-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.c3-power{padding:20px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);cursor:pointer;transition:all 0.2s;text-align:center;}
+.c3-power:hover,.c3-power.on{border-color:#B8860B;background:rgba(184,134,11,0.04);}
+.c3-power-icon{font-size:24px;margin-bottom:8px;}
+.c3-power-name{font-size:13px;font-weight:600;color:#0a0a0a;}
+.c3-gen-btn{width:100%;padding:18px;background:#0a0a0a;color:#fff;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;margin-top:8px;}
+.c3-gen-btn:hover{background:#1a1a1a;box-shadow:0 16px 48px rgba(0,0,0,0.2);transform:translateY(-2px);}
+
+/* C3 Pricing */
+.c3-pricing-section{background:#0a0a0a;padding:120px 64px;}
+.c3-pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto;}
+.c3-price{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:40px;transition:all 0.3s;}
+.c3-price.pro{background:rgba(184,134,11,0.08);border-color:rgba(184,134,11,0.3);}
+.c3-price-tier{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);font-family:'JetBrains Mono',monospace;margin-bottom:12px;}
+.c3-price-amount{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:#fff;line-height:1;margin-bottom:8px;}
+.c3-price-amount sup{font-size:20px;vertical-align:top;margin-top:10px;display:inline-block;}
+.c3-price-amount .period{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:300;color:rgba(255,255,255,0.35);}
+.c3-price-desc{font-size:13px;color:rgba(255,255,255,0.35);margin-bottom:28px;line-height:1.6;}
+.c3-price-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.c3-price-list li{font-size:13px;color:rgba(255,255,255,0.55);display:flex;align-items:center;gap:10px;}
+.c3-price-list li::before{content:'✓';color:#B8860B;font-weight:700;}
+.c3-price-list li.no{color:rgba(255,255,255,0.2);}
+.c3-price-list li.no::before{content:'—';color:rgba(255,255,255,0.15);}
+.c3-price-btn{width:100%;padding:13px;border-radius:100px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;transition:all 0.2s;}
+.c3-price:not(.pro) .c3-price-btn{background:rgba(255,255,255,0.08);color:#fff;}
+.c3-price:not(.pro) .c3-price-btn:hover{background:rgba(255,255,255,0.14);}
+.c3-price.pro .c3-price-btn{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;}
+.c3-price.pro .c3-price-btn:hover{box-shadow:0 12px 32px rgba(184,134,11,0.4);}
+
+/* C3 Security */
+.c3-security{padding:48px 64px;border-top:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-between;background:#fafafa;flex-wrap:wrap;gap:20px;}
+.c3-seals{display:flex;gap:16px;flex-wrap:wrap;}
+.c3-seal{display:flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;font-size:11px;color:rgba(0,0,0,0.4);font-family:'JetBrains Mono',monospace;}
+.c3-pays{display:flex;gap:10px;}
+.c3-pay{padding:6px 14px;background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:6px;font-size:12px;font-weight:700;color:rgba(0,0,0,0.5);}
+
+/* Bottom Mobile Nav (Konsept 1 & 2 için) */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);padding:8px 0;z-index:500;}
+.bottom-nav-items{display:flex;justify-content:space-around;}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 16px;cursor:pointer;color:rgba(255,255,255,0.35);transition:color 0.2s;}
+.bottom-nav-item.active,.bottom-nav-item:hover{color:#FF6B35;}
+.bottom-nav-icon{font-size:20px;}
+.bottom-nav-label{font-size:9px;letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+
+/* ===== UTILITIES ===== */
+.section-divider{height:1px;background:rgba(255,255,255,0.05);margin:0;}
+.text-center{text-align:center;}
+.mt-80{margin-top:80px;}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .proto-tabs{padding:0 16px;gap:2px;overflow-x:auto;}
+  .proto-badge{display:none;}
+  .c1-hero,.c2-hero{padding:60px 20px;}
+  .c1-power-cards,.c1-bento,.c1-chorus-previews,.c1-pricing,.c2-feat-grid,.c3-feat-grid,.c3-pricing-grid,.result-actions{grid-template-columns:1fr;}
+  .c1-bento{grid-template-columns:1fr;}
+  .bento-voice{grid-column:1;}
+  .bento-voice-inner{flex-direction:column;}
+  .c2-hero{grid-template-columns:1fr;}
+  .c2-right{display:none;}
+  .c2-stats-row{grid-template-columns:1fr;}
+  .c3-nav{padding:0 24px;}
+  .c3-nav-links{display:none;}
+  .c3-hero{padding:60px 20px;}
+  .c3-product,.c3-pricing-section{padding:80px 24px;}
+  .c3-wizard-wrap{padding:32px 24px;}
+  .c3-power-row{grid-template-columns:1fr;}
+  .c1-security,.c3-security{flex-direction:column;align-items:flex-start;}
+  .bottom-nav{display:block;}
+  .c1-section,.c2-features{padding-left:20px;padding-right:20px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== TAB SWITCHER ===== -->
+<nav class="proto-tabs">
+  <span class="proto-logo">Nova<em>hit</em></span>
+  <button class="tab-btn active" onclick="showTab(1)">🔥 1 — Satış Odaklı</button>
+  <div class="tab-divider"></div>
+  <button class="tab-btn" onclick="showTab(2)">🎨 2 — Sanatçı Deneyimi</button>
+  <div class="tab-divider"></div>
+  <button class="tab-btn" onclick="showTab(3)">✦ 3 — Minimalist Premium</button>
+  <span class="proto-badge">Prototip · 3 Konsept</span>
+</nav>
+
+<!-- =========================================
+     KONSEPT 1: SATIŞ ODAKLI
+========================================= -->
+<section class="concept active" id="tab1">
+
+  <!-- Hero -->
+  <header class="c1-hero">
+    <div class="c1-bg">
+      <!-- Floating particles -->
+      <div class="particle" style="width:3px;height:3px;background:#FF6B35;left:10%;animation-duration:12s;animation-delay:0s;"></div>
+      <div class="particle" style="width:2px;height:2px;background:#E8175D;left:25%;animation-duration:9s;animation-delay:2s;"></div>
+      <div class="particle" style="width:4px;height:4px;background:#FF6B35;left:60%;animation-duration:15s;animation-delay:4s;opacity:0.5;"></div>
+      <div class="particle" style="width:2px;height:2px;background:#E8175D;left:80%;animation-duration:11s;animation-delay:1s;"></div>
+      <div class="particle" style="width:3px;height:3px;background:#fff;left:45%;animation-duration:13s;animation-delay:3s;opacity:0.3;"></div>
+    </div>
+    <div class="c1-content">
+      <div class="c1-eyebrow">🎵 Yapay Zeka Müzik Stüdyosu</div>
+      <h1 class="c1-h1">
+        <span class="line1">Kendi <em style="color:#FF6B35;font-style:italic;">hit</em> şarkını</span>
+        <span class="line2">30 saniyede oluştur</span>
+        <span class="line3">Sesinle ya da sıfırdan… Novahit senin için hit üretir.</span>
+      </h1>
+      <p class="c1-sub">15 uzman AI ajan, <strong>125 müzik türü</strong> ve <strong>50+ dil</strong> ile profesyonel kalitede şarkılar üret. Suno'dan hızlı, Udio'dan akıllı.</p>
+      <div class="c1-cta-row">
+        <button class="c1-btn-main" onclick="document.getElementById('c1wizard').scrollIntoView({behavior:'smooth'})">✦ &nbsp;Şimdi Üret — Ücretsiz</button>
+        <button class="c1-btn-ghost">▶ &nbsp;Örnek Dinle</button>
+      </div>
+      <div class="c1-proof">
+        <div class="c1-proof-item"><span class="c1-proof-num">50K+</span><span class="c1-proof-label">Şarkı Üretildi</span></div>
+        <div class="c1-proof-sep"></div>
+        <div class="c1-proof-item"><span class="c1-proof-num">125</span><span class="c1-proof-label">Müzik Türü</span></div>
+        <div class="c1-proof-sep"></div>
+        <div class="c1-proof-item"><span class="c1-proof-num">50+</span><span class="c1-proof-label">Dil Desteği</span></div>
+        <div class="c1-proof-sep"></div>
+        <div class="c1-proof-item"><span class="c1-proof-num">4.9★</span><span class="c1-proof-label">Kullanıcı Puanı</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hit Power Section -->
+  <div class="c1-section">
+    <p class="c1-sec-label">Şarkının Gücünü Seç</p>
+    <h2 class="c1-sec-title">Ne kadar <em>hit</em> olsun?</h2>
+    <p class="c1-sec-sub">Her şarkı eşit doğmaz. Viral olmak istiyorsan, ona söyle.</p>
+
+    <div class="c1-power-cards">
+      <div class="c1-power-card std" onclick="selectPower(this,'std')">
+        <div class="c1-power-icon">🎯</div>
+        <div class="c1-power-name">Standart</div>
+        <div class="c1-power-desc">Temiz, profesyonel üretim. Kişisel kullanım ve sosyal medya için ideal.</div>
+        <span class="c1-power-badge">Ücretsiz</span>
+      </div>
+      <div class="c1-power-card hit selected" onclick="selectPower(this,'hit')">
+        <div class="c1-power-icon">🔥</div>
+        <div class="c1-power-name">Hit Modu</div>
+        <div class="c1-power-desc">Streaming için optimize edilmiş, akılda kalıcı nakarat yapısı, profesyonel mix.</div>
+        <span class="c1-power-badge">Pro</span>
+      </div>
+      <div class="c1-power-card viral" onclick="selectPower(this,'viral')">
+        <div class="c1-power-icon">💣</div>
+        <div class="c1-power-name">Viral Modu</div>
+        <div class="c1-power-desc">TikTok & Reels için özel kurgulama. Hook ilk 3 saniyede vurur. Shorts versiyonu dahil.</div>
+        <span class="c1-power-badge">Voice Studio</span>
+      </div>
+    </div>
+
+    <!-- BENTO: Voice Feature -->
+    <div class="c1-bento">
+      <div class="bento-card bento-voice">
+        <div class="bento-voice-inner">
+          <div class="bento-voice-text">
+            <h3>Kendi <em>sesinle</em> üret</h3>
+            <p>30 saniye ses kaydını yükle. AI senin sesinle profesyonel şarkı söylesin. Klonlama, dublaj, her şey dahil.</p>
+            <button class="c1-btn-main" style="display:inline-flex;gap:8px;align-items:center;">🎤 &nbsp;Sesini Yükle</button>
+          </div>
+          <div class="bento-voice-upload" onclick="this.style.background='rgba(255,107,53,0.15)'">
+            <div class="bento-voice-upload-icon">🎙️</div>
+            <div class="bento-voice-upload-label">Dosyayı sürükle<br>veya tıkla</div>
+          </div>
+        </div>
+      </div>
+      <div class="bento-card bento-stat">
+        <div class="bento-stat-num">30sn</div>
+        <div class="bento-stat-label">Üretim Süresi</div>
+      </div>
+      <div class="bento-card bento-speed">
+        <h4>Rakip Karşılaştırma</h4>
+        <div class="speed-bar-wrap">
+          <div class="speed-bar-item novo">
+            <span style="width:60px">Novahit</span>
+            <div class="speed-bar"><div class="speed-bar-fill" style="width:95%"></div></div>
+            <span>30sn</span>
+          </div>
+          <div class="speed-bar-item suno">
+            <span style="width:60px">Suno</span>
+            <div class="speed-bar"><div class="speed-bar-fill" style="width:55%"></div></div>
+            <span>~2dk</span>
+          </div>
+          <div class="speed-bar-item udio">
+            <span style="width:60px">Udio</span>
+            <div class="speed-bar"><div class="speed-bar-fill" style="width:42%"></div></div>
+            <span>~3dk</span>
+          </div>
+        </div>
+      </div>
+      <div class="bento-card bento-lang">
+        <h4>50+ Dil Desteği</h4>
+        <div class="lang-flags">
+          🇹🇷🇺🇸🇬🇧🇩🇪🇫🇷🇪🇸🇮🇹🇵🇹🇷🇺🇯🇵🇰🇷🇨🇳🇮🇳🇧🇷🇲🇽🇳🇱🇵🇱🇸🇦🇦🇪
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:16px;">ve 30+ daha…</p>
+      </div>
+    </div>
+
+    <!-- WIZARD -->
+    <div class="c1-wizard" id="c1wizard">
+
+      <!-- MODE TABS -->
+      <div class="wiz-mode-tabs">
+        <button class="wiz-mode-tab active" onclick="switchWizMode('simple',this)">✦ &nbsp;Basit</button>
+        <button class="wiz-mode-tab" onclick="switchWizMode('custom',this)">⚙ &nbsp;Özel (Custom)</button>
+      </div>
+
+      <!-- ===== SIMPLE MODE ===== -->
+      <div id="wizSimple">
+        <div class="c1-wiz-step">
+          <p class="c1-wiz-label"><em>01</em> — Şarkın ne hissettirsin?</p>
+          <div class="c1-feel-chips">
+            <button class="feel-chip on" onclick="toggleChip(this)">Hüzün</button>
+            <button class="feel-chip" onclick="toggleChip(this)">Aşk</button>
+            <button class="feel-chip" onclick="toggleChip(this)">Coşku</button>
+            <button class="feel-chip" onclick="toggleChip(this)">Özlem</button>
+            <button class="feel-chip" onclick="toggleChip(this)">Güç</button>
+            <button class="feel-chip" onclick="toggleChip(this)">Eğlence</button>
+            <button class="feel-chip" onclick="toggleChip(this)">Nostalji</button>
+          </div>
+        </div>
+
+        <div class="c1-wiz-step">
+          <p class="c1-wiz-label"><em>02</em> — Şarkının gücünü seç</p>
+          <div class="c1-power-cards">
+            <div class="c1-power-card std" onclick="selectPower(this,'std')">
+              <div class="c1-power-icon">🎯</div>
+              <div class="c1-power-name">Standart</div>
+              <div class="c1-power-desc">Temiz, profesyonel üretim.</div>
+              <span class="c1-power-badge">Ücretsiz</span>
+            </div>
+            <div class="c1-power-card hit selected" onclick="selectPower(this,'hit')">
+              <div class="c1-power-icon">🔥</div>
+              <div class="c1-power-name">Hit Modu</div>
+              <div class="c1-power-desc">Akılda kalıcı nakarat yapısı.</div>
+              <span class="c1-power-badge">Pro</span>
+            </div>
+            <div class="c1-power-card viral" onclick="selectPower(this,'viral')">
+              <div class="c1-power-icon">💣</div>
+              <div class="c1-power-name">Viral Modu</div>
+              <div class="c1-power-desc">TikTok & Reels optimize.</div>
+              <span class="c1-power-badge">Voice Studio</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="c1-wiz-step">
+          <p class="c1-wiz-label"><em>03</em> — Nakarat ne kadar güçlü olsun?</p>
+          <div class="c1-slider-wrap">
+            <input type="range" class="c1-slider" min="1" max="5" value="4" oninput="updateChorusLabel(this)">
+            <div class="c1-slider-labels">
+              <span>Sade</span><span>Dengeli</span><span id="chorusVal" style="color:#FF6B35;font-weight:700;">Güçlü ●</span><span>Bağımlılık Yapan</span><span>EKSTRİM</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="c1-wiz-step">
+          <p class="c1-wiz-label"><em>04</em> — Nakarat Ön İzleme — Birini seç</p>
+          <div class="c1-chorus-previews">
+            <div class="chorus-card selected" onclick="selectChorus(this)">
+              <div class="chorus-card-num">Taslak 01</div>
+              <div class="chorus-card-text">"Sesin içimde yankılanır<br>Gece yarısı rüzgar gibi<br>Bırak gitsin, bırak gitsin…"</div>
+              <div class="chorus-card-play">▶ Dinle</div>
+            </div>
+            <div class="chorus-card" onclick="selectChorus(this)">
+              <div class="chorus-card-num">Taslak 02</div>
+              <div class="chorus-card-text">"Ateş gibi yanan hisler<br>Kalbimde iz bırakan izler<br>Seni bulmak için geç…"</div>
+              <div class="chorus-card-play">▶ Dinle</div>
+            </div>
+            <div class="chorus-card" onclick="selectChorus(this)">
+              <div class="chorus-card-num">Taslak 03</div>
+              <div class="chorus-card-text">"Dünya dursa bile dönüyor<br>Seninle her an yenileniyor<br>Bu an sonsuza dek…"</div>
+              <div class="chorus-card-play">▶ Dinle</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /wizSimple -->
+
+      <!-- ===== CUSTOM MODE ===== -->
+      <div id="wizCustom" style="display:none;">
+
+        <!-- LYRICS -->
+        <div class="custom-field">
+          <div class="custom-field-header">
+            <span class="custom-field-label">📝 Sözler</span>
+          </div>
+          <textarea class="custom-textarea" id="customLyrics" placeholder="Şarkı sözlerini buraya yaz… Kıta, nakarat, köprü olarak ayırabilirsin. Boş bırakırsan AI yazar.
+
+[Kıta 1]
+…
+
+[Nakarat]
+…"></textarea>
+          <button class="btn-ai-lyrics" onclick="generateAILyrics()">
+            ✦ Yapay Zeka Söz Yazsın
+          </button>
+        </div>
+
+        <!-- STYLES -->
+        <div class="custom-field">
+          <div class="custom-field-header">
+            <span class="custom-field-label">🎨 Tarz & Stil</span>
+          </div>
+          <textarea class="custom-textarea" id="customStyles" placeholder="Müzik stilini yaz: pop, arabesk, cinematic, trap, acoustic, dark…" style="min-height:60px;"></textarea>
+          <div class="style-tags">
+            <button class="style-tag on" onclick="this.classList.toggle('on');addStyleTag(this)">Smooth</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Cinematic</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Dark</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Upbeat</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Melancholic</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Epic</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Acoustic</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Trap</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Swing</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Dubstep</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Arabesk</button>
+            <button class="style-tag" onclick="this.classList.toggle('on');addStyleTag(this)">Lo-fi</button>
+          </div>
+        </div>
+
+        <!-- TITLE + ADVANCED ACCORDION -->
+        <div class="custom-accordion">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            <span>📌 &nbsp;Şarkı Başlığı & Gelişmiş Ayarlar</span>
+            <span class="accordion-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            <div class="acc-row">
+              <div class="acc-field">
+                <div class="acc-label">Şarkı Başlığı</div>
+                <input class="acc-input" type="text" placeholder="Başlık yaz veya boş bırak…">
+              </div>
+              <div class="acc-field">
+                <div class="acc-label">Ses Tipi</div>
+                <input class="acc-input" type="text" placeholder="Erkek, Kadın, Koro…">
+              </div>
+            </div>
+            <div class="acc-field">
+              <div class="acc-label">Tempo (BPM) &nbsp;<span id="bpmVal" style="color:#FF6B35;">120</span></div>
+              <input class="acc-slider" type="range" min="60" max="200" value="120" oninput="document.getElementById('bpmVal').textContent=this.value">
+            </div>
+            <div class="acc-field">
+              <div class="acc-label">Enstrüman Ağırlığı &nbsp;<span id="instrVal" style="color:#FF6B35;">50%</span></div>
+              <input class="acc-slider" type="range" min="0" max="100" value="50" oninput="document.getElementById('instrVal').textContent=this.value+'%'">
+            </div>
+            <div class="acc-field">
+              <div class="acc-label">Nakarat Güç</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+                <button class="style-tag on" onclick="this.classList.toggle('on')">Güçlü</button>
+                <button class="style-tag" onclick="this.classList.toggle('on')">Sade</button>
+                <button class="style-tag" onclick="this.classList.toggle('on')">Ekstrem</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /wizCustom -->
+
+      <!-- GENERATE BUTTON (her iki modda da) -->
+      <button class="c1-gen-btn-v2" onclick="showResult()">
+        <div class="gen-btn-icons"><span>🎵</span><span>🎤</span></div>
+        ✦ &nbsp;Şarkımı Üret — 30 Saniye
+      </button>
+    </div>
+
+    <!-- Result Screen -->
+    <div class="c1-result mt-80" id="c1result">
+      <div class="result-track">
+        <div class="result-art">🎵</div>
+        <div class="result-info">
+          <h3>Hüzün & Özlem — Novahit AI</h3>
+          <p>Hit Modu · Türkçe Pop · 3:24 · 192kbps</p>
+        </div>
+      </div>
+      <div class="result-waveform" id="resultWaveform"></div>
+      <div class="result-actions">
+        <button class="result-btn listen">▶ Dinle</button>
+        <button class="result-btn dl">⬇ İndir</button>
+        <button class="result-btn share">↗ Paylaş</button>
+        <button class="result-btn shorts">📱 Shorts olarak indir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="c1-section text-center">
+    <p class="c1-sec-label">Fiyatlandırma</p>
+    <h2 class="c1-sec-title">Başla, büyü, <em>hit</em> ol</h2>
+    <p class="c1-sec-sub" style="margin:0 auto 60px;">Ücretli planlar iptal edilebilir. Kredi kartı gerektirmez.</p>
+    <div class="c1-pricing">
+      <div class="price-card">
+        <p class="price-tier">Ücretsiz</p>
+        <div class="price-amount"><sup>$</sup>0<span>/ay</span></div>
+        <p class="price-desc">Dene, karar ver. Sınırsız zaman.</p>
+        <ul class="price-features">
+          <li>3 şarkı / ay</li>
+          <li>Standart kalite</li>
+          <li>Türkçe & İngilizce</li>
+          <li class="locked">Ses klonlama</li>
+          <li class="locked">Hit & Viral modu</li>
+          <li class="locked">Shorts indir</li>
+        </ul>
+        <button class="price-cta">Başla</button>
+      </div>
+      <div class="price-card pro">
+        <p class="price-tier">Pro</p>
+        <div class="price-amount"><sup>$</sup>9<span>.99/ay</span></div>
+        <p class="price-desc">Streamer'lar, içerik üreticiler ve müzisyenler için.</p>
+        <ul class="price-features">
+          <li>10 şarkı / gün</li>
+          <li>Yüksek kalite (wav)</li>
+          <li>50+ dil desteği</li>
+          <li>Hit Modu dahil</li>
+          <li>Viral Modu dahil</li>
+          <li class="locked">Ses klonlama</li>
+        </ul>
+        <button class="price-cta">Pro'ya Geç</button>
+      </div>
+      <div class="price-card">
+        <p class="price-tier">Voice Studio</p>
+        <div class="price-amount"><sup>$</sup>24<span>.99/ay</span></div>
+        <p class="price-desc">Kendi sesin, sınırsız üretim, öncelikli işlem.</p>
+        <ul class="price-features">
+          <li>Sınırsız şarkı</li>
+          <li>Ses klonlama (HD)</li>
+          <li>Tüm modlar dahil</li>
+          <li>Shorts otomatik</li>
+          <li>API erişimi</li>
+          <li>Öncelikli destek</li>
+        </ul>
+        <button class="price-cta">Voice Studio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security Footer -->
+  <div class="c1-security">
+    <div class="security-seals">
+      <div class="seal"><span class="seal-icon">🔒</span> 256-bit AES Encryption</div>
+      <div class="seal"><span class="seal-icon">✅</span> SSL Secure</div>
+      <div class="seal"><span class="seal-icon">🛡️</span> GDPR Uyumlu</div>
+    </div>
+    <div class="payment-icons">
+      <div class="pay-badge">VISA</div>
+      <div class="pay-badge">MC</div>
+      <div class="pay-badge">TROY</div>
+      <div class="pay-badge">PayPal</div>
+      <div class="pay-badge">Apple Pay</div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-items">
+      <div class="bottom-nav-item active"><div class="bottom-nav-icon">🏠</div><div class="bottom-nav-label">Ana</div></div>
+      <div class="bottom-nav-item"><div class="bottom-nav-icon">🎵</div><div class="bottom-nav-label">Üret</div></div>
+      <div class="bottom-nav-item"><div class="bottom-nav-icon">🎤</div><div class="bottom-nav-label">Sesim</div></div>
+      <div class="bottom-nav-item"><div class="bottom-nav-icon">📁</div><div class="bottom-nav-label">Şarkılarım</div></div>
+    </div>
+  </nav>
+
+</section>
+
+<!-- =========================================
+     KONSEPT 2: SANATÇI DENEYİMİ
+========================================= -->
+<section class="concept c2" id="tab2">
+
+  <header class="c2-hero">
+    <div class="c2-bg">
+      <div class="c2-bg-orb1"></div>
+      <div class="c2-bg-orb2"></div>
+    </div>
+    <div class="c2-left">
+      <p class="c2-eyebrow">Novahit AI Music Studio</p>
+      <h1 class="c2-h1">Müziğin<br><span class="accent">ruhunu</span><br>sen beslersin</h1>
+      <p class="c2-sub">Hayal ettiğin duyguyu yaz. 15 AI ajan senin için besteliyor, söylüyor, prodüksiyon yapıyor. Sanat senindir.</p>
+
+      <div class="c2-input-wrap">
+        <p class="c2-input-label">Ruhunu yansıt</p>
+        <textarea class="c2-textarea" placeholder="Geceyi düşün, yağmuru, birini özlemeyi… bu hissi yaz." rows="3"></textarea>
+      </div>
+
+      <div class="c2-tags">
+        <button class="c2-tag on" onclick="this.classList.toggle('on')">Arabesk</button>
+        <button class="c2-tag" onclick="this.classList.toggle('on')">Soul</button>
+        <button class="c2-tag" onclick="this.classList.toggle('on')">Jazz</button>
+        <button class="c2-tag" onclick="this.classList.toggle('on')">Türkçe Pop</button>
+        <button class="c2-tag" onclick="this.classList.toggle('on')">Klasik</button>
+        <button class="c2-tag" onclick="this.classList.toggle('on')">R&B</button>
+        <button class="c2-tag" onclick="this.classList.toggle('on')">Lofi</button>
+      </div>
+
+      <button class="c2-gen-btn" style="margin-top:20px;">✦ &nbsp;Şarkımı Yarat</button>
+    </div>
+
+    <div class="c2-right">
+      <div class="c2-vinyl-wrap">
+        <div class="c2-vinyl">
+          <div class="c2-vinyl-grooves"></div>
+          <div class="c2-vinyl-label">
+            <div class="c2-vinyl-label-text">NOVA<br>HIT</div>
+          </div>
+        </div>
+        <div class="c2-vinyl-note n1">🎵</div>
+        <div class="c2-vinyl-note n2">♪</div>
+        <div class="c2-vinyl-note n3">🎶</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="c2-stats-row">
+    <div class="c2-stat"><div class="c2-stat-num">50K+</div><div class="c2-stat-label">Sanatçı Üretildi</div></div>
+    <div class="c2-stat"><div class="c2-stat-num">125</div><div class="c2-stat-label">Müzik Türü</div></div>
+    <div class="c2-stat"><div class="c2-stat-num">15</div><div class="c2-stat-label">Uzman AI Ajan</div></div>
+  </div>
+
+  <!-- Features -->
+  <div class="c2-features">
+    <div class="text-center" style="margin-bottom:60px;">
+      <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(167,139,250,0.6);font-family:'JetBrains Mono',monospace;margin-bottom:16px;">Stüdyo Özellikleri</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.05;">Her sanatçının <span style="background:linear-gradient(135deg,#a78bfa,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">ihtiyacı</span></h2>
+    </div>
+    <div class="c2-feat-grid">
+      <div class="c2-feat">
+        <div class="c2-feat-icon">🎤</div>
+        <h3>Ses Klonlama</h3>
+        <p>30 saniye ses yükle. AI senin sesin ve nefes tarzınla şarkı söylesin. Sesi sen besle, sanatı AI tamamlasın.</p>
+      </div>
+      <div class="c2-feat">
+        <div class="c2-feat-icon">💣</div>
+        <h3>Viral Modu</h3>
+        <p>İlk 3 saniyede hook. TikTok & Reels için özel kurgu. Otomatik Shorts versiyonu. Algoritmanın sevdiği format.</p>
+      </div>
+      <div class="c2-feat">
+        <div class="c2-feat-icon">🎼</div>
+        <h3>Nakarat Kontrolü</h3>
+        <p>Nakaratın güçünü slider ile ayarla. 3 farklı nakarat taslağı arasından seç, değiştir, mükemmelleştir.</p>
+      </div>
+      <div class="c2-feat">
+        <div class="c2-feat-icon">🌍</div>
+        <h3>50+ Dil Desteği</h3>
+        <p>Türkçe'den Japonca'ya, Arapça'dan Portekizce'ye. Şarkın dünyanın her yerine ulaşsın.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing (dark/minimal) -->
+  <div style="padding:100px 80px;max-width:1200px;margin:0 auto;">
+    <div class="text-center" style="margin-bottom:60px;">
+      <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(167,139,250,0.6);font-family:'JetBrains Mono',monospace;margin-bottom:16px;">Planlar</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:48px;font-weight:900;">Sana uygun <span style="background:linear-gradient(135deg,#a78bfa,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">plan</span></h2>
+    </div>
+    <div class="c1-pricing">
+      <div class="price-card"><p class="price-tier">Ücretsiz</p><div class="price-amount"><sup>$</sup>0<span>/ay</span></div><p class="price-desc">3 şarkı / ay, standart kalite</p><ul class="price-features"><li>3 şarkı / ay</li><li>Standart kalite</li><li class="locked">Ses klonlama</li></ul><button class="price-cta">Başla</button></div>
+      <div class="price-card pro"><p class="price-tier">Pro</p><div class="price-amount"><sup>$</sup>9<span>.99/ay</span></div><p class="price-desc">Günde 10 şarkı, Hit & Viral modu</p><ul class="price-features"><li>10 şarkı / gün</li><li>Hit & Viral modu</li><li class="locked">Ses klonlama</li></ul><button class="price-cta">Pro'ya Geç</button></div>
+      <div class="price-card"><p class="price-tier">Voice Studio</p><div class="price-amount"><sup>$</sup>24<span>.99/ay</span></div><p class="price-desc">Sınırsız + Ses klonlama + API</p><ul class="price-features"><li>Sınırsız şarkı</li><li>Ses klonlama HD</li><li>API erişimi</li></ul><button class="price-cta">Voice Studio</button></div>
+    </div>
+  </div>
+
+  <div class="c1-security">
+    <div class="security-seals"><div class="seal"><span class="seal-icon">🔒</span> 256-bit AES</div><div class="seal"><span class="seal-icon">✅</span> SSL Secure</div></div>
+    <div class="payment-icons"><div class="pay-badge">VISA</div><div class="pay-badge">MC</div><div class="pay-badge">TROY</div><div class="pay-badge">PayPal</div></div>
+  </div>
+
+  <nav class="bottom-nav" style="background:rgba(4,4,10,0.95);border-top-color:rgba(167,139,250,0.1);">
+    <div class="bottom-nav-items">
+      <div class="bottom-nav-item active" style="color:#a78bfa;"><div class="bottom-nav-icon">🏠</div><div class="bottom-nav-label">Ana</div></div>
+      <div class="bottom-nav-item"><div class="bottom-nav-icon">🎵</div><div class="bottom-nav-label">Üret</div></div>
+      <div class="bottom-nav-item"><div class="bottom-nav-icon">🎤</div><div class="bottom-nav-label">Sesim</div></div>
+      <div class="bottom-nav-item"><div class="bottom-nav-icon">📁</div><div class="bottom-nav-label">Kütüphane</div></div>
+    </div>
+  </nav>
+
+</section>
+
+<!-- =========================================
+     KONSEPT 3: MİNİMALİST PREMİUM
+========================================= -->
+<section class="concept c3" id="tab3">
+
+  <!-- Nav -->
+  <nav class="c3-nav">
+    <span class="c3-nav-logo">Nova<em>hit</em></span>
+    <div class="c3-nav-links">
+      <a href="#">Üret</a>
+      <a href="#">Ses Stüdyo</a>
+      <a href="#">Keşfet</a>
+      <a href="#">Fiyatlar</a>
+    </div>
+    <button class="c3-nav-cta">Ücretsiz Başla</button>
+  </nav>
+
+  <!-- Hero -->
+  <header class="c3-hero">
+    <div class="c3-hero-lines">
+      <div class="c3-line h" style="top:25%"></div>
+      <div class="c3-line h" style="top:50%"></div>
+      <div class="c3-line h" style="top:75%"></div>
+      <div class="c3-line v" style="left:25%"></div>
+      <div class="c3-line v" style="left:50%"></div>
+      <div class="c3-line v" style="left:75%"></div>
+    </div>
+    <div class="c3-hero-content">
+      <div class="c3-eyebrow">AI Music Studio</div>
+      <h1 class="c3-h1">Kendi hit şarkını<br><em>30 saniyede</em><br>oluştur</h1>
+      <p class="c3-sub">Sesinle ya da sıfırdan… Novahit senin için hit üretir.</p>
+      <div class="c3-cta-row">
+        <button class="c3-btn-main">Ücretsiz Başla</button>
+        <button class="c3-btn-ghost">Nasıl Çalışır?</button>
+      </div>
+      <div class="c3-social-proof">
+        <div class="c3-proof-item"><div class="c3-proof-num">50K+</div><div class="c3-proof-label">Şarkı</div></div>
+        <div class="c3-proof-sep"></div>
+        <div class="c3-proof-item"><div class="c3-proof-num">125</div><div class="c3-proof-label">Tür</div></div>
+        <div class="c3-proof-sep"></div>
+        <div class="c3-proof-item"><div class="c3-proof-num">50+</div><div class="c3-proof-label">Dil</div></div>
+        <div class="c3-proof-sep"></div>
+        <div class="c3-proof-item"><div class="c3-proof-num">4.9★</div><div class="c3-proof-label">Puan</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product section -->
+  <div class="c3-product">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;">
+      <div>
+        <div class="c3-section-chip">Özellikler</div>
+        <h2 class="c3-section-title">Müziğin<br><em>yeni yüzü</em></h2>
+        <p class="c3-section-sub">125 müzik türü, 50+ dil ve 15 uzman AI ajan ile profesyonel kalitede müzik üretimi. Rakipsiz hız, rakipsiz kalite.</p>
+
+        <div class="c3-feat-grid">
+          <div class="c3-feat">
+            <div class="c3-feat-icon">🎤</div>
+            <h3>Ses Klonlama</h3>
+            <p>30 sn kayıt yükle, AI sesinle profesyonel şarkı söylesin.</p>
+          </div>
+          <div class="c3-feat">
+            <div class="c3-feat-icon">💣</div>
+            <h3>Viral Modu</h3>
+            <p>Shorts ve Reels için otomatik optimizasyon.</p>
+          </div>
+          <div class="c3-feat">
+            <div class="c3-feat-icon">🎼</div>
+            <h3>Nakarat Kontrolü</h3>
+            <p>3 taslak, slider kontrolü, tam özgürlük.</p>
+          </div>
+          <div class="c3-feat">
+            <div class="c3-feat-icon">⚡</div>
+            <h3>30 Saniye</h3>
+            <p>Rakiplerin dakikalar sürerken sen bitiriyorsun.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wizard -->
+      <div class="c3-wizard-wrap">
+        <h3 class="c3-wiz-title">Şarkını yarat</h3>
+        <p class="c3-wiz-sub">Ücretsiz başla, kredi kartı gerekmez.</p>
+
+        <div class="c3-wiz-field">
+          <p class="c3-wiz-field-label">Şarkın ne hissettirsin?</p>
+          <div class="c3-feel-chips">
+            <button class="c3-chip on" onclick="this.classList.toggle('on')">Hüzün</button>
+            <button class="c3-chip" onclick="this.classList.toggle('on')">Aşk</button>
+            <button class="c3-chip" onclick="this.classList.toggle('on')">Coşku</button>
+            <button class="c3-chip" onclick="this.classList.toggle('on')">Güç</button>
+            <button class="c3-chip" onclick="this.classList.toggle('on')">Nostalji</button>
+          </div>
+        </div>
+
+        <div class="c3-wiz-field">
+          <p class="c3-wiz-field-label">Ruhunu yansıt</p>
+          <textarea class="c3-textarea" placeholder="Ne anlatmak istiyorsun? Kısaca yaz…" rows="3"></textarea>
+        </div>
+
+        <div class="c3-wiz-field">
+          <p class="c3-wiz-field-label">Şarkının gücü</p>
+          <div class="c3-power-row">
+            <div class="c3-power" onclick="selectC3Power(this)"><div class="c3-power-icon">🎯</div><div class="c3-power-name">Standart</div></div>
+            <div class="c3-power on" onclick="selectC3Power(this)"><div class="c3-power-icon">🔥</div><div class="c3-power-name">Hit</div></div>
+            <div class="c3-power" onclick="selectC3Power(this)"><div class="c3-power-icon">💣</div><div class="c3-power-name">Viral</div></div>
+          </div>
+        </div>
+
+        <button class="c3-gen-btn">Şarkımı Üret →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="c3-pricing-section">
+    <div class="text-center" style="margin-bottom:60px;">
+      <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(184,134,11,0.7);font-family:'JetBrains Mono',monospace;margin-bottom:16px;">Fiyatlandırma</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,64px);font-weight:900;color:#fff;letter-spacing:-2px;">Başla, <em style="color:#B8860B;font-style:italic;">büyü</em>, hit ol</h2>
+    </div>
+    <div class="c3-pricing-grid">
+      <div class="c3-price">
+        <p class="c3-price-tier">Ücretsiz</p>
+        <div class="c3-price-amount"><sup>$</sup>0<span class="period">/ay</span></div>
+        <p class="c3-price-desc">Dene, karar ver.</p>
+        <ul class="c3-price-list"><li>3 şarkı / ay</li><li>Standart kalite</li><li class="no">Ses klonlama</li><li class="no">Hit & Viral</li></ul>
+        <button class="c3-price-btn">Başla</button>
+      </div>
+      <div class="c3-price pro">
+        <p class="c3-price-tier">Pro</p>
+        <div class="c3-price-amount"><sup>$</sup>9<span class="period">.99/ay</span></div>
+        <p class="c3-price-desc">İçerik üreticiler için.</p>
+        <ul class="c3-price-list"><li>10 şarkı / gün</li><li>Hit & Viral modu</li><li>50+ dil</li><li class="no">Ses klonlama</li></ul>
+        <button class="c3-price-btn">Pro'ya Geç</button>
+      </div>
+      <div class="c3-price">
+        <p class="c3-price-tier">Voice Studio</p>
+        <div class="c3-price-amount"><sup>$</sup>24<span class="period">.99/ay</span></div>
+        <p class="c3-price-desc">Profesyonel sanatçılar için.</p>
+        <ul class="c3-price-list"><li>Sınırsız şarkı</li><li>Ses klonlama HD</li><li>Shorts otomatik</li><li>API erişimi</li></ul>
+        <button class="c3-price-btn">Voice Studio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security -->
+  <div class="c3-security">
+    <div class="c3-seals">
+      <div class="c3-seal">🔒 256-bit AES Encryption</div>
+      <div class="c3-seal">✅ SSL Secure</div>
+      <div class="c3-seal">🛡️ GDPR Uyumlu</div>
+    </div>
+    <div class="c3-pays">
+      <div class="c3-pay">VISA</div>
+      <div class="c3-pay">MC</div>
+      <div class="c3-pay">TROY</div>
+      <div class="c3-pay">PayPal</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== JS ===== -->
+<script>
+// Wizard Simple/Custom mode switch
+function switchWizMode(mode, btn){
+  document.querySelectorAll('.wiz-mode-tab').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('wizSimple').style.display = mode==='simple' ? 'block' : 'none';
+  document.getElementById('wizCustom').style.display = mode==='custom' ? 'block' : 'none';
+}
+
+// AI Lyrics generator (mock)
+function generateAILyrics(){
+  var area = document.getElementById('customLyrics');
+  area.value = '';
+  var lyrics = '[Kıta 1]\nGece yarısı yalnız oturdum\nFotoğraflara baktım durdum\nHer bir kare bir hatıra\nSenin sesin var içimde hâlâ\n\n[Nakarat]\nBırak gitsin, bırak gitsin\nRüzgar gibi savrulan anlar\nBırak gitsin, bırak gitsin\nAma kalbimde sen kalırsın\n\n[Kıta 2]\nSabah ışığı doğmadan önce\nDüşlerin içinde kayboldum yine\nBu şehrin sesi, senin sesin\nKarışır bazen, karışır bazen';
+  var i=0;
+  var interval = setInterval(function(){
+    area.value += lyrics[i];
+    i++;
+    if(i>=lyrics.length) clearInterval(interval);
+  }, 18);
+}
+
+// Style tag → textarea
+function addStyleTag(btn){
+  var area = document.getElementById('customStyles');
+  var tag = btn.textContent.trim();
+  if(btn.classList.contains('on')){
+    area.value = area.value ? area.value+', '+tag : tag;
+  } else {
+    area.value = area.value.replace(new RegExp(',?\\s*'+tag,'gi'),'').replace(/^,\s*/,'').trim();
+  }
+}
+
+// Accordion
+function toggleAccordion(btn){
+  btn.classList.toggle('open');
+  var body = btn.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// Tab switching
+function showTab(n){
+  document.querySelectorAll('.concept').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab'+n).classList.add('active');
+  document.querySelectorAll('.tab-btn')[n-1].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Power card selection
+function selectPower(el,type){
+  document.querySelectorAll('.c1-power-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// Toggle lyrics textarea
+function toggleLyrics(){
+  const box = document.getElementById('lyricsBox');
+  box.style.display = document.getElementById('lyricToggle').checked ? 'block' : 'none';
+}
+
+// Chorus selection
+function selectChorus(el){
+  document.querySelectorAll('.chorus-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// Feel chip toggle
+function toggleChip(el){el.classList.toggle('on');}
+
+// Chorus label update
+function updateChorusLabel(el){
+  const labels = ['Sade','Dengeli','Dengeli','Güçlü ●','Bağımlılık Yapan','EKSTRİM'];
+  document.getElementById('chorusVal').textContent = labels[el.value];
+}
+
+// Show result
+function showResult(){
+  const r = document.getElementById('c1result');
+  r.classList.add('visible');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  // Generate waveform bars
+  const wf = document.getElementById('resultWaveform');
+  wf.innerHTML='';
+  for(let i=0;i<60;i++){
+    const b=document.createElement('div');
+    b.className='result-wf-bar';
+    const h=Math.random()*70+20;
+    b.style.cssText=`--h:${h}%;--d:${(Math.random()*0.4+0.2).toFixed(2)}s;`;
+    wf.appendChild(b);
+  }
+}
+
+// C3 power selection
+function selectC3Power(el){
+  document.querySelectorAll('.c3-power').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// Animate speed bars on load
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.querySelectorAll('.speed-bar-fill').forEach(b=>{
+      const w=b.style.width;
+      b.style.width='0';
+      setTimeout(()=>{b.style.width=w;},100);
+    });
+  },500);
+});
+</script>
+
+</body>
+</html>
