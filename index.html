@@ -2906,9 +2906,10 @@ Her gece seni düşünüp uyudum
 
     function toggleAccordionMain(btn) {
       var body = btn.nextElementSibling;
-      var isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
-      body.style.maxHeight = isOpen ? '0px' : body.scrollHeight + 'px';
-      btn.querySelector('.acc-arrow') && (btn.querySelector('.acc-arrow').textContent = isOpen ? '▼' : '▲');
+      var isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      var arrow = btn.querySelector('.accordion-arrow');
+      if (arrow) arrow.textContent = isOpen ? '▾' : '▴';
     }
 
     // ─── YASAL SORUMLULUK MODALI ────────────────────────────────
