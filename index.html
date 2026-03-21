@@ -1551,7 +1551,7 @@
         </div>
         <h1 class="hero-h1">
           Kendi hit şarkını
-          <span class="line2">30 saniyede oluştur</span>
+          <span class="line2">Dakikalar içinde oluştur</span>
         </h1>
         <p class="hero-sub">Sesinle ya da sıfırdan… Novahit senin için hit üretir.</p>
         <div class="hero-buttons">
@@ -1741,8 +1741,8 @@
               <div class="wave-bar" style="height:35px;"></div>
               <div class="wave-bar" style="height:20px;"></div>
             </div>
-            <p style="font-size:18px; font-weight:600; margin-top:20px;">AI şarkını üretiyor…</p>
-            <p style="color:var(--text-muted); font-size:14px; margin-top:8px;">Ortalama 28–35 saniye sürer</p>
+            <p style="font-size:18px; font-weight:600; margin-top:20px;" id="loadingMsg">🎹 Melodi yazılıyor…</p>
+            <p style="color:var(--text-muted); font-size:14px; margin-top:8px;">Gerçek bir hit 1-2 dakika alır ☕</p>
             <div style="margin-top:24px; background:var(--dark3); border-radius:100px; height:6px; max-width:320px; margin-left:auto; margin-right:auto; overflow:hidden;">
               <div id="loading-bar" style="height:100%; background:linear-gradient(90deg,var(--orange),var(--pink)); border-radius:100px; width:0%; transition:width 3s linear;"></div>
             </div>
@@ -2681,7 +2681,25 @@
         document.getElementById('step-indicator').textContent = 'Üretiliyor…';
 
         var bar = document.getElementById('loading-bar');
-        requestAnimationFrame(function() { bar.style.width = '95%'; });
+        requestAnimationFrame(function() { bar.style.width = '85%'; });
+
+        // Loading mesaj döngüsü
+        var loadMsgs = [
+          '🎹 Melodi yazılıyor…',
+          '🎸 Akorlar ayarlanıyor…',
+          '🥁 Ritim örüntüsü oluşturuluyor…',
+          '🎤 Vokal tonu belirleniyor…',
+          '🎚 Mix & mastering yapılıyor…',
+          '✨ Son dokunuşlar ekleniyor…',
+          '🎵 Neredeyse hazır…'
+        ];
+        var _msgIdx = 0;
+        var _msgEl = document.getElementById('loadingMsg');
+        var _msgTimer = setInterval(function() {
+          _msgIdx = (_msgIdx + 1) % loadMsgs.length;
+          if (_msgEl) _msgEl.textContent = loadMsgs[_msgIdx];
+        }, 6000);
+        window._loadingMsgTimer = _msgTimer;
 
         var payload = {
           emotion: wizardState.emotion || 'Aşk',
@@ -2729,6 +2747,7 @@
       var genre = (data && data.genre) ? data.genre : ((wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu') + ' · 3:24');
       document.getElementById('result-title').textContent = title;
       document.getElementById('result-genre').textContent = genre;
+      clearInterval(window._loadingMsgTimer);
       document.getElementById('loading-state').style.display = 'none';
       document.getElementById('result-state').style.display = 'block';
       applyVersionLocks();
