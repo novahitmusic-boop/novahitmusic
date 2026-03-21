@@ -75,7 +75,7 @@ export default async function handler(req, res) {
   // Email ile kota kontrolü (opsiyonel — email gönderilmişse)
   if (email) {
     const user = await getUser(email);
-    if (user && user.plan === 'free' && user.songs_used >= user.songs_limit) {
+    if (user && user.plan === 'free' && user.songs_used >= (user.songs_limit || 3)) {
       return res.status(403).json({
         error: 'quota_exceeded',
         message: 'Ücretsiz limitin doldu. Pro\'ya geç, sınırsız üret!',

@@ -94,11 +94,12 @@ export default async function handler(req, res) {
   const user = await getOrCreateUser(email);
 
   if (action === 'check') {
+    var limit = user.songs_limit || 3;
     return res.json({
-      allowed: user.songs_used < user.songs_limit,
-      songs_used: user.songs_used,
-      songs_limit: user.songs_limit,
-      plan: user.plan
+      allowed: user.plan !== 'free' || user.songs_used < limit,
+      songs_used: user.songs_used || 0,
+      songs_limit: limit,
+      plan: user.plan || 'free'
     });
   }
 
