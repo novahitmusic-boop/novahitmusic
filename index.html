@@ -1584,14 +1584,8 @@
     <section id="wizard-section" aria-label="Şarkı oluşturma sihirbazı">
       <div class="container wizard-container">
         <div class="section-label">Şarkını Oluştur</div>
-        <!-- MODE TABS -->
-        <div class="wiz-mode-tabs" role="tablist">
-          <button class="wiz-mode-tab active" role="tab" aria-selected="true" onclick="switchWizMode('simple',this)">✦ &nbsp;Basit</button>
-          <button class="wiz-mode-tab" role="tab" aria-selected="false" onclick="switchWizMode('custom',this)">⚙ &nbsp;Özel (Custom)</button>
-        </div>
-
-        <!-- ===== SIMPLE MODE ===== -->
-        <div id="wizSimple">
+        <!-- ===== SIMPLE MODE (gizli) ===== -->
+        <div id="wizSimple" style="display:none;">
           <div class="wizard-progress-bar" role="progressbar" aria-label="Adım ilerlemesi" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4">
             <div class="wizard-progress-fill" id="wizard-fill"></div>
           </div>
@@ -1670,7 +1664,7 @@
         </div><!-- /wizSimple -->
 
         <!-- ===== CUSTOM MODE ===== -->
-        <div id="wizCustom" style="display:none;">
+        <div id="wizCustom">
           <div class="custom-field">
             <span class="custom-field-label">📝 Sözler</span>
             <textarea class="custom-textarea" id="customLyricsMain" placeholder="Şarkı sözlerini yaz…&#10;&#10;[Kıta 1]&#10;…&#10;&#10;[Nakarat]&#10;…&#10;&#10;Boş bırakırsan AI yazar." aria-label="Özel şarkı sözleri"></textarea>
