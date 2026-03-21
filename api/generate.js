@@ -60,11 +60,13 @@ export default async function handler(req, res) {
   }
 
   const { prompt: rawPrompt, style: rawStyle, title, email,
-          emotion, power, lyrics, chorusLevel, lyricsBy, chorus } = req.body;
+          emotion, power, lyrics, chorusLevel, lyricsBy, chorus,
+          genres, mood, language } = req.body;
 
   // Wizard alanlarından prompt/style oluştur
   const prompt = rawPrompt || lyrics || emotion || 'Duygusal Türkçe şarkı';
-  const style  = rawStyle  || [emotion, power].filter(Boolean).join(', ') || 'Türkçe Pop';
+  const styleParts = [rawStyle, genres, mood, emotion, power].filter(Boolean);
+  const style = styleParts.length > 0 ? styleParts.join(', ') : 'Türkçe Pop';
 
   if (!prompt) {
     return res.status(400).json({ error: 'prompt gerekli' });
