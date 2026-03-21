@@ -2712,7 +2712,14 @@
           await new Promise(function(r) { setTimeout(r, 2800); });
         }
 
-        showResult(data);
+        // taskId varsa polling başlat
+        var taskId = data && data.data && data.data.taskId;
+        if (taskId) {
+          showResult(data);
+          pollSongStatus(taskId);
+        } else {
+          showResult(data);
+        }
       });
     }
 
@@ -2725,8 +2732,60 @@
       document.getElementById('loading-state').style.display = 'none';
       document.getElementById('result-state').style.display = 'block';
       applyVersionLocks();
-      // Klip stüdyosunu 1.5sn gecikmeyle göster
       setTimeout(showKlipStudio, 1500);
+    }
+
+    var _pollInterval = null;
+    function pollSongStatus(taskId) {
+      var attempts = 0;
+      document.getElementById('result-genre').textContent = 'Şarkın hazırlanıyor... ⏳';
+      _pollInterval = setInterval(async function() {
+        attempts++;
+        if (attempts > 40) { // 2 dk timeout
+          clearInterval(_pollInterval);
+          document.getElementById('result-genre').textContent = 'Hazır — ses yüklenemiyor olabilir';
+          return;
+        }
+        try {
+          var r = await fetch('/api/status?taskId=' + encodeURIComponent(taskId));
+          var d = await r.json();
+          // kie.ai: data.response.sunoData[0].audioUrl veya benzer yapı
+          var songs = d && d.data && (d.data.response || d.data);
+          var audioList = songs && (songs.sunoData || songs.audioList || songs.songs || (Array.isArray(songs) ? songs : null));
+          if (audioList && audioList.length > 0 && audioList[0].audioUrl) {
+            clearInterval(_pollInterval);
+            setSongAudioUrls(audioList);
+            document.getElementById('result-title').textContent = audioList[0].title || document.getElementById('result-title').textContent;
+            document.getElementById('result-genre').textContent = (wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu');
+          }
+        } catch(e) {}
+      }, 3000);
+    }
+
+    function setSongAudioUrls(audioList) {
+      var cards = [
+        document.querySelector('#versionsWrap .version-card:nth-child(1)'),
+        document.getElementById('versionCard2'),
+        document.getElementById('versionCard3')
+      ];
+      audioList.forEach(function(song, i) {
+        if (!cards[i]) return;
+        var playBtn = cards[i].querySelector('.btn-version.play');
+        var dlBtn   = cards[i].querySelector('.btn-version.dl');
+        var url = song.audioUrl || song.audio_url || song.url;
+        if (!url) return;
+        if (playBtn) {
+          playBtn.onclick = function() {
+            var audio = new Audio(url);
+            audio.play();
+            playBtn.textContent = '⏸ Duraksatıyor';
+            audio.onended = function() { playBtn.textContent = '▶ Dinle'; };
+          };
+        }
+        if (dlBtn) {
+          dlBtn.onclick = function() { window.open(url, '_blank'); };
+        }
+      });
     }
 
     function openPaywall() { openModal('paywall-modal'); }
@@ -2831,28 +2890,40 @@
 
     // ─── V1/V2/V3 İLK ÜRETİM SİSTEMİ ──────────────────────────
     function applyVersionLocks() {
-      var isFirst = !localStorage.getItem('novahit_first_production');
-      if(isFirst) {
-        // İlk üretim — her şey açık
-        localStorage.setItem('novahit_first_production', '1');
+      var used = parseInt(localStorage.getItem('novahit_songs_used') || '0');
+      var limit = 3;
+      // Sayacı artır
+      used = used + 1;
+      localStorage.setItem('novahit_songs_used', used);
+
+      var isFirst = used === 1;
+      var quotaDone = used > limit;
+
+      if (isFirst) {
         document.getElementById('welcomeGiftBanner').style.display = 'flex';
-        document.getElementById('v2Lock').style.display = 'none';
-        document.getElementById('v3Lock').style.display = 'none';
-        document.getElementById('v2Badge').style.display = 'none';
-        document.getElementById('v3Badge').style.display = 'none';
       } else {
-        // Sonraki üretimler — V2/V3 kilitli
         document.getElementById('welcomeGiftBanner').style.display = 'none';
+      }
+
+      if (quotaDone) {
+        // 3 hakkı bitti — V2/V3 kilitle
         document.getElementById('v2Lock').style.display = 'flex';
         document.getElementById('v3Lock').style.display = 'flex';
         document.getElementById('v2Badge').style.display = 'inline-block';
         document.getElementById('v3Badge').style.display = 'inline-block';
         document.getElementById('versionCard2').classList.add('locked-card');
         document.getElementById('versionCard3').classList.add('locked-card');
-        // Waveform barları kilitlilerde griye çevir
         document.querySelectorAll('#versionCard2 .version-wf-bar, #versionCard3 .version-wf-bar').forEach(function(b){
           b.classList.remove('free'); b.classList.add('locked-bar');
         });
+      } else {
+        // Hak var — V2/V3 açık
+        document.getElementById('v2Lock').style.display = 'none';
+        document.getElementById('v3Lock').style.display = 'none';
+        document.getElementById('v2Badge').style.display = 'none';
+        document.getElementById('v3Badge').style.display = 'none';
+        document.getElementById('versionCard2').classList.remove('locked-card');
+        document.getElementById('versionCard3').classList.remove('locked-card');
       }
     }
 
