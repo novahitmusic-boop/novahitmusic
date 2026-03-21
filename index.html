@@ -2757,27 +2757,46 @@
     var _pollInterval = null;
     function pollSongStatus(taskId) {
       var attempts = 0;
+      // Butonları devre dışı bırak
+      document.querySelectorAll('#versionsWrap .btn-version.play').forEach(function(b){
+        b.textContent = '⏳ Hazırlanıyor';
+        b.disabled = true;
+        b.style.opacity = '0.5';
+      });
       document.getElementById('result-genre').textContent = 'Şarkın hazırlanıyor... ⏳';
+
       _pollInterval = setInterval(async function() {
         attempts++;
-        if (attempts > 40) { // 2 dk timeout
+        if (attempts > 60) { // 3 dk timeout
           clearInterval(_pollInterval);
-          document.getElementById('result-genre').textContent = 'Hazır — ses yüklenemiyor olabilir';
+          document.getElementById('result-genre').textContent = 'Üretim tamamlandı — ses kaydedildi';
+          document.querySelectorAll('#versionsWrap .btn-version.play').forEach(function(b){
+            b.textContent = '▶ Dinle'; b.disabled = false; b.style.opacity = '';
+          });
           return;
         }
         try {
           var r = await fetch('/api/status?taskId=' + encodeURIComponent(taskId));
           var d = await r.json();
-          // kie.ai: data.response.sunoData[0].audioUrl veya benzer yapı
-          var songs = d && d.data && (d.data.response || d.data);
-          var audioList = songs && (songs.sunoData || songs.audioList || songs.songs || (Array.isArray(songs) ? songs : null));
-          if (audioList && audioList.length > 0 && audioList[0].audioUrl) {
-            clearInterval(_pollInterval);
-            setSongAudioUrls(audioList);
-            document.getElementById('result-title').textContent = audioList[0].title || document.getElementById('result-title').textContent;
-            document.getElementById('result-genre').textContent = (wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu');
+          // kie.ai response yapısı: d.data.response.sunoData[]
+          var resp = d && d.data && d.data.response;
+          var audioList = resp && (resp.sunoData || resp.audioList || resp.songs);
+          // Alternatif: d.data doğrudan array
+          if (!audioList && d && d.data && Array.isArray(d.data)) audioList = d.data;
+          // Alternatif: d.data.sunoData
+          if (!audioList && d && d.data && d.data.sunoData) audioList = d.data.sunoData;
+
+          if (audioList && audioList.length > 0) {
+            var firstUrl = audioList[0].audioUrl || audioList[0].audio_url || audioList[0].url;
+            if (firstUrl) {
+              clearInterval(_pollInterval);
+              setSongAudioUrls(audioList);
+              var title = audioList[0].title || audioList[0].songName;
+              if (title) document.getElementById('result-title').textContent = title;
+              document.getElementById('result-genre').textContent = (wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu');
+            }
           }
-        } catch(e) {}
+        } catch(e) { console.log('poll error', e); }
       }, 3000);
     }
 
