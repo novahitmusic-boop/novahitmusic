@@ -2762,6 +2762,9 @@
       }, 3000);
     }
 
+    var _currentAudio = null;
+    var _currentPlayBtn = null;
+
     function setSongAudioUrls(audioList) {
       var cards = [
         document.querySelector('#versionsWrap .version-card:nth-child(1)'),
@@ -2775,11 +2778,32 @@
         var url = song.audioUrl || song.audio_url || song.url;
         if (!url) return;
         if (playBtn) {
+          playBtn.dataset.audioUrl = url;
           playBtn.onclick = function() {
-            var audio = new Audio(url);
-            audio.play();
-            playBtn.textContent = '⏸ Duraksatıyor';
-            audio.onended = function() { playBtn.textContent = '▶ Dinle'; };
+            // Başka çalan varsa durdur
+            if (_currentAudio && !_currentAudio.paused) {
+              _currentAudio.pause();
+              if (_currentPlayBtn && _currentPlayBtn !== playBtn) {
+                _currentPlayBtn.textContent = '▶ Dinle';
+              }
+            }
+            // Aynı butona basıldıysa toggle
+            if (_currentAudio && _currentPlayBtn === playBtn) {
+              if (_currentAudio.paused) {
+                _currentAudio.play();
+                playBtn.textContent = '⏸ Duraklat';
+              } else {
+                _currentAudio.pause();
+                playBtn.textContent = '▶ Dinle';
+              }
+              return;
+            }
+            // Yeni ses başlat
+            _currentAudio = new Audio(url);
+            _currentPlayBtn = playBtn;
+            _currentAudio.play();
+            playBtn.textContent = '⏸ Duraklat';
+            _currentAudio.onended = function() { playBtn.textContent = '▶ Dinle'; };
           };
         }
         if (dlBtn) {
