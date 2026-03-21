@@ -1,12 +1,90 @@
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const UPSTASH_URL  = process.env.UPSTASH_REDIS_URL;
+const UPSTASH_TOK  = process.env.UPSTASH_REDIS_TOKEN;
+
+async function redisIncr(key, ex = 86400) {
+  const r = await fetch(`${UPSTASH_URL}/incr/${key}`, {
+    headers: { Authorization: `Bearer ${UPSTASH_TOK}` }
+  });
+  const j = await r.json();
+  if (j.result === 1) {
+    await fetch(`${UPSTASH_URL}/expire/${key}/${ex}`, {
+      headers: { Authorization: `Bearer ${UPSTASH_TOK}` }
+    });
+  }
+  return j.result;
+}
+
+async function getUser(email) {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}&select=*`,
+    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+  );
+  const rows = await res.json();
+  if (rows && rows.length > 0) return rows[0];
+
+  // Kullanıcı yoksa oluştur (3 hediye şarkı)
+  const ins = await fetch(`${SUPABASE_URL}/rest/v1/quotas`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=representation'
+    },
+    body: JSON.stringify({ email, songs_used: 0, songs_limit: 3, plan: 'free' })
+  });
+  const created = await ins.json();
+  return Array.isArray(created) ? created[0] : created;
+}
+
+async function incrementUsage(email, currentUsed) {
+  await fetch(
+    `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
+    {
+      method: 'PATCH',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ songs_used: currentUsed + 1 })
+    }
+  );
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { prompt, style, title } = req.body;
+  const { prompt, style, title, email } = req.body;
 
   if (!prompt || !style) {
     return res.status(400).json({ error: 'prompt ve style gerekli' });
+  }
+
+  // IP rate limit: günde 50 üretim
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || 'unknown';
+  const ipCount = await redisIncr(`gen:ip:${ip}`);
+  if (ipCount > 50) {
+    return res.status(429).json({ error: 'Günlük limit aşıldı. Yarın tekrar dene.' });
+  }
+
+  // Email ile kota kontrolü (opsiyonel — email gönderilmişse)
+  if (email) {
+    const user = await getUser(email);
+    if (user && user.plan === 'free' && user.songs_used >= user.songs_limit) {
+      return res.status(403).json({
+        error: 'quota_exceeded',
+        message: 'Ücretsiz limitin doldu. Pro\'ya geç, sınırsız üret!',
+        songs_used: user.songs_used,
+        songs_limit: user.songs_limit
+      });
+    }
+    // Kullanımı artır
+    if (user) await incrementUsage(email, user.songs_used);
   }
 
   try {
