@@ -2889,8 +2889,8 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         try {
           var r = await fetch('/api/status?taskId=' + encodeURIComponent(taskId));
           var d = await r.json();
-          // kie.ai response yapısı: d.data.response.sunoData[]
-          var resp = d && d.data && d.data.response;
+          // kie.ai response yapısı: d.data.response.sunoData[] veya d.data.yanıt.sunoData[] (SUCCESS durumunda)
+          var resp = d && d.data && (d.data.response || d.data['yanıt'] || d.data.yant);
           var audioList = resp && (resp.sunoData || resp.audioList || resp.songs);
           // Alternatif: d.data doğrudan array
           if (!audioList && d && d.data && Array.isArray(d.data)) audioList = d.data;
