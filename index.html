@@ -350,6 +350,27 @@
     .wizard-container { position:relative; }
     .wizard-container::after { content:'🎹'; position:absolute; bottom:24px; right:32px; font-size:32px; opacity:0.06; pointer-events:none; }
 
+    /* ── STUDIO BLOCKS ── */
+    .studio-block { margin-bottom:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:18px; padding:22px 20px; }
+    .studio-block-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .studio-block-title { font-size:13px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.7); font-family:var(--font-mono); }
+    .studio-block-sub { font-size:11px; color:rgba(255,107,53,0.6); font-family:var(--font-mono); }
+    .genre-quick-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-mono); margin-bottom:8px; }
+    /* Genre categories */
+    .genre-cats { margin-top:16px; display:flex; flex-direction:column; gap:6px; }
+    .genre-cat-row { border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden; }
+    .genre-cat-btn { width:100%; display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.02); border:none; color:rgba(255,255,255,0.6); font-family:var(--font-body); font-size:13px; cursor:pointer; transition:background 0.2s; }
+    .genre-cat-btn:hover { background:rgba(255,107,53,0.06); color:rgba(255,255,255,0.9); }
+    .genre-cat-body { display:none; padding:12px 14px; border-top:1px solid rgba(255,255,255,0.06); }
+    .genre-cat-body.open { display:flex; flex-wrap:wrap; gap:7px; }
+    /* Language select */
+    .lang-select-wrap { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,107,53,0.2); border-radius:12px; padding:14px 18px; cursor:pointer; transition:border-color 0.2s; font-size:15px; color:#fff; }
+    .lang-select-wrap:hover { border-color:rgba(255,107,53,0.5); }
+    /* Neon sliders */
+    .neon-val { color:var(--orange); font-weight:700; }
+    .neon-slider { width:100%; appearance:none; height:3px; background:rgba(255,255,255,0.08); border-radius:2px; outline:none; cursor:pointer; margin-top:8px; }
+    .neon-slider::-webkit-slider-thumb { appearance:none; width:16px; height:16px; border-radius:50%; background:var(--orange); box-shadow:0 0 10px rgba(255,107,53,0.8), 0 0 20px rgba(255,107,53,0.4); cursor:pointer; }
+    .neon-slider::-webkit-slider-runnable-track { background:linear-gradient(90deg,rgba(255,107,53,0.3),rgba(255,255,255,0.06)); border-radius:2px; }
     /* Custom mode fields */
     .custom-field { margin-bottom:24px; }
     .custom-field-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.3); font-family:var(--font-mono); display:block; margin-bottom:10px; }
@@ -1676,104 +1697,107 @@
           </div>
         </div><!-- /wizSimple -->
 
-        <!-- ===== CUSTOM MODE ===== -->
+        <!-- ===== STUDIO MODE ===== -->
         <div id="wizCustom">
-          <div class="custom-field">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-              <span class="custom-field-label" style="margin:0;">📝 Şarkı Sözleri</span>
-              <button class="btn-ai-lyrics" onclick="generateAILyricsMain()" style="margin:0;padding:8px 16px;font-size:13px;">✦ AI Söz Yazsın</button>
+
+          <!-- 1. ŞARKI SÖZLERİ -->
+          <div class="studio-block">
+            <div class="studio-block-header">
+              <span class="studio-block-title">📝 Şarkı Sözleri</span>
+              <button class="btn-ai-lyrics" onclick="generateAILyricsMain()">✦ AI Söz Yazsın</button>
             </div>
-            <textarea class="custom-textarea" id="customLyricsMain" placeholder="Sözlerini buraya yaz…
+            <textarea class="custom-textarea" id="customLyricsMain"
+              placeholder="Sözlerini buraya yaz… ya da boş bırak, AI yazsın.
 
 [Kıta 1]
 Kalbim seninle aynı anda atıyor
-Uzak mesafeler aramızı açıyor
 
 [Nakarat]
-Seni bulmak için yıldızlara baktım
-Her gece seni düşünüp uyudum
-
-— Boş bırakırsan Yapay Zeka yazar —" aria-label="Özel şarkı sözleri"></textarea>
+Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea>
           </div>
 
-          <div class="custom-field">
-            <span class="custom-field-label">🎨 Tarz & Stil</span>
-            <textarea class="custom-textarea" id="customStylesMain" placeholder="Müzik stilini yaz: pop, arabesk, cinematic, trap, acoustic, dark…" style="min-height:60px;" aria-label="Müzik stili"></textarea>
-            <div class="style-tags" role="group" aria-label="Stil etiketleri">
-              <button class="style-tag on" onclick="this.classList.toggle('on');addStyleTagMain(this)">Smooth</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Cinematic</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Dark</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Upbeat</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Melancholic</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Epic</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Acoustic</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Trap</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Arabesk</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Lo-fi</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">Jazz</button>
-              <button class="style-tag" onclick="this.classList.toggle('on');addStyleTagMain(this)">R&B</button>
+          <!-- 2. TÜR & STİL GALERİSİ -->
+          <div class="studio-block">
+            <div class="studio-block-header">
+              <span class="studio-block-title">🎸 Tür & Stil</span>
+              <span class="studio-block-sub">125 tür</span>
+            </div>
+
+            <!-- Hızlı Seçim -->
+            <div class="genre-quick-label">⚡ Hızlı Seçim</div>
+            <div class="style-tags" id="genreQuick">
+              <button class="style-tag on" data-genre="Turkish Pop" onclick="selectGenreQuick(this)">🇹🇷 Türkçe Pop</button>
+              <button class="style-tag" data-genre="Arabesk" onclick="selectGenreQuick(this)">🎭 Arabesk</button>
+              <button class="style-tag" data-genre="Trap" onclick="selectGenreQuick(this)">💣 Trap</button>
+              <button class="style-tag" data-genre="Pop" onclick="selectGenreQuick(this)">🎵 Pop</button>
+              <button class="style-tag" data-genre="R&B" onclick="selectGenreQuick(this)">🎤 R&B</button>
+            </div>
+
+            <!-- Kategori Çekmeceleri -->
+            <div class="genre-cats" id="genreCats"></div>
+          </div>
+
+          <!-- 3. DİL SEÇİMİ -->
+          <div class="studio-block">
+            <div class="studio-block-header">
+              <span class="studio-block-title">🌍 Dil</span>
+            </div>
+            <div class="lang-select-wrap" onclick="openLangModal()">
+              <span id="langSelectedFlag">🇹🇷</span>
+              <span id="langSelectedName">Türkçe</span>
+              <span style="margin-left:auto;color:rgba(255,255,255,0.3);font-size:12px;">▾ Değiştir</span>
             </div>
           </div>
 
-          <!-- DİL SEÇİMİ -->
-          <div class="custom-field">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-              <span class="custom-field-label" style="margin:0;">🌍 Dil</span>
-              <button onclick="openLangModal()" style="background:none;border:1px solid rgba(255,107,53,0.3);border-radius:8px;color:rgba(255,107,53,0.9);font-size:12px;padding:5px 12px;cursor:pointer;font-family:var(--font-body);">Tüm Diller +</button>
-            </div>
-            <div class="style-tags" id="langTags" role="group" aria-label="Dil seçimi">
-              <button class="style-tag on" data-lang="Turkish" onclick="selectLang(this)">🇹🇷 Türkçe</button>
-              <button class="style-tag" data-lang="English" onclick="selectLang(this)">🇬🇧 İngilizce</button>
-              <button class="style-tag" data-lang="German" onclick="selectLang(this)">🇩🇪 Almanca</button>
-              <button class="style-tag" data-lang="French" onclick="selectLang(this)">🇫🇷 Fransızca</button>
-              <button class="style-tag" data-lang="Italian" onclick="selectLang(this)">🇮🇹 İtalyanca</button>
-              <button class="style-tag" data-lang="Spanish" onclick="selectLang(this)">🇪🇸 İspanyolca</button>
-              <button class="style-tag" data-lang="Greek" onclick="selectLang(this)">🇬🇷 Yunanca</button>
-            </div>
-          </div>
-
-          <!-- DİL MODAL -->
-          <div id="langModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;">
-            <div style="background:#1a1a2e;border:1px solid rgba(255,107,53,0.3);border-radius:20px;padding:32px;max-width:560px;width:92%;max-height:80vh;overflow-y:auto;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-                <h3 style="margin:0;color:#fff;font-size:18px;">🌍 Dil Seç</h3>
-                <button onclick="closeLangModal()" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:22px;cursor:pointer;">×</button>
-              </div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px;" id="langModalGrid"></div>
-            </div>
-          </div>
-
+          <!-- 4. USTA MODU -->
           <div class="custom-accordion">
-            <button class="accordion-btn" onclick="toggleAccordionMain(this)" aria-expanded="false">
-              <span>📌 &nbsp;Şarkı Başlığı & Gelişmiş Ayarlar</span>
+            <button class="accordion-btn" onclick="toggleAccordionMain(this)">
+              <span>🎛 Usta Modu — Profesyonel Kontroller</span>
               <span class="accordion-arrow">▾</span>
             </button>
             <div class="accordion-body">
               <div class="acc-row">
                 <div class="acc-field">
                   <span class="acc-label">Şarkı Başlığı</span>
-                  <input class="acc-input" type="text" placeholder="Boş bırakırsan AI seçer…" aria-label="Şarkı başlığı">
+                  <input class="acc-input" id="customTitleMain" type="text" placeholder="Boş bırakırsan AI seçer…">
                 </div>
                 <div class="acc-field">
                   <span class="acc-label">Ses Tipi</span>
-                  <input class="acc-input" type="text" placeholder="Erkek, Kadın, Koro…" aria-label="Ses tipi">
+                  <input class="acc-input" id="customVoiceMain" type="text" placeholder="Erkek, Kadın, Koro…">
                 </div>
               </div>
               <div class="acc-field">
-                <span class="acc-label">Tempo (BPM) &nbsp;<span id="bpmValMain" style="color:var(--orange);">120</span></span>
-                <input class="acc-slider" type="range" min="60" max="200" value="120" aria-label="Tempo" oninput="document.getElementById('bpmValMain').textContent=this.value">
+                <span class="acc-label">Tempo — BPM &nbsp;<span id="bpmValMain" class="neon-val">120</span></span>
+                <input class="acc-slider neon-slider" type="range" min="60" max="200" value="120" oninput="document.getElementById('bpmValMain').textContent=this.value">
               </div>
               <div class="acc-field">
-                <span class="acc-label">Enstrüman Ağırlığı &nbsp;<span id="instrValMain" style="color:var(--orange);">50%</span></span>
-                <input class="acc-slider" type="range" min="0" max="100" value="50" aria-label="Enstrüman ağırlığı" oninput="document.getElementById('instrValMain').textContent=this.value+'%'">
+                <span class="acc-label">Enstrüman Ağırlığı &nbsp;<span id="instrValMain" class="neon-val">50%</span></span>
+                <input class="acc-slider neon-slider" type="range" min="0" max="100" value="50" oninput="document.getElementById('instrValMain').textContent=this.value+'%'">
+              </div>
+              <div class="acc-field">
+                <span class="acc-label">Vokal Yoğunluğu &nbsp;<span id="vocalValMain" class="neon-val">70%</span></span>
+                <input class="acc-slider neon-slider" type="range" min="0" max="100" value="70" oninput="document.getElementById('vocalValMain').textContent=this.value+'%'">
               </div>
             </div>
           </div>
 
-          <button class="btn-wizard-next" onclick="generateMusic()" aria-label="Şarkını oluştur" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;padding:20px;">
-            <span>🎵</span><span>🎤</span> &nbsp;✦ Şarkımı Oluştur
+          <button class="btn-wizard-next" onclick="generateMusic()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:12px;font-size:17px;padding:22px;letter-spacing:0.5px;">
+            🎵 &nbsp;✦ Şarkımı Oluştur
           </button>
         </div><!-- /wizCustom -->
+
+        <!-- DİL MODAL -->
+        <div id="langModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;">
+          <div style="background:#12121f;border:1px solid rgba(255,107,53,0.25);border-radius:24px;padding:32px;max-width:580px;width:94%;max-height:82vh;display:flex;flex-direction:column;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h3 style="margin:0;color:#fff;font-size:18px;">🌍 Dil Seç</h3>
+              <button onclick="closeLangModal()" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:24px;cursor:pointer;line-height:1;">×</button>
+            </div>
+            <input id="langSearch" type="text" placeholder="🔍 Dil ara…" oninput="filterLangs(this.value)"
+              style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;font-family:var(--font-body);">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;overflow-y:auto;" id="langModalGrid"></div>
+          </div>
+        </div>
 
         <!-- LOADING STATE -->
         <div id="loading-state" aria-live="polite" aria-label="Şarkı üretiliyor">
@@ -2757,6 +2781,7 @@ Her gece seni düşünüp uyudum
           chorus: wizardState.chorus,
           email: email,
           language: _selectedLang || 'Turkish',
+          genres: _selectedGenres.join(', '),
         };
 
         var data = null;
@@ -2909,6 +2934,68 @@ Her gece seni düşünüp uyudum
       document.getElementById('wizCustom').style.display  = mode === 'custom' ? '' : 'none';
     }
 
+    // ─── TÜR KATEGORİLERİ ───────────────────────────────────────
+    var _selectedGenres = ['Turkish Pop'];
+    var _genreCategories = [
+      { name:'🎵 Pop & Dans', genres:['Pop','Dance Pop','Electro Pop','Synth Pop','Nu Disco','K-Pop','J-Pop','Latin Pop','Indie Pop','Chamber Pop'] },
+      { name:'🇹🇷 Türkçe Müzik', genres:['Turkish Pop','Arabesk','Türkü','Halk Müziği','Fantezi','Özgün Müzik','Rumeli','Zeybek','Roman Havası','Damar'] },
+      { name:'🎸 Rock & Metal', genres:['Rock','Alternative Rock','Indie Rock','Classic Rock','Hard Rock','Heavy Metal','Death Metal','Punk Rock','Grunge','Post Rock'] },
+      { name:'🔥 Hip-Hop & Trap', genres:['Trap','Hip-Hop','Rap','Drill','Mumble Rap','Phonk','Boom Bap','Cloud Rap','Emo Rap','Turkish Hip-Hop'] },
+      { name:'🎹 Elektronik', genres:['Electronic','House','Techno','Trance','Ambient','EDM','Deep House','Progressive House','Drum & Bass','Dubstep'] },
+      { name:'🎺 R&B & Soul', genres:['R&B','Soul','Neo Soul','Funk','Gospel','Blues','Motown','Contemporary R&B','Alternative R&B','Jazz'] },
+      { name:'🌍 Dünya Müziği', genres:['Flamenco','Bossanova','Samba','Reggae','Reggaeton','Afrobeats','Cumbia','Salsa','Tango','Bollywood'] },
+      { name:'🎻 Klasik & Sinematik', genres:['Cinematic','Orchestral','Classical','Epic','Trailer','Ambient','Piano Ballad','String Quartet','Choral','Neoclassical'] },
+      { name:'🌙 Chill & Alternatif', genres:['Lo-fi','Acoustic','Indie Folk','Chillout','Soft Rock','Dream Pop','Bedroom Pop','Singer-Songwriter','Americana','Bluegrass'] },
+      { name:'⚡ Diğer', genres:['Jazz Fusion','Experimental','Avant-Garde','Psych Rock','Garage Rock','Post-Punk','New Wave','Shoegaze','Math Rock','Noise'] }
+    ];
+
+    function selectGenreQuick(btn) {
+      btn.classList.toggle('on');
+      var g = btn.dataset.genre;
+      var idx = _selectedGenres.indexOf(g);
+      if (idx > -1) _selectedGenres.splice(idx,1); else _selectedGenres.push(g);
+    }
+
+    function toggleGenreCat(btn) {
+      var body = btn.nextElementSibling;
+      var isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      btn.querySelector('.gc-arrow').textContent = isOpen ? '▾' : '▴';
+    }
+
+    function selectGenreItem(btn) {
+      btn.classList.toggle('on');
+      var g = btn.dataset.genre;
+      var idx = _selectedGenres.indexOf(g);
+      if (idx > -1) _selectedGenres.splice(idx,1); else _selectedGenres.push(g);
+    }
+
+    (function buildGenreCats() {
+      var container = document.getElementById('genreCats');
+      if (!container) return;
+      _genreCategories.forEach(function(cat) {
+        var row = document.createElement('div');
+        row.className = 'genre-cat-row';
+        var btn = document.createElement('button');
+        btn.className = 'genre-cat-btn';
+        btn.innerHTML = '<span>'+cat.name+'</span><span class="gc-arrow" style="font-size:11px;color:rgba(255,255,255,0.3);">▾</span>';
+        btn.onclick = function(){ toggleGenreCat(btn); };
+        var body = document.createElement('div');
+        body.className = 'genre-cat-body';
+        cat.genres.forEach(function(g) {
+          var gb = document.createElement('button');
+          gb.className = 'style-tag' + (_selectedGenres.indexOf(g)>-1?' on':'');
+          gb.dataset.genre = g;
+          gb.textContent = g;
+          gb.onclick = function(){ selectGenreItem(gb); };
+          body.appendChild(gb);
+        });
+        row.appendChild(btn);
+        row.appendChild(body);
+        container.appendChild(row);
+      });
+    })();
+
     // ─── DİL SEÇİMİ ─────────────────────────────────────────────
     var _selectedLang = 'Turkish';
 
@@ -2946,26 +3033,33 @@ Her gece seni düşünüp uyudum
       _selectedLang = btn.dataset.lang;
     }
 
-    function openLangModal() {
+    function renderLangGrid(filter) {
       var grid = document.getElementById('langModalGrid');
       grid.innerHTML = '';
-      _allLangs.forEach(function(l) {
+      var list = filter ? _allLangs.filter(function(l){ return l.label.toLowerCase().includes(filter.toLowerCase()); }) : _allLangs;
+      list.forEach(function(l) {
         var b = document.createElement('button');
         b.className = 'style-tag' + (l.code === _selectedLang ? ' on' : '');
         b.textContent = l.label;
         b.onclick = function() {
           _selectedLang = l.code;
-          // Kısa dillerde tag güncelle
-          document.querySelectorAll('#langTags .style-tag').forEach(function(t){ t.classList.remove('on'); });
-          var match = document.querySelector('#langTags [data-lang="'+l.code+'"]');
-          if (match) match.classList.add('on');
+          document.getElementById('langSelectedFlag').textContent = l.label.split(' ')[0];
+          document.getElementById('langSelectedName').textContent = l.label.split(' ').slice(1).join(' ');
           closeLangModal();
         };
         grid.appendChild(b);
       });
+    }
+
+    function filterLangs(val) { renderLangGrid(val); }
+
+    function openLangModal() {
+      document.getElementById('langSearch').value = '';
+      renderLangGrid('');
       var m = document.getElementById('langModal');
       m.style.display = 'flex';
       document.body.style.overflow = 'hidden';
+      setTimeout(function(){ document.getElementById('langSearch').focus(); }, 100);
     }
 
     function closeLangModal() {
