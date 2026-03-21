@@ -2627,42 +2627,93 @@
       document.getElementById('step-indicator').textContent = 'Adım ' + currentStep + '/4';
     }
 
-    async function generateMusic() {
-      document.getElementById('step-4').classList.remove('active');
-      document.getElementById('loading-state').style.display = 'block';
-      document.getElementById('wizard-fill').style.width = '100%';
-      document.getElementById('step-indicator').textContent = 'Üretiliyor…';
+    function getUserEmail() {
+      return localStorage.getItem('novahit_email') || null;
+    }
 
-      var bar = document.getElementById('loading-bar');
-      requestAnimationFrame(function() { bar.style.width = '95%'; });
+    function promptEmail(callback) {
+      var existing = getUserEmail();
+      if (existing) { callback(existing); return; }
 
-      var payload = {
-        emotion: wizardState.emotion || 'Aşk',
-        power: wizardState.power || 'Hit Modu',
-        chorusLevel: document.getElementById('chorus-slider').value,
-        lyricsBy: wizardState.lyricsBy,
-        lyrics: document.getElementById('lyrics-input').value,
-        chorus: wizardState.chorus,
+      // Email modal göster
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;';
+      overlay.innerHTML = `
+        <div style="background:#1a1a2e;border:1px solid rgba(255,107,53,0.4);border-radius:20px;padding:40px;max-width:400px;width:90%;text-align:center;">
+          <div style="font-size:40px;margin-bottom:16px;">🎵</div>
+          <h3 style="color:#fff;margin:0 0 8px;font-size:22px;">Şarkını Kaydet</h3>
+          <p style="color:rgba(255,255,255,0.6);font-size:14px;margin:0 0 24px;">3 ücretsiz şarkı hakkın var. E-posta adresinle takip edelim.</p>
+          <input id="emailInput" type="email" placeholder="ornek@mail.com" style="width:100%;padding:14px;border-radius:12px;border:1px solid rgba(255,107,53,0.4);background:rgba(255,255,255,0.05);color:#fff;font-size:15px;box-sizing:border-box;margin-bottom:16px;outline:none;">
+          <button id="emailBtn" onclick="window._submitEmail()" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#ff6b35,#f7931e);color:#fff;font-size:16px;font-weight:700;cursor:pointer;">Devam Et →</button>
+          <p style="color:rgba(255,255,255,0.3);font-size:12px;margin:12px 0 0;">Spam yok. Sadece şarkıların için.</p>
+        </div>`;
+      document.body.appendChild(overlay);
+      document.getElementById('emailInput').focus();
+      document.getElementById('emailInput').addEventListener('keydown', function(e){ if(e.key==='Enter') window._submitEmail(); });
+      window._submitEmail = function() {
+        var val = document.getElementById('emailInput').value.trim();
+        if (!val || !val.includes('@')) { document.getElementById('emailInput').style.border='1px solid red'; return; }
+        localStorage.setItem('novahit_email', val);
+        document.body.removeChild(overlay);
+        callback(val);
       };
+    }
 
-      var data = null;
-      try {
-        var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 30000);
-        var response = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: controller.signal,
-        });
-        clearTimeout(timeoutId);
-        if (response.ok) data = await response.json();
-      } catch (err) {
-        // Network error or API unavailable — use demo result
-        await new Promise(function(r) { setTimeout(r, 2800); });
-      }
+    async function generateMusic() {
+      promptEmail(async function(email) {
+        // Kota kontrolü
+        try {
+          var checkRes = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, action: 'check' })
+          });
+          var checkData = await checkRes.json();
+          if (checkData.allowed === false) {
+            openPaywall();
+            return;
+          }
+        } catch(e) { /* kota API çalışmıyorsa devam et */ }
 
-      showResult(data);
+        document.getElementById('step-4').classList.remove('active');
+        document.getElementById('loading-state').style.display = 'block';
+        document.getElementById('wizard-fill').style.width = '100%';
+        document.getElementById('step-indicator').textContent = 'Üretiliyor…';
+
+        var bar = document.getElementById('loading-bar');
+        requestAnimationFrame(function() { bar.style.width = '95%'; });
+
+        var payload = {
+          emotion: wizardState.emotion || 'Aşk',
+          power: wizardState.power || 'Hit Modu',
+          chorusLevel: document.getElementById('chorus-slider').value,
+          lyricsBy: wizardState.lyricsBy,
+          lyrics: document.getElementById('lyrics-input').value,
+          chorus: wizardState.chorus,
+          email: email,
+        };
+
+        var data = null;
+        try {
+          var controller = new AbortController();
+          var timeoutId = setTimeout(function() { controller.abort(); }, 30000);
+          var response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal,
+          });
+          clearTimeout(timeoutId);
+          if (response.ok) {
+            data = await response.json();
+            if (data.error === 'quota_exceeded') { openPaywall(); return; }
+          }
+        } catch (err) {
+          await new Promise(function(r) { setTimeout(r, 2800); });
+        }
+
+        showResult(data);
+      });
     }
 
     function showResult(data) {
