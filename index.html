@@ -354,20 +354,21 @@
     .custom-field { margin-bottom:24px; }
     .custom-field-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.3); font-family:var(--font-mono); display:block; margin-bottom:10px; }
     .custom-textarea {
-      width:100%; background:rgba(255,255,255,0.07);
-      border:1.5px solid rgba(255,107,53,0.2);
+      width:100%; background:rgba(255,255,255,0.08);
+      border:2px solid rgba(255,107,53,0.4);
       border-radius:16px; padding:20px 18px;
       color:#fff; font-family:var(--font-body);
       font-size:15px; line-height:1.8; resize:vertical;
-      min-height:180px; outline:none;
+      min-height:220px; outline:none;
       transition:border-color 0.3s, box-shadow 0.3s;
-      box-shadow:0 4px 24px rgba(0,0,0,0.3);
+      box-shadow:0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+      display:block; box-sizing:border-box;
     }
     .custom-textarea:focus {
-      border-color:rgba(255,107,53,0.6);
-      box-shadow:0 4px 24px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,107,53,0.12);
+      border-color:var(--orange);
+      box-shadow:0 4px 24px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,107,53,0.15);
     }
-    .custom-textarea::placeholder { color:rgba(255,255,255,0.35); font-style:italic; }
+    .custom-textarea::placeholder { color:rgba(255,255,255,0.4); font-style:italic; }
     .btn-ai-lyrics { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(255,107,53,0.08); border:1px solid rgba(255,107,53,0.25); border-radius:8px; color:var(--orange); font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.25s; margin-top:10px; }
     .btn-ai-lyrics:hover { background:rgba(255,107,53,0.15); border-color:rgba(255,107,53,0.5); box-shadow:0 0 20px rgba(255,107,53,0.2); }
     /* Style tags glassmorphism */
