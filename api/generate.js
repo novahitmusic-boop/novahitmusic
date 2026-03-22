@@ -37,62 +37,64 @@ async function useQuota(email) {
 }
 
 // ── Mureka: önce söz üret, sonra şarkı üret ──────────────────────────────
+// Prompt'tan Mureka desc formatı oluştur (virgülle ayrılmış keyword'ler)
+function buildDesc(prompt) {
+  // Uzun cümleyi keyword'lere çevir, max 200 char
+  return prompt
+    .replace(/[.!?]/g, ',')
+    .split(',')
+    .map(s => s.trim().toLowerCase())
+    .filter(s => s.length > 1 && s.length < 40)
+    .slice(0, 8)
+    .join(', ')
+    .slice(0, 200);
+}
+
+// Basit [verse]/[chorus] yapısında Türkçe şarkı sözü
+function buildLyrics(prompt) {
+  const theme = prompt.split(',')[0].trim();
+  return `[verse]\n${theme} ile başlıyor her şey\nGecelerin sessizliğinde hissediyorum\nSensiz geçen günler boş geliyor\nKalbimde bir eksiklik var hep\n\n[chorus]\n${theme}, bu şarkı senin için\nDuygularım taşıyor, söyleyemiyorum\nYanıyorum içten, göremiyor kimse\n${theme}, kalbimdesin sen\n\n[verse 2]\nFotoğraflara bakıp düşünüyorum\nZamanlar geçiyor ama sen duruyorsun\nHer şarkıda sesini duyar gibiyim\nBu his geçmiyor, geçmeyecek de\n\n[bridge]\nBelki anlarsın bir gün ne hissettim\nBelki dönersin, belki dönmezsin\n\n[chorus]\n${theme}, bu şarkı senin için\nDuygularım taşıyor, söyleyemiyorum\nYanıyorum içten, göremiyor kimse\n${theme}, kalbimdesin sen`;
+}
+
 async function murekaGenerate(prompt, title, language) {
   const headers = {
     'Authorization': `Bearer ${MUREKA_KEY}`,
     'Content-Type': 'application/json',
   };
 
-  // 1. Söz üret
-  const lyricsRes = await fetch('https://api.mureka.ai/v1/lyrics/generate', {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ prompt, model: 'auto' }),
-    signal: AbortSignal.timeout(20000),
-  });
-  if (!lyricsRes.ok) throw new Error('Mureka lyrics hata: ' + lyricsRes.status);
-  const lyricsJob = await lyricsRes.json();
-
-  // Söz sonucunu bekle (sync veya async)
-  let lyrics = lyricsJob.text || lyricsJob.lyrics || '';
-  if (!lyrics && lyricsJob.id) {
-    for (let i = 0; i < 10; i++) {
-      await new Promise(r => setTimeout(r, 3000));
-      const poll = await fetch(`https://api.mureka.ai/v1/lyrics/query/${lyricsJob.id}`, {
-        headers, signal: AbortSignal.timeout(10000),
-      });
-      const pd = await poll.json();
-      if (pd.status === 'succeeded' || pd.status === 'completed') {
-        lyrics = pd.text || pd.lyrics || pd.content || '';
-        break;
-      }
-      if (pd.status === 'failed') throw new Error('Mureka lyrics failed');
-    }
-  }
-  if (!lyrics) throw new Error('Mureka lyrics boş döndü');
-
-  // 2. Vokal cinsiyeti tahmin et
+  // Vokal cinsiyeti prompt'tan tahmin et
   const lowerPrompt = prompt.toLowerCase();
   const vocal_gender = lowerPrompt.includes('kadın') || lowerPrompt.includes('female') ? 'female'
     : lowerPrompt.includes('erkek') || lowerPrompt.includes('male') ? 'male'
     : 'female';
 
-  // 3. Şarkı üret
+  const desc  = buildDesc(prompt);
+  const lyrics = buildLyrics(prompt);
+
+  console.log('Mureka desc:', desc);
+
   const songRes = await fetch('https://api.mureka.ai/v1/song/generate', {
     method: 'POST',
     headers,
     body: JSON.stringify({
       lyrics,
-      desc: prompt.slice(0, 200),
+      prompt: desc,           // style/mood descriptor
       vocal_gender,
-      title: title || '',
-      model: 'auto',
+      title: (title || '').slice(0, 50),
+      model: 'mureka-8',      // en iyi kalite
+      n: 2,                   // 2 versiyon
     }),
-    signal: AbortSignal.timeout(20000),
+    signal: AbortSignal.timeout(25000),
   });
-  if (!songRes.ok) throw new Error('Mureka song hata: ' + songRes.status);
+
+  if (!songRes.ok) {
+    const errText = await songRes.text();
+    throw new Error(`Mureka song hata ${songRes.status}: ${errText}`);
+  }
+
   const songJob = await songRes.json();
-  if (!songJob.id) throw new Error('Mureka task ID yok');
+  console.log('Mureka song job:', JSON.stringify(songJob));
+  if (!songJob.id) throw new Error('Mureka task ID yok: ' + JSON.stringify(songJob));
 
   return { provider: 'mureka', taskId: songJob.id };
 }
