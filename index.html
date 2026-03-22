@@ -385,6 +385,37 @@
     .mood-btn.on[data-mood="calm"]      { border-color:#4ecdc4; background:rgba(78,205,196,0.12); box-shadow:0 0 18px rgba(78,205,196,0.3); }
     .mood-btn.on[data-mood="cool"]      { border-color:#a78bfa; background:rgba(167,139,250,0.12);box-shadow:0 0 18px rgba(167,139,250,0.3);}
     .mood-btn.on .mood-label { color:#fff; }
+    /* ===== 3 ADIM UI ===== */
+    .step-block { margin-bottom:28px; }
+    .step-label { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.35); font-family:var(--font-body); margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+    .step-num { width:22px; height:22px; border-radius:50%; background:linear-gradient(135deg,var(--orange),var(--pink)); color:#fff; font-size:11px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .topic-chips, .genre-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .topic-chip, .genre-chip {
+      padding:9px 18px; border-radius:100px;
+      background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.1);
+      color:rgba(255,255,255,0.6); font-size:13px; font-weight:600;
+      cursor:pointer; transition:all 0.2s; font-family:var(--font-body);
+    }
+    .topic-chip:hover, .genre-chip:hover { background:rgba(255,107,53,0.1); border-color:rgba(255,107,53,0.4); color:#fff; }
+    .topic-chip.active { background:rgba(255,107,53,0.18); border-color:var(--orange); color:var(--orange); box-shadow:0 0 14px rgba(255,107,53,0.2); }
+    .genre-chip.active { background:rgba(255,107,53,0.18); border-color:var(--orange); color:var(--orange); box-shadow:0 0 14px rgba(255,107,53,0.2); }
+    .topic-custom-input {
+      width:100%; box-sizing:border-box; background:rgba(255,255,255,0.04);
+      border:1.5px solid rgba(255,255,255,0.08); border-radius:12px;
+      padding:13px 18px; color:#fff; font-family:var(--font-body); font-size:14px;
+      outline:none; transition:border-color 0.2s;
+    }
+    .topic-custom-input:focus { border-color:rgba(255,107,53,0.5); }
+    .topic-custom-input::placeholder { color:rgba(255,255,255,0.25); }
+    .vocal-btns { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .vocal-btn {
+      padding:16px; border-radius:14px; border:1.5px solid rgba(255,255,255,0.1);
+      background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.55);
+      font-family:var(--font-body); font-size:15px; font-weight:700;
+      cursor:pointer; transition:all 0.2s; text-align:center;
+    }
+    .vocal-btn:hover { border-color:rgba(255,107,53,0.4); color:#fff; }
+    .vocal-btn.active { background:rgba(255,107,53,0.15); border-color:var(--orange); color:var(--orange); box-shadow:0 0 18px rgba(255,107,53,0.2); }
     /* ===== SIMPLE PROMPT UI ===== */
     .prompt-box { position:relative; margin-bottom:16px; }
     .prompt-textarea {
@@ -1689,39 +1720,52 @@
     <section id="wizard-section" aria-label="Şarkı oluşturma sihirbazı">
       <div class="container wizard-container">
         <div class="section-label">Şarkını Oluştur</div>
-        <!-- ===== SIMPLE PROMPT UI ===== -->
+        <!-- ===== YENİ 3 ADIM UI ===== -->
         <div id="wizPrompt">
 
-          <!-- Ana Prompt -->
-          <div class="prompt-box">
-            <textarea class="prompt-textarea" id="mainPrompt" rows="4"
-              placeholder="Şarkını tarif et… Örn: Arabesk, hüzünlü, yavaş tempo, erkek vokal, ayrılık ve hasret temalı, İstanbul geceleri hissiyatı"></textarea>
-            <button class="prompt-ai-btn" onclick="generateAIPromptSuggestion()">✦ AI Öner</button>
+          <!-- ADIM 1: KONU -->
+          <div class="step-block">
+            <div class="step-label"><span class="step-num">1</span> Şarkın neyle ilgili?</div>
+            <div class="topic-chips" id="topicChips">
+              <button class="topic-chip" data-topic="ayrılık ve hasret">💔 Ayrılık</button>
+              <button class="topic-chip" data-topic="özlem ve geçmiş">🌙 Özlem</button>
+              <button class="topic-chip" data-topic="aşk ve tutku">❤️ Aşk</button>
+              <button class="topic-chip" data-topic="yalnızlık ve hüzün">😔 Yalnızlık</button>
+              <button class="topic-chip" data-topic="umut ve yeni başlangıç">✨ Umut</button>
+              <button class="topic-chip" data-topic="güç ve özgürlük">⚡ Güç</button>
+              <button class="topic-chip" data-topic="neşe ve eğlence">🎉 Neşe</button>
+              <button class="topic-chip" data-topic="ihanet ve öfke">🔥 İhanet</button>
+            </div>
+            <input class="topic-custom-input" id="topicCustom" type="text" placeholder="ya da kendin yaz: anneme dair, İstanbul geceleri…">
           </div>
 
-          <!-- Hızlı Chip'ler -->
-          <div class="prompt-examples">
-            <span class="prompt-ex-label">Hızlı başlat</span>
-            <div class="prompt-chips">
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="Arabesk, romantik ve hüzünlü, yavaş tempo, erkek sesi, aşk ve özlem temalı, derin duygular">❤️ Arabesk Aşk</button>
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="Hüzünlü ballad, Türkçe pop, kadın sesi, piyano ağırlıklı, ayrılık ve yalnızlık">😢 Hüzün Balladı</button>
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="Romantik slow, duygusal ve samimi, çift sesi, gitar ve piyano, gece atmosferi, derin sevgi">🌹 Romantik Slow</button>
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="Enerjik Türkçe pop, neşeli ve coşkulu, hızlı tempo, dans ritmi, yaz ve özgürlük">🔥 Enerjik Pop</button>
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="Türkçe trap, sert beat, erkek rap, sokak hissiyatı, kararlılık ve güç">💣 Türkçe Trap</button>
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="90'lar Türkçe pop, nostaljik, hafif arabesk, saz ve klavye, geçmişe özlem">📻 90'lar Nostalji</button>
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="Akustik folk, sakin ve içten, gitar, doğa ve huzur temalı, kırsal atmosfer">🎸 Akustik Folk</button>
-              <button class="prompt-chip" onclick="fillPrompt(this)" data-prompt="R&B soul, kadın sesi, smooth beat, gece kulübü atmosferi, aşk ve tutku">🎤 R&B Soul</button>
+          <!-- ADIM 2: TARZ -->
+          <div class="step-block">
+            <div class="step-label"><span class="step-num">2</span> Müzik tarzı</div>
+            <div class="genre-chips" id="genreChips">
+              <button class="genre-chip active" data-genre="arabesk, Turkish arabesque, saz, oud, emotional">🎭 Arabesk</button>
+              <button class="genre-chip" data-genre="Turkish pop, modern, catchy, upbeat">🇹🇷 Türkçe Pop</button>
+              <button class="genre-chip" data-genre="slow ballad, piano, emotional, heartfelt">🎹 Ballad</button>
+              <button class="genre-chip" data-genre="R&B, soul, smooth, groove">🎤 R&B Soul</button>
+              <button class="genre-chip" data-genre="trap, hip-hop, Turkish rap, hard beat">💣 Trap</button>
+              <button class="genre-chip" data-genre="acoustic folk, guitar, intimate, warm">🎸 Akustik</button>
+              <button class="genre-chip" data-genre="90s Turkish pop, nostalgic, retro, saz">📻 90'lar</button>
+              <button class="genre-chip" data-genre="rock, electric guitar, powerful, energetic">🎸 Rock</button>
             </div>
           </div>
 
-          <!-- Başlık + Dil -->
-          <div class="prompt-meta">
-            <input class="prompt-title-input" id="promptTitle" type="text" placeholder="Şarkı başlığı (opsiyonel, AI seçebilir)">
-            <div class="lang-select-wrap" onclick="openLangModal()" style="white-space:nowrap;cursor:pointer;flex-shrink:0;">
-              <span id="langSelectedFlag">🇹🇷</span>
-              <span id="langSelectedName">Türkçe</span>
-              <span style="margin-left:8px;color:rgba(255,255,255,0.3);font-size:12px;">▾</span>
+          <!-- ADIM 3: VOKAL -->
+          <div class="step-block">
+            <div class="step-label"><span class="step-num">3</span> Vokal tipi</div>
+            <div class="vocal-btns">
+              <button class="vocal-btn active" id="vocalMale" onclick="selectVocal('male')">♂ Erkek Sesi</button>
+              <button class="vocal-btn" id="vocalFemale" onclick="selectVocal('female')">♀ Kadın Sesi</button>
             </div>
+          </div>
+
+          <!-- Başlık -->
+          <div class="step-block" style="margin-bottom:20px;">
+            <input class="prompt-title-input" id="promptTitle" type="text" placeholder="Şarkı başlığı (opsiyonel)">
           </div>
 
           <!-- Üret -->
@@ -2592,28 +2636,47 @@
     // ─── WIZARD ──────────────────────────────────────────────────
     var wizardState = { emotion: null, power: null, lyricsBy: 'novahit', chorus: null };
 
-    function fillPrompt(btn) {
-      document.querySelectorAll('.prompt-chip').forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
-      var ta = document.getElementById('mainPrompt');
-      ta.value = btn.dataset.prompt;
-      ta.focus();
+    // Topic chip seçimi
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.topic-chip').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.topic-chip').forEach(function(b){ b.classList.remove('active'); });
+          btn.classList.add('active');
+          document.getElementById('topicCustom').value = '';
+        });
+      });
+      document.querySelectorAll('.genre-chip').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.genre-chip').forEach(function(b){ b.classList.remove('active'); });
+          btn.classList.add('active');
+        });
+      });
+      document.getElementById('topicCustom').addEventListener('input', function() {
+        if (this.value.trim()) {
+          document.querySelectorAll('.topic-chip').forEach(function(b){ b.classList.remove('active'); });
+        }
+      });
+    });
+
+    var _selectedVocal = 'male';
+    function selectVocal(gender) {
+      _selectedVocal = gender;
+      document.getElementById('vocalMale').classList.toggle('active', gender === 'male');
+      document.getElementById('vocalFemale').classList.toggle('active', gender === 'female');
     }
 
-    function generateAIPromptSuggestion() {
-      var suggestions = [
-        'Arabesk, romantik ve hüzünlü, yavaş tempo, erkek sesi, aşk ve özlem temalı, İstanbul geceleri hissiyatı',
-        'Hüzünlü Türkçe ballad, kadın sesi, piyano ve keman, yalnızlık ve ayrılık, samimi duygular',
-        'Enerjik Türkçe pop, neşeli ve coşkulu, dans ritmi, yaz ve özgürlük, genç ruh',
-        'Romantik slow, çift sesi, gitar ağırlıklı, gece atmosferi, derin ve kalıcı sevgi',
-        'Nostalji, 90\'lar Türkçe pop, hafif arabesk, saz ve klavye, geçmişe özlem ve hasret',
-        'Güçlü ballad, kadın sesi, orkestral, umut ve direniş, ilham verici sözler',
-        'R&B soul, smooth beat, kadın sesi, gece kulübü atmosferi, tutku ve arzu',
-        'Türkçe trap, sert beat, erkek rap, sokak kültürü, kararlılık ve öz güven'
-      ];
-      var ta = document.getElementById('mainPrompt');
-      ta.value = suggestions[Math.floor(Math.random() * suggestions.length)];
-      ta.focus();
+    function getWizardPrompt() {
+      // Konu
+      var activeTopicBtn = document.querySelector('.topic-chip.active');
+      var customTopic = (document.getElementById('topicCustom').value || '').trim();
+      var topic = customTopic || (activeTopicBtn ? activeTopicBtn.dataset.topic : 'aşk ve özlem');
+      // Tarz
+      var activeGenreBtn = document.querySelector('.genre-chip.active');
+      var genre = activeGenreBtn ? activeGenreBtn.dataset.genre : 'arabesk, Turkish arabesque';
+      // Vokal
+      var vocal = _selectedVocal === 'male' ? 'male vocal' : 'female vocal';
+      // Mureka desc formatı: "genre, topic, vocal"
+      return genre + ', ' + topic + ', ' + vocal + ', Turkish lyrics, emotional';
     }
     var currentStep = 1;
 
@@ -2799,18 +2862,8 @@
         }, 6000);
         window._loadingMsgTimer = _msgTimer;
 
-        var _promptText = (document.getElementById('mainPrompt').value || '').trim();
+        var _promptText = getWizardPrompt();
         var _promptTitle = (document.getElementById('promptTitle').value || '').trim();
-        if (!_promptText) {
-          clearInterval(window._loadingMsgTimer);
-          clearInterval(window._barTimer);
-          document.getElementById('loading-state').style.display = 'none';
-          document.getElementById('wizPrompt').style.display = 'block';
-          document.getElementById('mainPrompt').focus();
-          document.getElementById('mainPrompt').style.border = '1.5px solid rgba(255,107,53,0.8)';
-          setTimeout(function(){ document.getElementById('mainPrompt').style.border = ''; }, 2000);
-          return;
-        }
         var payload = {
           prompt: _promptText,
           style: _promptText,
