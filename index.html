@@ -1799,8 +1799,8 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
                   <input class="acc-input" id="customTitleMain" type="text" placeholder="Boş bırakırsan AI seçer…">
                 </div>
                 <div class="acc-field">
-                  <span class="acc-label">Ses Tipi</span>
-                  <input class="acc-input" id="customVoiceMain" type="text" placeholder="Erkek, Kadın, Koro…">
+                  <span class="acc-label">🎤 Vokal Tipi</span>
+                  <input class="acc-input" id="customVoiceMain" type="text" placeholder="🧑 Erkek Sesi / 👩 Kadın Sesi / 👥 Koro">
                 </div>
               </div>
               <div class="acc-field">
@@ -3202,12 +3202,62 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
     function generateAILyricsMain() {
       var ta = document.getElementById('customLyricsMain');
       if (!ta) return;
-      var samples = [
+
+      // Get current selections from wizard state
+      var emotion = wizardState.emotion || 'Duygusal';
+      var mood = _selectedMood || 'Hüzünlü';
+      var genres = _selectedGenres || [];
+
+      // Map emotion+mood to appropriate samples
+      var samplesByEmotionMood = {
+        'Arabesk-Hüzünlü': [
+          "Eski bir kız, eski bir aşk\nHer akşam seni rüyamda görüm\nYalnız kaldım, kimse yok yanımda\nArabesk şarkı, senin ismini söyler",
+          "Kara tren, duman gibi ufuk\nBir kez daha, ben sensiz kaldım\nTatarmı verdim, kalbimi satıyor\nGeceleri ağlıyorum, sabahlar pişmanlık"
+        ],
+        'Arabesk-Romantik': [
+          "Rüyada bir elf, gözlerde seher\nSenin elinle, cennete varırım\nArabesk aşk, Osmanlı türküsü\nKalbim senin, sonsuza kadar",
+          "Kısmetin yazılı, talih yapısı\nBir kadın, bir erkek, sonsuz hikaye\nArabesk sevgi, derin, ırlak\nSenle olmak, cennet gibi"
+        ],
+        'Pop-Enerjik': [
+          "Uçuyorum, kanatlarım açık\nGelecek parlak, rüyalar gerçek\nHayat bir dans, ritim benim\nHer anı yaşıyorum, hiç durmam",
+          "Müzik açık, gece açık\nSenle dansım, ruh taşıyorum\nEnerjim sonsuz, gülüşüm çok\nHayat güzel, ben özgürüm"
+        ],
+        'Pop-Romantik': [
+          "Sen benim güneş, ben ışınlarım\nSevgi söz değil, hissiyattır\nSeninle her gün, yeni bir hikaye\nKalbim atıyor, seni çağırıyor",
+          "Göz göze geldim, dünya durdu\nAsla unutmam, bu anı sakla\nBir müsik, iki kişi, sonsuz\nSeninle olmak, daha da güzel"
+        ],
+        'Ambient-Hüzünlü': [
+          "Sessizlikte kayboldum, ses ararım\nGökyüzü griye çevriliyor\nRuh yorgun, kalp mutsuz\nBelki yarın, belki hiçbir zaman",
+          "Yalnızlık bir oda, ben içerde\nBurada huzur var, ama yok sevgi\nSöz söylemek zor, acı çok\nZaman bir hekim, belki şifa verir"
+        ],
+        'Ambient-Kontemplasyon': [
+          "Düşüncelerim deniz, dalgalanıyor\nHayat soru, ben cevapta kayboldum\nBelki gerçek, belki yanılsam\nDünyayı anlayan, hiç kimse yok",
+          "Muhasebe zamanı, ruh muhasebe\nYapılanı yıkıyorum, yenisini kuruyorum\nHer anlık bir ders, her acı biliş\nBelki anlayacağım, bir gün kendimi"
+        ],
+        'Jazz-Sensual': [
+          "Sarı lambalarda bulanık dans\nSesler ruh, müzik eriyor\nSeninle gece, sabaha kadar\nJazz ve kadın, sonsuz simfoni",
+          "Mavi sigara dumanı, kızıl şarap\nEllerimiz değdi, elektrik oldu\nJazz trompeti, gözlerin dans\nGece bitmez, hiç bitmez istiyorum"
+        ]
+      };
+
+      // Fallback samples (for any emotion/mood combo not explicitly listed)
+      var fallbackSamples = [
         "Geceleri uyuyamam, aklımda hep sen varsın\nSesini duyar gibiyim, ama sen çoktan gittin\nBu şehir sensiz boş, sokaklarda izin var\nKalbimde bir yara açtın, kapanmaz bu hiç yarın",
         "Yüksel gökyüzüne, rüzgar arkanda\nHiç durma, hiç bırakma hayallerini\nKaranlık gecelerde parlayan yıldız sensin\nDünya senin, uç özgürce şimdi",
         "Kahvenin kokusu, sabahın sesi\nSeninle başlıyor her yeni gün benim için\nGözlerinde kaybolur tüm kaygılarım\nSen benim evimsin, sen benim huzurum"
       ];
+
+      // Look for matching samples based on emotion-mood combination
+      var key = emotion + '-' + mood;
+      var samples = samplesByEmotionMood[key] || fallbackSamples;
+
+      // Log the selection for debugging
+      console.log('AI Lyrics: emotion=' + emotion + ', mood=' + mood + ', key=' + key + ', found=' + (samplesByEmotionMood[key] ? 'yes' : 'no'));
+
+      // Pick a random sample from the matched set
       var chosen = samples[Math.floor(Math.random() * samples.length)];
+
+      // Type it out
       ta.value = '';
       var i = 0;
       clearInterval(_aiLyricsTyping);
