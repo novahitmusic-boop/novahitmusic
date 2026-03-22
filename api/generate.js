@@ -81,7 +81,7 @@ async function murekaGenerate(prompt, title, language) {
       prompt: desc,           // style/mood descriptor
       vocal_gender,
       title: (title || '').slice(0, 50),
-      model: 'mureka-8',      // en iyi kalite
+      model: 'mureka-o2',     // vokal + sözlü şarkı (V8 sadece BGM!)
       n: 2,                   // 2 versiyon
     }),
     signal: AbortSignal.timeout(25000),
