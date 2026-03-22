@@ -385,89 +385,99 @@
     .mood-btn.on[data-mood="calm"]      { border-color:#4ecdc4; background:rgba(78,205,196,0.12); box-shadow:0 0 18px rgba(78,205,196,0.3); }
     .mood-btn.on[data-mood="cool"]      { border-color:#a78bfa; background:rgba(167,139,250,0.12);box-shadow:0 0 18px rgba(167,139,250,0.3);}
     .mood-btn.on .mood-label { color:#fff; }
-    /* ===== SUNO-STYLE CLEAN UI ===== */
-    #wizard-section { background: #08080f; padding: 80px 0 100px; }
-    .wiz-c-wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; text-align: center; }
+    /* ===== GRID TABLE UI ===== */
+    #wizard-section { background: #07070e; padding: 70px 0 90px; }
+    .wiz-c-wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
     .wiz-c-title {
-      font-size: clamp(28px, 5vw, 44px); font-weight: 900; color: #fff;
-      margin: 0 0 12px; letter-spacing: -1px; line-height: 1.15;
+      font-size: clamp(26px, 4vw, 40px); font-weight: 900; color: #fff;
+      margin: 0 0 8px; letter-spacing: -1px; line-height: 1.15; text-align: center;
     }
-    .wiz-c-sub { color: rgba(255,255,255,0.35); font-size: 15px; margin: 0 0 40px; }
-    /* BÜYÜK TEXTAREA */
-    .wiz-prompt-box {
-      position: relative; margin-bottom: 16px;
+    .wiz-c-sub { color: rgba(255,255,255,0.3); font-size: 14px; margin: 0 0 36px; text-align: center; }
+    /* ANA TABLO */
+    .wiz-grid {
+      width: 100%; border-collapse: collapse;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px; overflow: hidden;
     }
-    .wiz-prompt-textarea {
-      width: 100%; box-sizing: border-box;
-      background: rgba(255,255,255,0.04);
-      border: 1.5px solid rgba(255,255,255,0.1);
-      border-radius: 20px; padding: 22px 24px 60px;
-      color: #fff; font-family: var(--font-body); font-size: 16px;
-      line-height: 1.6; outline: none; resize: none; min-height: 130px;
-      transition: border-color 0.2s, background 0.2s;
+    .wiz-grid-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .wiz-prompt-textarea:focus {
-      border-color: rgba(255,107,53,0.5);
-      background: rgba(255,107,53,0.03);
+    .wiz-grid-row:last-child { border-bottom: none; }
+    .wiz-grid-label {
+      padding: 18px 16px;
+      background: rgba(255,255,255,0.03);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      font-family: var(--font-mono);
+      display: flex; align-items: center;
     }
-    .wiz-prompt-textarea::placeholder { color: rgba(255,255,255,0.2); }
-    /* Textarea içi alt bar */
-    .wiz-prompt-inner-bar {
-      position: absolute; bottom: 12px; left: 14px; right: 14px;
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    .wiz-grid-cell {
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.015);
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
     }
+    /* SEÇİM CHİPLERİ */
+    .wiz-chip {
+      padding: 8px 16px; border-radius: 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; font-family: var(--font-body);
+      user-select: none; white-space: nowrap;
+    }
+    .wiz-chip:hover {
+      background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.4);
+      color: #fff;
+    }
+    .wiz-chip.active {
+      background: rgba(255,107,53,0.2); border-color: var(--orange);
+      color: #fff; box-shadow: 0 0 0 2px rgba(255,107,53,0.2);
+    }
+    /* VOKAL TOGGLE */
     .wiz-c-vocal {
       display: inline-flex; align-items: center;
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 100px; padding: 3px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 3px; gap: 2px;
     }
     .wiz-c-vbtn {
-      padding: 6px 16px; border-radius: 100px; border: none;
+      padding: 8px 20px; border-radius: 6px; border: none;
       background: transparent; color: rgba(255,255,255,0.4);
-      font-family: var(--font-body); font-size: 12px; font-weight: 700;
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
       cursor: pointer; transition: all 0.15s;
     }
     .wiz-c-vbtn.active {
       background: linear-gradient(135deg, var(--orange), var(--pink));
       color: #fff; box-shadow: 0 2px 10px rgba(255,107,53,0.35);
     }
-    .wiz-c-vdivider { width: 1px; height: 14px; background: rgba(255,255,255,0.1); }
-    .wiz-char-count { font-size: 11px; color: rgba(255,255,255,0.2); font-family: var(--font-mono); }
-    /* BÜYÜK BUTON */
-    .wiz-c-btn {
-      width: 100%; padding: 18px; border-radius: 16px; border: none;
-      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
-      color: #fff; font-family: var(--font-body); font-size: 17px; font-weight: 800;
-      cursor: pointer; letter-spacing: 0.3px;
-      box-shadow: 0 6px 36px rgba(255,107,53,0.4);
-      transition: all 0.2s; margin-bottom: 24px;
-    }
-    .wiz-c-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 48px rgba(255,107,53,0.6); }
-    .wiz-c-btn:active { transform: translateY(0); }
-    /* TAG CHİPLER */
-    .wiz-tags-label { font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 1.5px; text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 10px; }
-    .wiz-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-    .wiz-tag {
-      padding: 7px 14px; border-radius: 100px;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 500;
-      cursor: pointer; transition: all 0.15s; font-family: var(--font-body);
-      user-select: none;
-    }
-    .wiz-tag:hover { background: rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.35); color: rgba(255,255,255,0.85); }
-    .wiz-tag:active { transform: scale(0.95); }
-    /* Başlık input küçük */
+    .wiz-c-vdivider { display: none; }
+    /* BAŞLIK INPUT */
     .wiz-c-title-input {
-      width: 100%; box-sizing: border-box; margin-bottom: 16px;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 12px 16px; color: #fff;
+      flex: 1; min-width: 180px; box-sizing: border-box;
+      background: transparent; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 9px 14px; color: #fff;
       font-family: var(--font-body); font-size: 14px; outline: none;
       transition: border-color 0.2s;
     }
     .wiz-c-title-input:focus { border-color: rgba(255,107,53,0.4); }
     .wiz-c-title-input::placeholder { color: rgba(255,255,255,0.18); }
-    @media(max-width:500px) {
-      .wiz-prompt-textarea { font-size: 15px; min-height: 110px; padding-bottom: 54px; }
+    /* BÜYÜK BUTON */
+    .wiz-c-btn {
+      width: 100%; padding: 18px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
+      color: #fff; font-family: var(--font-body); font-size: 17px; font-weight: 800;
+      cursor: pointer; letter-spacing: 0.3px; margin-top: 16px;
+      box-shadow: 0 6px 32px rgba(255,107,53,0.4);
+      transition: all 0.2s;
+    }
+    .wiz-c-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 44px rgba(255,107,53,0.6); }
+    .wiz-c-btn:active { transform: translateY(0); }
+    @media(max-width:560px) {
+      .wiz-grid-row { grid-template-columns: 80px 1fr; }
+      .wiz-grid-label { font-size: 9px; padding: 14px 10px; }
+      .wiz-grid-cell { padding: 12px 12px; gap: 6px; }
+      .wiz-chip { padding: 7px 12px; font-size: 12px; }
     }
     /* ===== 3 ADIM UI ===== */
     .step-block { margin-bottom:28px; }
@@ -1805,47 +1815,77 @@
       <div class="wiz-c-wrap">
         <div id="wizPrompt">
 
-          <h2 class="wiz-c-title">Şarkını anlat, AI üretsin</h2>
-          <p class="wiz-c-sub">Nasıl bir şarkı istediğini yaz — tarz, konu, his. Aşağıdaki etiketler yardımcı olur.</p>
+          <h2 class="wiz-c-title">Şarkını oluştur</h2>
+          <p class="wiz-c-sub">Konu, tarz ve sesi seç — AI gerisini halleder.</p>
 
-          <!-- ANA TEXTAREA -->
-          <div class="wiz-prompt-box">
-            <textarea class="wiz-prompt-textarea" id="wizMainPrompt" rows="4"
-              placeholder="örn: Ayrılık temalı duygusal bir arabesk, erkek vokal, saz ağırlıklı, hüzünlü…"></textarea>
-            <div class="wiz-prompt-inner-bar">
-              <div class="wiz-c-vocal">
-                <button type="button" class="wiz-c-vbtn active" id="vocalMale" onclick="selectVocal('male')">♂ Erkek</button>
-                <div class="wiz-c-vdivider"></div>
-                <button type="button" class="wiz-c-vbtn" id="vocalFemale" onclick="selectVocal('female')">♀ Kadın</button>
+          <!-- GRID TABLO -->
+          <div class="wiz-grid">
+
+            <!-- KONU SATIRI -->
+            <div class="wiz-grid-row">
+              <div class="wiz-grid-label">🎯 Konu</div>
+              <div class="wiz-grid-cell">
+                <button type="button" class="wiz-chip" data-key="konu" data-val="ayrılık" onclick="selectChip(this,'konu')">💔 Ayrılık</button>
+                <button type="button" class="wiz-chip" data-key="konu" data-val="özlem" onclick="selectChip(this,'konu')">🌙 Özlem</button>
+                <button type="button" class="wiz-chip" data-key="konu" data-val="aşk" onclick="selectChip(this,'konu')">❤️ Aşk</button>
+                <button type="button" class="wiz-chip" data-key="konu" data-val="yalnızlık" onclick="selectChip(this,'konu')">😔 Yalnızlık</button>
+                <button type="button" class="wiz-chip" data-key="konu" data-val="umut" onclick="selectChip(this,'konu')">✨ Umut</button>
+                <button type="button" class="wiz-chip" data-key="konu" data-val="güç" onclick="selectChip(this,'konu')">⚡ Güç</button>
+                <button type="button" class="wiz-chip" data-key="konu" data-val="ihanet" onclick="selectChip(this,'konu')">🔥 İhanet</button>
+                <button type="button" class="wiz-chip" data-key="konu" data-val="annem" onclick="selectChip(this,'konu')">💛 Annem</button>
               </div>
-              <span class="wiz-char-count" id="wizCharCount">0 / 300</span>
             </div>
-          </div>
 
-          <!-- BAŞLIK -->
-          <input class="wiz-c-title-input" id="promptTitle" type="text" placeholder="Şarkı başlığı (opsiyonel)">
+            <!-- TARZ SATIRI -->
+            <div class="wiz-grid-row">
+              <div class="wiz-grid-label">🎸 Tarz</div>
+              <div class="wiz-grid-cell">
+                <button type="button" class="wiz-chip active" data-key="tarz" data-val="arabesk" onclick="selectChip(this,'tarz')">🎭 Arabesk</button>
+                <button type="button" class="wiz-chip" data-key="tarz" data-val="Turkish pop" onclick="selectChip(this,'tarz')">🇹🇷 Türkçe Pop</button>
+                <button type="button" class="wiz-chip" data-key="tarz" data-val="slow ballad" onclick="selectChip(this,'tarz')">🎹 Ballad</button>
+                <button type="button" class="wiz-chip" data-key="tarz" data-val="R&B" onclick="selectChip(this,'tarz')">🎤 R&B</button>
+                <button type="button" class="wiz-chip" data-key="tarz" data-val="trap" onclick="selectChip(this,'tarz')">💣 Trap</button>
+                <button type="button" class="wiz-chip" data-key="tarz" data-val="acoustic folk" onclick="selectChip(this,'tarz')">🎸 Akustik</button>
+                <button type="button" class="wiz-chip" data-key="tarz" data-val="90s Turkish pop" onclick="selectChip(this,'tarz')">📻 90'lar</button>
+                <button type="button" class="wiz-chip" data-key="tarz" data-val="rock" onclick="selectChip(this,'tarz')">🤘 Rock</button>
+              </div>
+            </div>
 
-          <!-- BÜYÜK BUTON -->
+            <!-- MOD SATIRI -->
+            <div class="wiz-grid-row">
+              <div class="wiz-grid-label">💫 Mod</div>
+              <div class="wiz-grid-cell">
+                <button type="button" class="wiz-chip" data-key="mod" data-val="melancholic" onclick="selectChip(this,'mod')">😢 Hüzünlü</button>
+                <button type="button" class="wiz-chip" data-key="mod" data-val="romantic" onclick="selectChip(this,'mod')">🌹 Romantik</button>
+                <button type="button" class="wiz-chip" data-key="mod" data-val="energetic" onclick="selectChip(this,'mod')">⚡ Enerjik</button>
+                <button type="button" class="wiz-chip" data-key="mod" data-val="dark" onclick="selectChip(this,'mod')">🌑 Karanlık</button>
+                <button type="button" class="wiz-chip" data-key="mod" data-val="hopeful" onclick="selectChip(this,'mod')">🌤 Umutlu</button>
+                <button type="button" class="wiz-chip" data-key="mod" data-val="dramatic" onclick="selectChip(this,'mod')">🎭 Dramatik</button>
+              </div>
+            </div>
+
+            <!-- VOKAL SATIRI -->
+            <div class="wiz-grid-row">
+              <div class="wiz-grid-label">🎤 Ses</div>
+              <div class="wiz-grid-cell">
+                <div class="wiz-c-vocal">
+                  <button type="button" class="wiz-c-vbtn active" id="vocalMale" onclick="selectVocal('male')">♂ Erkek</button>
+                  <button type="button" class="wiz-c-vbtn" id="vocalFemale" onclick="selectVocal('female')">♀ Kadın</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- BAŞLIK SATIRI -->
+            <div class="wiz-grid-row">
+              <div class="wiz-grid-label">✏️ Başlık</div>
+              <div class="wiz-grid-cell">
+                <input class="wiz-c-title-input" id="promptTitle" type="text" placeholder="Şarkı başlığı (opsiyonel)">
+              </div>
+            </div>
+
+          </div><!-- /wiz-grid -->
+
           <button type="button" class="wiz-c-btn" onclick="generateMusic()">✦ Şarkımı Oluştur</button>
-
-          <!-- HIZLI ETİKETLER -->
-          <div class="wiz-tags-label">Hızlı ekle</div>
-          <div class="wiz-tags">
-            <button type="button" class="wiz-tag" onclick="appendTag('💔 Ayrılık')">💔 Ayrılık</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('❤️ Aşk')">❤️ Aşk</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('🌙 Özlem')">🌙 Özlem</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('✨ Umut')">✨ Umut</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('🔥 İhanet')">🔥 İhanet</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('arabesk')">🎭 Arabesk</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('Türkçe pop')">🇹🇷 Pop</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('ballad, piyano')">🎹 Ballad</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('trap, rap')">💣 Trap</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('akustik gitar')">🎸 Akustik</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('90lar nostalji')">📻 90'lar</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('rock, elektrik gitar')">🤘 Rock</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('hüzünlü')">😢 Hüzünlü</button>
-            <button type="button" class="wiz-tag" onclick="appendTag('enerjik, coşkulu')">⚡ Enerjik</button>
-          </div>
 
         </div><!-- /wizPrompt -->
 
@@ -2714,51 +2754,39 @@
     // ─── WIZARD ──────────────────────────────────────────────────
     var wizardState = { emotion: null, power: null, lyricsBy: 'novahit', chorus: null };
 
-    function selectTopicChip(btn) {
-      document.querySelectorAll('.wiz-c-topic').forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
-      var topicCustomEl = document.getElementById('topicCustom');
-      if (topicCustomEl) topicCustomEl.value = '';
-    }
-
-    function selectGenreChip(btn) {
-      document.querySelectorAll('.wiz-c-genre').forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
-    }
-
     var _selectedVocal = 'male';
+
+    function selectChip(btn, key) {
+      document.querySelectorAll('.wiz-chip[data-key="' + key + '"]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+
     function selectVocal(gender) {
       _selectedVocal = gender;
       document.getElementById('vocalMale').classList.toggle('active', gender === 'male');
       document.getElementById('vocalFemale').classList.toggle('active', gender === 'female');
     }
 
-    function appendTag(text) {
-      var ta = document.getElementById('wizMainPrompt');
-      if (!ta) return;
-      var cur = ta.value.trim();
-      ta.value = cur ? cur + ', ' + text : text;
-      ta.focus();
-      updateCharCount();
-    }
-
-    function updateCharCount() {
-      var ta = document.getElementById('wizMainPrompt');
-      var el = document.getElementById('wizCharCount');
-      if (ta && el) el.textContent = ta.value.length + ' / 300';
-    }
-
     function getWizardPrompt() {
-      var ta = document.getElementById('wizMainPrompt');
-      var text = ta ? ta.value.trim() : '';
-      if (text) {
-        var vocal = _selectedVocal === 'male' ? 'male vocal' : 'female vocal';
-        return text + ', ' + vocal + ', Turkish lyrics';
-      }
-      // fallback
+      var konu = '';
+      var tarz = 'arabesk';
+      var mod  = '';
+      var konuEl = document.querySelector('.wiz-chip[data-key="konu"].active');
+      var tarzEl = document.querySelector('.wiz-chip[data-key="tarz"].active');
+      var modEl  = document.querySelector('.wiz-chip[data-key="mod"].active');
+      if (konuEl) konu = konuEl.dataset.val;
+      if (tarzEl) tarz = tarzEl.dataset.val;
+      if (modEl)  mod  = modEl.dataset.val;
       var vocal = _selectedVocal === 'male' ? 'male vocal' : 'female vocal';
-      return 'arabesk, Turkish arabesque, emotional, ' + vocal + ', Turkish lyrics';
+      var parts = [tarz, konu, mod, vocal, 'Turkish lyrics'].filter(Boolean);
+      return parts.join(', ');
     }
+
+    // eski fonksiyon adları — bozulmasın
+    function selectTopicChip(btn) { selectChip(btn, 'konu'); }
+    function selectGenreChip(btn) { selectChip(btn, 'tarz'); }
+    function appendTag() {}
+    function updateCharCount() {}
     var currentStep = 1;
 
     function selectEmotion(el) {
