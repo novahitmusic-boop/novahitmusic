@@ -385,101 +385,139 @@
     .mood-btn.on[data-mood="calm"]      { border-color:#4ecdc4; background:rgba(78,205,196,0.12); box-shadow:0 0 18px rgba(78,205,196,0.3); }
     .mood-btn.on[data-mood="cool"]      { border-color:#a78bfa; background:rgba(167,139,250,0.12);box-shadow:0 0 18px rgba(167,139,250,0.3);}
     .mood-btn.on .mood-label { color:#fff; }
-    /* ===== SEÇENEk C — TEK EKRAN ===== */
+    /* ===== STUDIO CARD — YENİ TASARIM ===== */
+    #wizard-section { background: #070710; padding: 80px 0 100px; }
     .wiz-c-wrap {
-      max-width: 680px; margin: 80px auto 60px; padding: 0 24px;
+      max-width: 720px; margin: 0 auto; padding: 0 20px;
       text-align: center;
     }
+    .wiz-c-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.25);
+      border-radius: 100px; padding: 6px 16px; margin-bottom: 24px;
+      font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--orange); font-family: var(--font-mono);
+    }
     .wiz-c-title {
-      font-size: clamp(24px, 5vw, 36px); font-weight: 800;
-      color: #fff; margin: 0 0 10px; letter-spacing: -0.5px;
+      font-size: clamp(32px, 6vw, 52px); font-weight: 900;
+      color: #fff; margin: 0 0 16px; letter-spacing: -1.5px; line-height: 1.1;
     }
+    .wiz-c-title span { background: linear-gradient(135deg,var(--orange),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .wiz-c-sub {
-      color: rgba(255,255,255,0.35); font-size: 15px; margin: 0 0 40px;
+      color: rgba(255,255,255,0.4); font-size: 16px; margin: 0 0 48px; line-height: 1.6;
     }
-    .wiz-c-section { margin-bottom: 28px; }
-    /* Konu chip'leri — büyük */
+    /* ANA KART */
+    .wiz-c-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 28px;
+      padding: 40px 36px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .wiz-c-card::before {
+      content: '';
+      position: absolute; inset: 0; border-radius: 28px;
+      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,107,53,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* ROW LABELS */
+    .wiz-c-row-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.25); font-family: var(--font-mono);
+      text-align: left; margin-bottom: 12px;
+    }
+    .wiz-c-section { margin-bottom: 32px; }
+    /* KONU CHİP */
     .wiz-c-topics {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
-      margin-bottom: 14px;
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;
     }
     .wiz-c-topic {
-      padding: 11px 22px; border-radius: 100px;
-      background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.6); font-size: 15px; font-weight: 600;
-      cursor: pointer; transition: all 0.18s; font-family: var(--font-body);
+      padding: 10px 20px; border-radius: 100px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      color: rgba(255,255,255,0.55); font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; font-family: var(--font-body);
     }
-    .wiz-c-topic:hover { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.35); color: #fff; }
+    .wiz-c-topic:hover { background: rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.4); color: #fff; }
     .wiz-c-topic.active {
-      background: rgba(255,107,53,0.15); border-color: var(--orange);
-      color: var(--orange); box-shadow: 0 0 20px rgba(255,107,53,0.2);
+      background: rgba(255,107,53,0.18); border-color: var(--orange);
+      color: #fff; box-shadow: 0 0 0 3px rgba(255,107,53,0.15);
     }
     .wiz-c-custom {
-      width: 100%; max-width: 400px; box-sizing: border-box;
-      background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 12px 18px; color: #fff;
+      width: 100%; box-sizing: border-box;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 11px 16px; color: #fff;
       font-family: var(--font-body); font-size: 14px; outline: none;
-      transition: border-color 0.2s; text-align: left;
+      transition: border-color 0.2s;
     }
-    .wiz-c-custom:focus { border-color: rgba(255,107,53,0.4); }
-    .wiz-c-custom::placeholder { color: rgba(255,255,255,0.2); }
-    /* Tarz chip'leri — küçük */
-    .wiz-c-genres {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
-    }
+    .wiz-c-custom:focus { border-color: rgba(255,107,53,0.45); background: rgba(255,107,53,0.04); }
+    .wiz-c-custom::placeholder { color: rgba(255,255,255,0.18); }
+    /* TARZ CHİP */
+    .wiz-c-genres { display: flex; flex-wrap: wrap; gap: 8px; }
     .wiz-c-genre {
-      padding: 8px 18px; border-radius: 100px;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 600;
-      cursor: pointer; transition: all 0.18s; font-family: var(--font-body);
+      padding: 8px 16px; border-radius: 100px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.4); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; font-family: var(--font-body);
     }
-    .wiz-c-genre:hover { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.3); color: #fff; }
+    .wiz-c-genre:hover { background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.3); color: rgba(255,255,255,0.9); }
     .wiz-c-genre.active {
-      background: rgba(255,107,53,0.12); border-color: rgba(255,107,53,0.6);
-      color: var(--orange);
+      background: rgba(232,23,93,0.15); border-color: var(--pink);
+      color: #fff;
     }
-    /* Vokal toggle */
+    /* ALT BAR: VOKAL + BAŞLIK + BUTON */
+    .wiz-c-bottom {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 32px; flex-wrap: wrap;
+    }
     .wiz-c-vocal {
-      display: inline-flex; align-items: center; gap: 0;
-      background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1);
-      border-radius: 100px; padding: 4px; overflow: hidden;
+      display: inline-flex; align-items: center;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 100px; padding: 3px; flex-shrink: 0;
     }
     .wiz-c-vbtn {
-      padding: 10px 32px; border-radius: 100px; border: none;
-      background: transparent; color: rgba(255,255,255,0.45);
-      font-family: var(--font-body); font-size: 14px; font-weight: 700;
-      cursor: pointer; transition: all 0.2s;
+      padding: 9px 22px; border-radius: 100px; border: none;
+      background: transparent; color: rgba(255,255,255,0.4);
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all 0.18s; white-space: nowrap;
     }
     .wiz-c-vbtn.active {
       background: linear-gradient(135deg, var(--orange), var(--pink));
-      color: #fff; box-shadow: 0 4px 16px rgba(255,107,53,0.35);
+      color: #fff; box-shadow: 0 2px 12px rgba(255,107,53,0.4);
     }
-    .wiz-c-vdivider { width: 1px; height: 20px; background: rgba(255,255,255,0.1); }
-    /* Başlık input */
+    .wiz-c-vdivider { width: 1px; height: 18px; background: rgba(255,255,255,0.08); }
     .wiz-c-title-input {
-      width: 100%; max-width: 400px; box-sizing: border-box;
-      background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 13px 18px; color: #fff;
+      flex: 1; min-width: 0; box-sizing: border-box;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 11px 16px; color: #fff;
       font-family: var(--font-body); font-size: 14px; outline: none;
-      transition: border-color 0.2s; margin-bottom: 24px; text-align: left;
-      display: block; margin-left: auto; margin-right: auto;
+      transition: border-color 0.2s;
     }
     .wiz-c-title-input:focus { border-color: rgba(255,107,53,0.4); }
-    .wiz-c-title-input::placeholder { color: rgba(255,255,255,0.2); }
-    /* Büyük üret butonu */
+    .wiz-c-title-input::placeholder { color: rgba(255,255,255,0.18); }
+    /* BÜYÜK BUTON */
     .wiz-c-btn {
-      width: 100%; max-width: 400px; padding: 20px; border-radius: 16px; border: none;
+      width: 100%; padding: 18px; border-radius: 16px; border: none;
       background: linear-gradient(135deg, var(--orange) 0%, var(--pink) 100%);
-      color: #fff; font-family: var(--font-body); font-size: 18px; font-weight: 800;
-      cursor: pointer; letter-spacing: 0.5px;
-      box-shadow: 0 8px 40px rgba(255,107,53,0.4);
-      transition: all 0.25s;
+      color: #fff; font-family: var(--font-body); font-size: 17px; font-weight: 800;
+      cursor: pointer; letter-spacing: 0.3px; margin-top: 20px;
+      box-shadow: 0 6px 36px rgba(255,107,53,0.45);
+      transition: all 0.2s; position: relative; overflow: hidden;
     }
-    .wiz-c-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 50px rgba(255,107,53,0.55); }
+    .wiz-c-btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .wiz-c-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 48px rgba(255,107,53,0.6); }
+    .wiz-c-btn:hover::after { opacity: 1; }
     .wiz-c-btn:active { transform: translateY(0); }
-    @media(max-width:500px) {
-      .wiz-c-wrap { margin: 50px auto 40px; }
-      .wiz-c-topic { padding: 9px 16px; font-size: 14px; }
+    @media(max-width:600px) {
+      .wiz-c-card { padding: 28px 20px 24px; }
+      .wiz-c-bottom { flex-direction: column; }
+      .wiz-c-bottom .wiz-c-vocal { order: 1; }
+      .wiz-c-bottom .wiz-c-title-input { order: 2; width: 100%; }
+      .wiz-c-title { font-size: 32px; }
     }
     /* ===== 3 ADIM UI ===== */
     .step-block { margin-bottom:28px; }
@@ -1817,53 +1855,59 @@
       <div class="wiz-c-wrap">
         <div id="wizPrompt">
 
-          <h2 class="wiz-c-title">Ne tür bir şarkı istiyorsun?</h2>
-          <p class="wiz-c-sub">Hissi seç, tarzı belirle, oluştur.</p>
+          <div class="wiz-c-eyebrow">🎵 AI Müzik Stüdyosu</div>
+          <h2 class="wiz-c-title">Hayalindeki şarkıyı<br><span>30 saniyede üret</span></h2>
+          <p class="wiz-c-sub">Konu ve tarzı seç — gerisini AI halleder.</p>
 
-          <!-- KONU -->
-          <div class="wiz-c-section">
-            <div class="wiz-c-topics">
-              <button type="button" class="wiz-c-topic" data-topic="ayrılık ve hasret" onclick="selectTopicChip(this)">💔 Ayrılık</button>
-              <button type="button" class="wiz-c-topic" data-topic="özlem ve geçmiş" onclick="selectTopicChip(this)">🌙 Özlem</button>
-              <button type="button" class="wiz-c-topic" data-topic="aşk ve tutku" onclick="selectTopicChip(this)">❤️ Aşk</button>
-              <button type="button" class="wiz-c-topic" data-topic="yalnızlık ve hüzün" onclick="selectTopicChip(this)">😔 Yalnızlık</button>
-              <button type="button" class="wiz-c-topic" data-topic="umut ve yeni başlangıç" onclick="selectTopicChip(this)">✨ Umut</button>
-              <button type="button" class="wiz-c-topic" data-topic="güç ve özgürlük" onclick="selectTopicChip(this)">⚡ Güç</button>
-              <button type="button" class="wiz-c-topic" data-topic="neşe ve eğlence" onclick="selectTopicChip(this)">🎉 Neşe</button>
-              <button type="button" class="wiz-c-topic" data-topic="ihanet ve öfke" onclick="selectTopicChip(this)">🔥 İhanet</button>
+          <div class="wiz-c-card">
+
+            <!-- KONU -->
+            <div class="wiz-c-section">
+              <div class="wiz-c-row-label">🎯 Konu</div>
+              <div class="wiz-c-topics">
+                <button type="button" class="wiz-c-topic" data-topic="ayrılık ve hasret" onclick="selectTopicChip(this)">💔 Ayrılık</button>
+                <button type="button" class="wiz-c-topic" data-topic="özlem ve geçmiş" onclick="selectTopicChip(this)">🌙 Özlem</button>
+                <button type="button" class="wiz-c-topic" data-topic="aşk ve tutku" onclick="selectTopicChip(this)">❤️ Aşk</button>
+                <button type="button" class="wiz-c-topic" data-topic="yalnızlık ve hüzün" onclick="selectTopicChip(this)">😔 Yalnızlık</button>
+                <button type="button" class="wiz-c-topic" data-topic="umut ve yeni başlangıç" onclick="selectTopicChip(this)">✨ Umut</button>
+                <button type="button" class="wiz-c-topic" data-topic="güç ve özgürlük" onclick="selectTopicChip(this)">⚡ Güç</button>
+                <button type="button" class="wiz-c-topic" data-topic="neşe ve eğlence" onclick="selectTopicChip(this)">🎉 Neşe</button>
+                <button type="button" class="wiz-c-topic" data-topic="ihanet ve öfke" onclick="selectTopicChip(this)">🔥 İhanet</button>
+              </div>
+              <input class="wiz-c-custom" id="topicCustom" type="text" placeholder="Veya kendin yaz… (örn: babama mektup, futbol sevdası)">
             </div>
-            <input class="wiz-c-custom" id="topicCustom" type="text" placeholder="veya kendin yaz…">
-          </div>
 
-          <!-- TARZ -->
-          <div class="wiz-c-section">
-            <div class="wiz-c-genres">
-              <button type="button" class="wiz-c-genre active" data-genre="arabesk, Turkish arabesque, saz, oud, emotional" onclick="selectGenreChip(this)">🎭 Arabesk</button>
-              <button type="button" class="wiz-c-genre" data-genre="Turkish pop, modern, catchy, upbeat" onclick="selectGenreChip(this)">🇹🇷 Türkçe Pop</button>
-              <button type="button" class="wiz-c-genre" data-genre="slow ballad, piano, emotional, heartfelt" onclick="selectGenreChip(this)">🎹 Ballad</button>
-              <button type="button" class="wiz-c-genre" data-genre="R&B, soul, smooth, groove" onclick="selectGenreChip(this)">🎤 R&B</button>
-              <button type="button" class="wiz-c-genre" data-genre="trap, hip-hop, Turkish rap, hard beat" onclick="selectGenreChip(this)">💣 Trap</button>
-              <button type="button" class="wiz-c-genre" data-genre="acoustic folk, guitar, intimate, warm" onclick="selectGenreChip(this)">🎸 Akustik</button>
-              <button type="button" class="wiz-c-genre" data-genre="90s Turkish pop, nostalgic, retro, saz" onclick="selectGenreChip(this)">📻 90'lar</button>
-              <button type="button" class="wiz-c-genre" data-genre="rock, electric guitar, powerful, energetic" onclick="selectGenreChip(this)">🎸 Rock</button>
+            <!-- TARZ -->
+            <div class="wiz-c-section">
+              <div class="wiz-c-row-label">🎸 Tarz</div>
+              <div class="wiz-c-genres">
+                <button type="button" class="wiz-c-genre active" data-genre="arabesk, Turkish arabesque, saz, oud, emotional" onclick="selectGenreChip(this)">🎭 Arabesk</button>
+                <button type="button" class="wiz-c-genre" data-genre="Turkish pop, modern, catchy, upbeat" onclick="selectGenreChip(this)">🇹🇷 Türkçe Pop</button>
+                <button type="button" class="wiz-c-genre" data-genre="slow ballad, piano, emotional, heartfelt" onclick="selectGenreChip(this)">🎹 Ballad</button>
+                <button type="button" class="wiz-c-genre" data-genre="R&B, soul, smooth, groove" onclick="selectGenreChip(this)">🎤 R&B</button>
+                <button type="button" class="wiz-c-genre" data-genre="trap, hip-hop, Turkish rap, hard beat" onclick="selectGenreChip(this)">💣 Trap</button>
+                <button type="button" class="wiz-c-genre" data-genre="acoustic folk, guitar, intimate, warm" onclick="selectGenreChip(this)">🎸 Akustik</button>
+                <button type="button" class="wiz-c-genre" data-genre="90s Turkish pop, nostalgic, retro, saz" onclick="selectGenreChip(this)">📻 90'lar</button>
+                <button type="button" class="wiz-c-genre" data-genre="rock, electric guitar, powerful, energetic" onclick="selectGenreChip(this)">🎸 Rock</button>
+              </div>
             </div>
-          </div>
 
-          <!-- VOKAL -->
-          <div class="wiz-c-section">
-            <div class="wiz-c-vocal">
-              <button type="button" class="wiz-c-vbtn active" id="vocalMale" onclick="selectVocal('male')">♂ Erkek</button>
-              <div class="wiz-c-vdivider"></div>
-              <button type="button" class="wiz-c-vbtn" id="vocalFemale" onclick="selectVocal('female')">♀ Kadın</button>
+            <!-- ALT BAR: VOKAL + BAŞLIK -->
+            <div class="wiz-c-row-label">🎤 Ses & Başlık</div>
+            <div class="wiz-c-bottom">
+              <div class="wiz-c-vocal">
+                <button type="button" class="wiz-c-vbtn active" id="vocalMale" onclick="selectVocal('male')">♂ Erkek</button>
+                <div class="wiz-c-vdivider"></div>
+                <button type="button" class="wiz-c-vbtn" id="vocalFemale" onclick="selectVocal('female')">♀ Kadın</button>
+              </div>
+              <input class="wiz-c-title-input" id="promptTitle" type="text" placeholder="Şarkı başlığı (opsiyonel)">
             </div>
-          </div>
 
-          <!-- BAŞLIK + BUTON -->
-          <input class="wiz-c-title-input" id="promptTitle" type="text" placeholder="Şarkı başlığı (opsiyonel)">
+            <button type="button" class="wiz-c-btn" onclick="generateMusic()">
+              ✦ &nbsp;Şarkımı Oluştur
+            </button>
 
-          <button type="button" class="wiz-c-btn" onclick="generateMusic()">
-            ✦ &nbsp;Şarkımı Oluştur
-          </button>
+          </div><!-- /wiz-c-card -->
 
         </div><!-- /wizPrompt -->
 
