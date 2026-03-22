@@ -3250,52 +3250,54 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
       if (!ta) return;
 
       // Get current selections from wizard state
-      var emotion = wizardState.emotion || 'Duygusal';
-      var mood = _selectedMood || 'Hüzünlü';
+      var emotion = wizardState.emotion || 'Aşk';
+      // Mood: data-mood attribute'ünden al (data-prompt değil)
+      var activeMoodBtn = document.querySelector('#moodGrid .mood-btn.on');
+      var moodKey = activeMoodBtn ? activeMoodBtn.dataset.mood : 'romantic';
+      var moodMap = { happy:'Enerjik', sad:'Hüzünlü', aggressive:'Güçlü', romantic:'Romantik', calm:'Sakin', cool:'Cool' };
+      var mood = moodMap[moodKey] || 'Romantik';
       var genres = _selectedGenres || [];
+      // Genre'den arabesk var mı?
+      var hasArabesk = genres.some(function(g){ return g && g.toLowerCase().includes('arabesk'); });
 
-      // Map emotion+mood to appropriate samples
+      // Map emotion+mood to appropriate samples — tam şarkı formatı (kıta + nakarat + kıta + nakarat + köprü)
       var samplesByEmotionMood = {
         'Arabesk-Hüzünlü': [
-          "Eski bir kız, eski bir aşk\nHer akşam seni rüyamda görüm\nYalnız kaldım, kimse yok yanımda\nArabesk şarkı, senin ismini söyler",
-          "Kara tren, duman gibi ufuk\nBir kez daha, ben sensiz kaldım\nTatarmı verdim, kalbimi satıyor\nGeceleri ağlıyorum, sabahlar pişmanlık"
+          "[Kıta 1]\nKara gecelerde yalnız kaldım yine\nSensiz bu evde duvarlar konuşuyor\nFotoğraflara bakıp ağlıyorum gece\nGeçmiş zamanlar rüyamda dolaşıyor\n\n[Nakarat]\nNe oldu bize, nereye gitti o günler\nSilip attın mı kalbinden beni sen\nHer şarkıda seni duyuyorum hâlâ\nArabesk dertler, sensizlik, hasret, ben\n\n[Kıta 2]\nSokaklarda yürürken izini arıyorum\nBir ses duydum sandım, döndüm sen değildin\nYıllar geçti ama acı hep taze\nKaderimmiş bu, kısmet böyle yazılmış\n\n[Nakarat]\nNe oldu bize, nereye gitti o günler\nSilip attın mı kalbinden beni sen\nHer şarkıda seni duyuyorum hâlâ\nArabesk dertler, sensizlik, hasret, ben\n\n[Köprü]\nBu dünyada sevmek mi vardı günahım\nYakıp kül etti beni bu aşk ateşi\nYalvardım ellere, kimseden yok cevap\nKadere küstüm, gönlüm yorgun, sabah yok"
         ],
         'Arabesk-Romantik': [
-          "Rüyada bir elf, gözlerde seher\nSenin elinle, cennete varırım\nArabesk aşk, Osmanlı türküsü\nKalbim senin, sonsuza kadar",
-          "Kısmetin yazılı, talih yapısı\nBir kadın, bir erkek, sonsuz hikaye\nArabesk sevgi, derin, ırlak\nSenle olmak, cennet gibi"
+          "[Kıta 1]\nGözlerinde bir deniz var, kayboluyorum\nEllerini tuttuğumda dünya duruyor\nOsmanlı gülleri gibi açıyorsun gönlümü\nSenin adın kalbime kazınmış ebedî\n\n[Nakarat]\nSev beni, sev beni, bu gece sev beni\nArabesk türküler gibi derin, gerçek\nKaderimsin sen, talihimsin sen\nSeninle her an cennet gibi güzel\n\n[Kıta 2]\nSaçların rüzgarda, gülüşün güneş gibi\nYan yana yürürken çiçekler açıyor\nBu şehrin gürültüsü susuyor yanında\nKalbim seninle, her nefes seninle\n\n[Nakarat]\nSev beni, sev beni, bu gece sev beni\nArabesk türküler gibi derin, gerçek\nKaderimsin sen, talihimsin sen\nSeninle her an cennet gibi güzel\n\n[Köprü]\nYıllar geçse de bu sevda bitmeyecek\nAnadolu aşkı gibi köklü, sonsuz\nSana ant içtim, elimden tutacaksın\nArabesk kaderim, seninle mutlu son"
         ],
         'Pop-Enerjik': [
-          "Uçuyorum, kanatlarım açık\nGelecek parlak, rüyalar gerçek\nHayat bir dans, ritim benim\nHer anı yaşıyorum, hiç durmam",
-          "Müzik açık, gece açık\nSenle dansım, ruh taşıyorum\nEnerjim sonsuz, gülüşüm çok\nHayat güzel, ben özgürüm"
+          "[Kıta 1]\nSabah güneşiyle kalktım, dünya benim\nRüyalar gerçek oluyor adım adım\nKorkular geride kaldı, yol açık önümde\nHer nefeste enerji, her adımda güç\n\n[Nakarat]\nUçuyorum, kanatlarım açık gökyüzüne\nHiç durmuyor ritim, müzik çalıyor\nHayat bir sahne, ben sahnedeyim\nEn iyi anım, işte şu an, şimdi\n\n[Kıta 2]\nGecenin ortasında dans ediyorum\nIşıklar parlıyor, şehir beni çağırıyor\nDostlarımla gülüyorum, şarkı söylüyorum\nBu anları yaşamak için varım burada\n\n[Nakarat]\nUçuyorum, kanatlarım açık gökyüzüne\nHiç durmuyor ritim, müzik çalıyor\nHayat bir sahne, ben sahnedeyim\nEn iyi anım, işte şu an, şimdi\n\n[Köprü]\nKorkma, vazgeçme, hayaller gerçek olur\nBir adım at, göreceksin ne güzel\nBu şarkı senin için, yüksel, uç, git\nHayat kısa, her anı hisset derinden"
         ],
         'Pop-Romantik': [
-          "Sen benim güneş, ben ışınlarım\nSevgi söz değil, hissiyattır\nSeninle her gün, yeni bir hikaye\nKalbim atıyor, seni çağırıyor",
-          "Göz göze geldim, dünya durdu\nAsla unutmam, bu anı sakla\nBir müsik, iki kişi, sonsuz\nSeninle olmak, daha da güzel"
+          "[Kıta 1]\nİlk gördüğümde zaman durdu sandım\nGülüşün güneş gibi vurdu kalbime\nSözler yetmedi anlatmaya seni\nGözlerinde bir dünya buldum, seninki\n\n[Nakarat]\nSen benim güneşimsin, her sabahım\nSeninle başlıyor hayatım yeniden\nEllerini tuttuğumda uçuyorum\nSeviyorum seni, çok, gerçekten, derinden\n\n[Kıta 2]\nKahveni içerken seyrediyorum seni\nSaçların dağınık, gözlerin yorgun ama\nHer halinle güzelsin, her anınla\nSeninle sıradan anlar bile büyülü\n\n[Nakarat]\nSen benim güneşimsin, her sabahım\nSeninle başlıyor hayatım yeniden\nEllerini tuttuğumda uçuyorum\nSeviyorum seni, çok, gerçekten, derinden\n\n[Köprü]\nYıllar geçse de bu his hiç değişmeyecek\nSenin yanında evdeyim, huzurdayım\nBu şarkıyı sana yazdım, sadece sana\nAşk bu işte, basit, derin, gerçek"
         ],
-        'Ambient-Hüzünlü': [
-          "Sessizlikte kayboldum, ses ararım\nGökyüzü griye çevriliyor\nRuh yorgun, kalp mutsuz\nBelki yarın, belki hiçbir zaman",
-          "Yalnızlık bir oda, ben içerde\nBurada huzur var, ama yok sevgi\nSöz söylemek zor, acı çok\nZaman bir hekim, belki şifa verir"
+        'Hüzün-Hüzünlü': [
+          "[Kıta 1]\nYağmur yağıyor camdan bakıyorum\nSen yokken her şey gri görünüyor\nKupkuru bir sessizlik doldu odama\nSenin kokunun izleri hâlâ burada\n\n[Nakarat]\nGittin ama izlerin kaldı her yerde\nSilemiyorum seni kalbimin içinden\nHüzün bir şarkı çalıyor içimde\nSensizlik bu kadar ağır bilinmezdi\n\n[Kıta 2]\nEski fotoğraflara bakamıyorum artık\nGüldüğüm günler çok uzak geliyor\nKendimi kaybettim bir köşede\nBelki bir gün geçer bu acı, belki\n\n[Nakarat]\nGittin ama izlerin kaldı her yerde\nSilemiyorum seni kalbimin içinden\nHüzün bir şarkı çalıyor içimde\nSensizlik bu kadar ağır bilinmezdi\n\n[Köprü]\nUmuyorum ki bir gün gülümserim yine\nBu karanlık geçer, sabah gelir eninde sonunda\nAma şu an sadece hissediyorum eksikliğini\nVe bu şarkı, sensizliğimin ta kendisi"
         ],
-        'Ambient-Kontemplasyon': [
-          "Düşüncelerim deniz, dalgalanıyor\nHayat soru, ben cevapta kayboldum\nBelki gerçek, belki yanılsam\nDünyayı anlayan, hiç kimse yok",
-          "Muhasebe zamanı, ruh muhasebe\nYapılanı yıkıyorum, yenisini kuruyorum\nHer anlık bir ders, her acı biliş\nBelki anlayacağım, bir gün kendimi"
+        'Aşk-Romantik': [
+          "[Kıta 1]\nBir bakışta anladım her şeyi\nKalbim durdu, nefes kesmedi beni\nYıllar aradım böyle bir anı\nBuldun mu beni, ben seni buldum işte\n\n[Nakarat]\nAşk bu, gerçek, derin, sonsuz\nSeninle tüm dünya anlamlı\nEllerini bırakmam hiç\nBu aşk bizim, kalıcı\n\n[Kıta 2]\nSabahları uyanmak güzel seninle\nGözlerini açarken güneş doğuyor\nHer küçük şey muhteşem oluyor\nSeninle olmak, hayatın ta kendisi\n\n[Nakarat]\nAşk bu, gerçek, derin, sonsuz\nSeninle tüm dünya anlamlı\nEllerini bırakmam hiç\nBu aşk bizim, kalıcı\n\n[Köprü]\nSöz veriyorum, hep yanında olacağım\nİyi günde, kötü günde, her zaman\nBu şarkı ömür boyu çalacak\nİkimiz için, sonsuza dek"
         ],
         'Jazz-Sensual': [
-          "Sarı lambalarda bulanık dans\nSesler ruh, müzik eriyor\nSeninle gece, sabaha kadar\nJazz ve kadın, sonsuz simfoni",
-          "Mavi sigara dumanı, kızıl şarap\nEllerimiz değdi, elektrik oldu\nJazz trompeti, gözlerin dans\nGece bitmez, hiç bitmez istiyorum"
+          "[Kıta 1]\nSarı lambalar yanıyor bu gece\nDuman gibi süzülüyor müzik havada\nEllerini masada gördüm, dokunmak istedim\nJazz çalıyor, zaman durmuş gibi\n\n[Nakarat]\nBu gece özel, bu gece seninle\nKızıl şarap ve eski bir melodi\nGözlerinde yitip gidiyorum yavaşça\nJazz ve sen, gecem tamamlandı işte\n\n[Kıta 2]\nSigaranın dumanı kıvrılıyor yukarı\nSes alçaldı, sadece ikimiz varız\nBu şehrin gürültüsü dışarıda kaldı\nİçeride sadece müzik ve senin sesin\n\n[Nakarat]\nBu gece özel, bu gece seninle\nKızıl şarap ve eski bir melodi\nGözlerinde yitip gidiyorum yavaşça\nJazz ve sen, gecem tamamlandı işte\n\n[Köprü]\nSabaha kadar böyle kalsın zaman\nBu anı dondurmak istiyorum içimde\nJazz biter ama bu his bitmeyecek\nSeninle geçen geceler, hatıralar olacak"
         ]
       };
 
-      // Fallback samples (for any emotion/mood combo not explicitly listed)
+      // Fallback samples — tam şarkı formatı
       var fallbackSamples = [
-        "Geceleri uyuyamam, aklımda hep sen varsın\nSesini duyar gibiyim, ama sen çoktan gittin\nBu şehir sensiz boş, sokaklarda izin var\nKalbimde bir yara açtın, kapanmaz bu hiç yarın",
-        "Yüksel gökyüzüne, rüzgar arkanda\nHiç durma, hiç bırakma hayallerini\nKaranlık gecelerde parlayan yıldız sensin\nDünya senin, uç özgürce şimdi",
-        "Kahvenin kokusu, sabahın sesi\nSeninle başlıyor her yeni gün benim için\nGözlerinde kaybolur tüm kaygılarım\nSen benim evimsin, sen benim huzurum"
+        "[Kıta 1]\nGeceleri uyuyamam, aklımda hep sen varsın\nSesini duyar gibiyim, ama sen çoktan gittin\nBu şehir sensiz boş, sokaklarda izin var\nKalbimde bir yara açtın, kapanmaz bu hiç yarın\n\n[Nakarat]\nSen gittin, ben kaldım bu boş evde yalnız\nDuvarlar tanık, gözyaşlarım tanık\nUnutmak istedim, olmadı bir türlü\nSensizlik öğretti bana ne kadar sevdiğimi\n\n[Kıta 2]\nEski şarkıları dinleyemiyorum artık\nHepsinde senin sesin var, senin izin\nBahar geldi ama içim kış gibi\nSen olmadan mevsimler anlamsız bana\n\n[Nakarat]\nSen gittin, ben kaldım bu boş evde yalnız\nDuvarlar tanık, gözyaşlarım tanık\nUnutmak istedim, olmadı bir türlü\nSensizlik öğretti bana ne kadar sevdiğimi\n\n[Köprü]\nBelki bir gün geçer bu, belki geçmez\nBelki dönersin, belki dönmezsin\nAma bu şarkı hep çalacak içimde\nSen gitsen de, sevgim bitmeyecek",
+
+        "[Kıta 1]\nYüksel gökyüzüne, rüzgar arkanda\nHiç durma, hiç bırakma hayallerini\nKaranlık gecelerde parlayan yıldız sensin\nDünya senin, uç özgürce şimdi\n\n[Nakarat]\nBen buradayım, her zaman yanında\nVazgeçme, düş, uç, git, yüksel\nBu yol uzun ama güzel sonunda\nİnan kendine, hayat sana güzel\n\n[Kıta 2]\nTaşlar düştü yoluna, yılmadın sen\nGüçsün, biliyorsun, inan buna\nHer düşüş bir sonraki yükselişin başlangıcı\nSen bu yolun tam ortasındasın\n\n[Nakarat]\nBen buradayım, her zaman yanında\nVazgeçme, düş, uç, git, yüksel\nBu yol uzun ama güzel sonunda\nİnan kendine, hayat sana güzel\n\n[Köprü]\nBu şarkıyı sana söylüyorum\nGüçlüsün, bunu bil, hisset\nİleride bakacaksın geriye\nVe diyeceksin: değdi, değdi, değdi"
       ];
 
-      // Look for matching samples based on emotion-mood combination
-      var key = emotion + '-' + mood;
-      var samples = samplesByEmotionMood[key] || fallbackSamples;
+      // Arabesk seçilmişse önce arabesk key dene, sonra emotion-mood, son fallback
+      var key = hasArabesk ? ('Arabesk-' + mood) : (emotion + '-' + mood);
+      var samples = samplesByEmotionMood[key]
+        || samplesByEmotionMood[emotion + '-' + mood]
+        || samplesByEmotionMood['Arabesk-' + mood]
+        || fallbackSamples;
 
       // Log the selection for debugging
       console.log('AI Lyrics: emotion=' + emotion + ', mood=' + mood + ', key=' + key + ', found=' + (samplesByEmotionMood[key] ? 'yes' : 'no'));
