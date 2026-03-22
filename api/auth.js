@@ -31,11 +31,13 @@ async function redisIncr(key) {
 
 async function getOrCreateUser(email) {
   // Önce oku
+  console.log(`DEBUG: getOrCreateUser querying for email: ${email}`);
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}&select=*`,
     { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
   );
   const rows = await res.json();
+  console.log(`DEBUG: getOrCreateUser query status: ${res.status}, rows length: ${rows?.length || 0}`);
   if (rows && rows.length > 0) {
     console.log(`DEBUG: getOrCreateUser found existing user:`, JSON.stringify(rows[0]));
     return rows[0];
@@ -130,6 +132,11 @@ export default async function handler(req, res) {
       }
     );
     console.log(`DEBUG: PATCH status: ${patchRes.status}`);
+    if (!patchRes.ok) {
+      const errText = await patchRes.text();
+      console.error(`DEBUG: PATCH failed - ${patchRes.status}: ${errText}`);
+      return res.status(500).json({ error: 'Failed to update quota', details: errText });
+    }
     const responseBody = { allowed: true, songs_used: newUsed, songs_limit: currLimit, plan: currPlan };
     console.log(`DEBUG: sending response:`, JSON.stringify(responseBody));
     return res.json(responseBody);
