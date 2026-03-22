@@ -132,10 +132,14 @@ export default async function handler(req, res) {
       }
     );
     console.log(`DEBUG: PATCH status: ${patchRes.status}`);
+    const patchBody = await patchRes.text();
+    console.log(`DEBUG: PATCH response body: ${patchBody}`);
     if (!patchRes.ok) {
-      const errText = await patchRes.text();
-      console.error(`DEBUG: PATCH failed - ${patchRes.status}: ${errText}`);
-      return res.status(500).json({ error: 'Failed to update quota', details: errText });
+      console.error(`DEBUG: PATCH failed - ${patchRes.status}: ${patchBody}`);
+      return res.status(500).json({ error: 'Failed to update quota', details: patchBody });
+    }
+    if (!patchBody || patchBody === '') {
+      console.warn(`DEBUG: PATCH succeeded but returned no data (may not have updated any rows)`);
     }
     const responseBody = { allowed: true, songs_used: newUsed, songs_limit: currLimit, plan: currPlan };
     console.log(`DEBUG: sending response:`, JSON.stringify(responseBody));
