@@ -2769,7 +2769,13 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
 
     async function generateMusic() {
       promptEmail(async function(email) {
-        // Kota kontrolü
+        // CRITICAL: Show loading UI IMMEDIATELY before any async calls
+        document.getElementById('step-4').classList.remove('active');
+        document.getElementById('loading-state').style.display = 'block';
+        document.getElementById('wizard-fill').style.width = '100%';
+        document.getElementById('step-indicator').textContent = 'Üretiliyor…';
+
+        // Kota kontrolü (async, doesn't block UI)
         try {
           var checkRes = await fetch('/api/auth', {
             method: 'POST',
@@ -2778,15 +2784,13 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
           });
           var checkData = await checkRes.json();
           if (checkData.allowed === false) {
+            // Hide loading and show paywall
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('step-4').classList.add('active');
             openPaywall();
             return;
           }
         } catch(e) { /* kota API çalışmıyorsa devam et */ }
-
-        document.getElementById('step-4').classList.remove('active');
-        document.getElementById('loading-state').style.display = 'block';
-        document.getElementById('wizard-fill').style.width = '100%';
-        document.getElementById('step-indicator').textContent = 'Üretiliyor…';
 
         var bar = document.getElementById('loading-bar');
         requestAnimationFrame(function() { bar.style.width = '85%'; });
