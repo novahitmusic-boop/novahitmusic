@@ -2895,11 +2895,14 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
           data = await response.json();
 
           // Handle API errors
-          if (!response.ok) {
-            genError = data.error || 'API hata: ' + response.status;
-          } else if (data.error === 'quota_exceeded') {
+          if (data.error === 'quota_exceeded' || response.status === 403) {
+            clearInterval(window._loadingMsgTimer);
+            clearInterval(window._barTimer);
+            document.getElementById('loading-state').style.display = 'none';
             openPaywall();
             return;
+          } else if (!response.ok) {
+            genError = data.error || 'API hata: ' + response.status;
           }
         } catch (err) {
           genError = err.message || 'Bağlantı hatası';
