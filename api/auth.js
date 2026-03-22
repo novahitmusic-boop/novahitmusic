@@ -122,6 +122,12 @@ export default async function handler(req, res) {
   if (count === 1) await redisSet(ratKey, 1, 86400);
   if (count > 100) return res.status(429).json({ error: 'rate limit' });
 
+  // Sahip emaili — her zaman sınırsız
+  const OWNER_EMAILS = ['muratakbal@hotmail.com'];
+  if (OWNER_EMAILS.includes(email.toLowerCase())) {
+    return res.json({ allowed: true, songs_used: 0, songs_limit: 9999, plan: 'pro' });
+  }
+
   const quota = await getUserQuota(email);
   const used = quota.songs_used || 0;
   const limit = quota.songs_limit || 3;
