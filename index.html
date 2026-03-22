@@ -82,7 +82,7 @@
       height: 2px;
       width: 0%;
       background: linear-gradient(90deg, var(--orange), var(--pink));
-      z-index: 9999;
+      z-index: 1;
       transition: width 0.1s;
     }
 
@@ -97,7 +97,7 @@
       border-bottom: 1px solid var(--glass-border);
       overflow: hidden;
       position: relative;
-      z-index: 1000;
+      z-index: 2;
     }
     .ticker-dot {
       width: 8px; height: 8px;
@@ -734,7 +734,7 @@
     .bento-left p { color: var(--text-muted); font-size: 16px; margin-bottom: 28px; }
     /* ===== YASAL SORUMLULUK MODALI ===== */
     #legal-modal {
-      display: none; position: fixed; inset: 0; z-index: 10000;
+      display: none; position: fixed; inset: 0; z-index: 9100;
       background: rgba(0,0,0,0.75); backdrop-filter: blur(12px);
       align-items: center; justify-content: center; padding: 20px;
       animation: fadeIn 0.25s ease;
@@ -1824,7 +1824,7 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         </div><!-- /wizCustom -->
 
         <!-- DİL MODAL -->
-        <div id="langModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;">
+        <div id="langModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9000;align-items:center;justify-content:center;">
           <div style="background:#12121f;border:1px solid rgba(255,107,53,0.25);border-radius:24px;padding:32px;max-width:580px;width:94%;max-height:82vh;display:flex;flex-direction:column;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
               <h3 style="margin:0;color:#fff;font-size:18px;">🌍 Dil Seç</h3>
@@ -2745,7 +2745,7 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
 
       // Email modal göster
       var overlay = document.createElement('div');
-      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9200;display:flex;align-items:center;justify-content:center;';
       overlay.innerHTML = `
         <div style="background:#1a1a2e;border:1px solid rgba(255,107,53,0.4);border-radius:20px;padding:40px;max-width:400px;width:90%;text-align:center;">
           <div style="font-size:40px;margin-bottom:16px;">🎵</div>

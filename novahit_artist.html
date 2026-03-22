@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https:;">
+<meta name="description" content="Novahit — AI ile profesyonel müzik üretimi. 125 müzik türü, 50+ dil, kendi sesinle şarkı.">
+<title>Novahit — AI Music Studio · Artist Experience</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+  {"@type":"WebSite","name":"Novahit","url":"https://novahit.com"},
+  {"@type":"MusicGroup","name":"Novahit AI Studio","url":"https://novahit.com"},
+  {"@type":"Product","name":"Novahit Pro","offers":{"@type":"Offer","price":"9.99","priceCurrency":"USD"}}
+]}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#0a0a0a;color:#fff;font-family:'Space Grotesk',sans-serif;overflow-x:hidden;}
+
+/* ══════════════════════════════
+   TOPBAR
+══════════════════════════════ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:40px;
+  background:#000;
+  border-bottom:1px solid rgba(255,107,53,0.12);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+}
+
+/* Sosyal Medya */
+.tb-social{display:flex;align-items:center;gap:4px;}
+.tb-soc-link{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.35);text-decoration:none;
+  transition:all 0.2s;position:relative;
+}
+.tb-soc-link:hover{color:#fff;background:rgba(255,255,255,0.06);}
+.tb-soc-link svg{width:15px;height:15px;fill:currentColor;}
+.tb-soc-link.ig:hover{color:#E1306C;}
+.tb-soc-link.tw:hover{color:#fff;}
+.tb-soc-link.tk:hover{color:#69C9D0;}
+
+/* Orta Slogan */
+.tb-center{
+  position:absolute;left:50%;transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,0.2);
+  display:flex;align-items:center;gap:8px;
+}
+.tb-center-dot{width:5px;height:5px;border-radius:50%;background:#FF6B35;animation:tbPulse 2s ease-in-out infinite;}
+@keyframes tbPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.6);}}
+
+/* Dil Seçici */
+.tb-langs{display:flex;align-items:center;gap:2px;}
+.tb-lang{
+  padding:4px 8px;border-radius:6px;border:none;background:transparent;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:rgba(255,255,255,0.3);cursor:pointer;
+  transition:all 0.2s;display:flex;align-items:center;gap:5px;
+  white-space:nowrap;
+}
+.tb-lang:hover{color:#fff;background:rgba(255,255,255,0.06);}
+.tb-lang.on{color:#FF6B35;background:rgba(255,107,53,0.08);}
+.tb-lang .flag{font-size:13px;line-height:1;}
+
+/* ══════════════════════════════
+   NAV
+══════════════════════════════ */
+.nav{
+  position:fixed;top:40px;left:0;right:0;z-index:100;
+  padding:0 48px;height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,10,10,0.88);backdrop-filter:blur(32px);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  transition:background 0.3s;
+}
+.nav.scrolled{background:rgba(5,5,5,0.97);}
+.logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;letter-spacing:2px;text-decoration:none;color:#fff;}
+.logo em{color:#FF6B35;font-style:italic;}
+.nav-links{display:flex;gap:32px;}
+.nav-links a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.5px;transition:color 0.2s;}
+.nav-links a:hover{color:#fff;}
+.nav-r{display:flex;gap:10px;align-items:center;}
+.btn-outline{padding:9px 22px;background:transparent;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);border-radius:4px;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif;}
+.btn-outline:hover{border-color:#FF6B35;color:#FF6B35;}
+.btn-cta{padding:9px 24px;background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,107,53,0.4);}
+
+/* Page padding */
+main{padding-top:108px;}
+
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
+.hero{
+  min-height:92vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;text-align:center;padding:80px 48px;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%,rgba(255,107,53,0.12) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 70%,rgba(232,23,93,0.08) 0%,transparent 70%),
+    #0a0a0a;
+}
+/* Yüzen parçacıklar */
+.particles{position:absolute;inset:0;pointer-events:none;}
+.particle{
+  position:absolute;width:2px;height:2px;border-radius:50%;
+  background:#FF6B35;animation:pfloat var(--d) ease-in-out var(--dl) infinite;
+  opacity:0;
+}
+@keyframes pfloat{
+  0%{opacity:0;transform:translateY(40px) scale(0);}
+  20%{opacity:0.6;}
+  80%{opacity:0.2;}
+  100%{opacity:0;transform:translateY(-200px) scale(0.5);}
+}
+.hero-content{position:relative;z-index:2;max-width:820px;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(255,107,53,0.3);border-radius:100px;
+  padding:6px 18px;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:#FF6B35;margin-bottom:40px;font-family:'JetBrains Mono',monospace;
+  background:rgba(255,107,53,0.06);
+}
+.hero-tag-dot{width:6px;height:6px;background:#FF6B35;border-radius:50%;animation:tbPulse 2s ease-in-out infinite;}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(52px,8vw,108px);font-weight:900;line-height:0.95;
+  letter-spacing:-3px;margin-bottom:24px;
+}
+.hero h1 em{color:#FF6B35;font-style:italic;}
+.hero-desc{font-size:17px;color:rgba(255,255,255,0.5);line-height:1.8;max-width:500px;margin:0 auto 52px;}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn-hero-main{
+  padding:18px 52px;background:linear-gradient(135deg,#FF6B35,#E8175D);
+  border:none;color:#fff;border-radius:4px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;letter-spacing:1px;
+}
+.btn-hero-main:hover{transform:translateY(-3px);box-shadow:0 20px 60px rgba(255,107,53,0.5);}
+.btn-hero-ghost{
+  padding:18px 52px;background:transparent;
+  border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);
+  border-radius:4px;font-size:14px;cursor:pointer;transition:all 0.3s;
+  font-family:'Space Grotesk',sans-serif;
+}
+.btn-hero-ghost:hover{border-color:rgba(255,255,255,0.4);color:#fff;}
+.hero-scroll{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:rgba(255,255,255,0.2);text-transform:uppercase;
+}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,107,53,0.4),transparent);animation:scrollLine 2s ease-in-out infinite;}
+@keyframes scrollLine{0%,100%{opacity:0.3;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.2);}}
+
+/* ══════════════════════════════
+   WAVEFORM
+══════════════════════════════ */
+.wf-section{
+  padding:100px 48px;text-align:center;position:relative;
+  background:linear-gradient(135deg,rgba(255,107,53,0.02),rgba(232,23,93,0.02));
+  border-top:1px solid rgba(255,255,255,0.03);
+}
+.wf-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#FF6B35;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:12px;}
+.wf-eyebrow::before,.wf-eyebrow::after{content:'';width:32px;height:1px;background:rgba(255,107,53,0.4);}
+.wf-title{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:52px;}
+.wf-title em{color:#FF6B35;font-style:italic;}
+.waveform{
+  display:flex;align-items:center;justify-content:center;gap:3px;
+  height:100px;margin:0 auto 12px;max-width:720px;cursor:pointer;
+}
+.wf-bar{
+  width:4px;border-radius:4px;
+  background:linear-gradient(to top,rgba(255,107,53,0.3),#FF6B35,#E8175D);
+  animation:wfAnim var(--d) ease-in-out var(--dl) infinite alternate;
+  animation-play-state:paused;
+  opacity:0.5;transition:opacity 0.3s;
+}
+.waveform.playing .wf-bar{animation-play-state:running;opacity:1;}
+@keyframes wfAnim{from{height:var(--min);}to{height:var(--max);}}
+.wf-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:28px;letter-spacing:2px;}
+.wf-track-info{margin-bottom:28px;}
+.wf-track-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:4px;}
+.wf-track-artist{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:2px;}
+.wf-controls{display:flex;align-items:center;justify-content:center;gap:16px;}
+.wf-btn{width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all 0.2s;}
+.wf-play{background:linear-gradient(135deg,#FF6B35,#E8175D);color:#fff;}
+.wf-play:hover{transform:scale(1.1);box-shadow:0 12px 40px rgba(255,107,53,0.5);}
+.wf-skip{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);}
+.wf-skip:hover{background:rgba(255,255,255,0.1);color:#fff;}
+.wf-vol{background:transparent;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);}
+.wf-vol:hover{border-color:rgba(255,107,53,0.4);color:#FF6B35;}
+
+/* ══════════════════════════════
+   STORIES
+══════════════════════════════ */
+.stories{padding:100px 48px;}
+.story{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+  margin-bottom:140px;
+}
+.story:last-child{margin-bottom:0;}
+.story.reverse{direction:rtl;}
+.story.reverse>*{direction:ltr;}
+.story-visual{
+  aspect-ratio:4/3;border-radius:16px;overflow:hidden;position:relative;
+  border:1px solid rgba(255,255,255,0.04);
+}
+.story-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:110px;}
+.story-glass{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,107,53,0.15),rgba(232,23,93,0.08));
+}
+.story-badge{
+  position:absolute;bottom:20px;left:20px;
+  padding:6px 16px;border-radius:100px;
+  background:rgba(255,107,53,0.9);
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;
+  backdrop-filter:blur(8px);
+}
+.story-label{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;
+  text-transform:uppercase;color:#FF6B35;margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+.story-label::before{content:'';width:24px;height:1px;background:#FF6B35;}
+.story h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(30px,3.5vw,48px);font-weight:700;line-height:1.1;margin-bottom:20px;
+}
+.story h2 em{color:#FF6B35;font-style:italic;}
+.story p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.9;margin-bottom:32px;}
+.story-nums{display:flex;gap:40px;margin-bottom:32px;}
+.story-num .n{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#FF6B35;}
+.story-num .l{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1px;margin-top:2px;}
+.btn-story{
+  padding:13px 32px;background:linear-gradient(135deg,#FF6B35,#E8175D);
+  border:none;color:#fff;border-radius:4px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all 0.3s;font-family:'Space Grotesk',sans-serif;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-story:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,107,53,0.4);}
+
+/* ══════════════════════════════
+   PRICING
+══════════════════════════════ */
+.pricing{padding:100px 48px;border-top:1px solid rgba(255,255,255,0.04);}
+.pricing-head{text-align:center;margin-bottom:64px;}
+.pricing-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#FF6B35;margin-bottom:16px;}
+.pricing-head h2{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,56px);font-weight:700;}
+.pricing-head h2 em{color:#FF6B35;font-style:italic;}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.05);}
+.plan{background:#0a0a0a;padding:48px 32px;position:relative;transition:background 0.3s;}
+.plan:hover{background:#0f0f0f;}
+.plan.featured{background:#111;border:1px solid rgba(255,107,53,0.25);margin:-1px;z-index:1;}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);padding:5px 18px;background:linear-gradient(135deg,#FF6B35,#E8175D);border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;white-space:nowrap;}
+.plan-name{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#FF6B35;margin-bottom:24px;}
+.plan-price{font-family:'Playfair Display',serif;font-size:60px;font-weight:700;line-height:1;margin-bottom:4px;}
+.plan-price sup{font-size:24px;vertical-align:super;}
+.plan-per{font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:32px;}
+.plan-features{list-style:none;margin-bottom:36px;}
+.plan-features li{padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:rgba(255,255,255,0.65);display:flex;align-items:center;gap:10px;}
+.plan-features li::before{content:'→';color:#FF6B35;flex-shrink:0;font-size:12px;}
+.plan-btn{width:100%;padding:14px;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.25s;font-family:'Space Grotesk',sans-serif;letter-spacing:0.5px;}
+.plan:not(.featured) .plan-btn{background:transparent;border:1px solid rgba(255,107,53,0.3);color:#FF6B35;}
+.plan:not(.featured) .plan-btn:hover{background:linear-gradient(135deg,#FF6B35,#E8175D);border-color:transparent;color:#fff;}
+.plan.featured .plan-btn{background:linear-gradient(135deg,#FF6B35,#E8175D);border:none;color:#fff;}
+.plan.featured .plan-btn:hover{box-shadow:0 12px 40px rgba(255,107,53,0.4);transform:translateY(-1px);}
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer{padding:70px 48px;border-top:1px solid rgba(255,255,255,0.04);}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:56px;}
+.ft-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;margin-bottom:12px;}
+.ft-logo em{color:#FF6B35;font-style:italic;}
+.ft-desc{font-size:13px;color:rgba(255,255,255,0.3);line-height:1.9;margin-bottom:20px;}
+.ft-social{display:flex;gap:8px;margin-bottom:20px;}
+.ft-soc{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.3);text-decoration:none;transition:all 0.2s;
+}
+.ft-soc svg{width:15px;height:15px;fill:currentColor;}
+.ft-soc:hover{background:rgba(255,107,53,0.12);border-color:rgba(255,107,53,0.3);color:#FF6B35;}
+.ft-col h4{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:18px;}
+.ft-col ul{list-style:none;}
+.ft-col ul li{margin-bottom:10px;}
+.ft-col ul a{font-size:13px;color:rgba(255,255,255,0.45);text-decoration:none;transition:color 0.2s;}
+.ft-col ul a:hover{color:#FF6B35;}
+.ft-trust{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0;border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);margin-bottom:24px;}
+.ft-badge{display:flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(255,255,255,0.05);border-radius:100px;font-size:11px;color:rgba(255,255,255,0.3);}
+.ft-bottom{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,0.15);}
+
+/* ══════════════════════════════
+   AI ASISTAN
+══════════════════════════════ */
+.ai-btn{
+  position:fixed;bottom:28px;right:28px;z-index:500;
+  width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#FF6B35,#E8175D);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 32px rgba(255,107,53,0.45);
+  transition:all 0.3s;
+  animation:aiPulse 3s ease-in-out infinite;
+}
+.ai-btn:hover{transform:scale(1.1);box-shadow:0 16px 48px rgba(255,107,53,0.6);}
+@keyframes aiPulse{
+  0%,100%{box-shadow:0 8px 32px rgba(255,107,53,0.45);}
+  50%{box-shadow:0 8px 48px rgba(255,107,53,0.7),0 0 0 8px rgba(255,107,53,0.08);}
+}
+.ai-btn-icon{font-size:24px;}
+.ai-notif{
+  position:absolute;top:-4px;right:-4px;
+  width:18px;height:18px;border-radius:50%;
+  background:#E8175D;color:#fff;
+  font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  border:2px solid #0a0a0a;
+}
+
+.ai-window{
+  position:fixed;bottom:100px;right:28px;z-index:501;
+  width:360px;
+  background:#111;
+  border:1px solid rgba(255,107,53,0.2);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,0.6);
+  display:none;
+  animation:aiSlide 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.ai-window.open{display:flex;flex-direction:column;}
+@keyframes aiSlide{from{opacity:0;transform:translateY(20px) scale(0.96);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+.ai-head{
+  padding:16px 20px;
+  background:linear-gradient(135deg,rgba(255,107,53,0.12),rgba(232,23,93,0.06));
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ai-agent{display:flex;align-items:center;gap:10px;}
+.ai-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,#FF6B35,#E8175D);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  flex-shrink:0;
+}
+.ai-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;}
+.ai-status{font-family:'JetBrains Mono',monospace;font-size:9px;color:#FF6B35;letter-spacing:1px;display:flex;align-items:center;gap:5px;margin-top:1px;}
+.ai-status::before{content:'';width:5px;height:5px;background:#FF6B35;border-radius:50%;animation:tbPulse 2s infinite;}
+.ai-close{background:transparent;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:18px;transition:color 0.2s;line-height:1;}
+.ai-close:hover{color:#fff;}
+
+.ai-msgs{
+  padding:16px;height:240px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:12px;
+  scrollbar-width:thin;scrollbar-color:rgba(255,107,53,0.2) transparent;
+}
+.ai-msgs::-webkit-scrollbar{width:4px;}
+.ai-msgs::-webkit-scrollbar-track{background:transparent;}
+.ai-msgs::-webkit-scrollbar-thumb{background:rgba(255,107,53,0.2);border-radius:2px;}
+
+.ai-msg{max-width:85%;}
+.ai-msg.bot{align-self:flex-start;}
+.ai-msg.user{align-self:flex-end;}
+.ai-bubble{padding:10px 14px;border-radius:12px;font-size:12px;line-height:1.7;}
+.ai-msg.bot .ai-bubble{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);border-radius:4px 12px 12px 12px;}
+.ai-msg.user .ai-bubble{background:linear-gradient(135deg,#FF6B35,#E8175D);color:#fff;font-weight:500;border-radius:12px 4px 12px 12px;}
+.ai-time{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);margin-top:4px;letter-spacing:1px;}
+
+.ai-typing{align-self:flex-start;}
+.ai-typing .ai-bubble{display:flex;gap:4px;align-items:center;padding:12px 16px;}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,107,53,0.5);animation:aiDot 1.2s ease-in-out infinite;}
+.ai-dot:nth-child(2){animation-delay:0.2s;}
+.ai-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes aiDot{0%,80%,100%{transform:scale(1);opacity:0.5;}40%{transform:scale(1.2);opacity:1;}}
+
+.ai-quick{
+  padding:10px 16px 12px;
+  display:flex;flex-wrap:wrap;gap:6px;
+  border-top:1px solid rgba(255,255,255,0.04);
+}
+.ai-q{
+  padding:5px 12px;border-radius:100px;
+  background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);
+  font-size:11px;color:rgba(255,255,255,0.6);cursor:pointer;
+  transition:all 0.2s;font-family:'Space Grotesk',sans-serif;
+}
+.ai-q:hover{background:rgba(255,107,53,0.15);color:#FF6B35;border-color:rgba(255,107,53,0.4);}
+
+.ai-input-area{
+  padding:12px 16px;border-top:1px solid rgba(255,255,255,0.05);
+  display:flex;gap:8px;align-items:center;
+}
+.ai-input{
+  flex:1;padding:9px 14px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);border-radius:8px;
+  color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;outline:none;
+  transition:border-color 0.2s;
+}
+.ai-input::placeholder{color:rgba(255,255,255,0.2);}
+.ai-input:focus{border-color:rgba(255,107,53,0.3);}
+.ai-send{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,#FF6B35,#E8175D);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:all 0.2s;flex-shrink:0;
+}
+.ai-send:hover{transform:scale(1.08);}
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media(max-width:900px){
+  .topbar{padding:0 20px;}
+  .tb-center{display:none;}
+  .nav{padding:0 20px;top:40px;}
+  .nav-links{display:none;}
+  main{padding-top:108px;}
+  .hero{padding:60px 20px;}
+  .wf-section{padding:70px 20px;}
+  .stories{padding:60px 20px;}
+  .story{grid-template-columns:1fr;gap:36px;margin-bottom:80px;}
+  .story.reverse{direction:ltr;}
+  .pricing{padding:70px 20px;}
+  .plans{grid-template-columns:1fr;}
+  footer{padding:48px 20px;}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
+  .ai-window{width:calc(100vw - 40px);right:20px;}
+}
+@media(max-width:600px){
+  .tb-lang .flag{font-size:16px;}
+  .tb-lang span{display:none;}
+  .hero h1{letter-spacing:-1px;}
+  .story-nums{gap:24px;}
+  .footer-top{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     TOPBAR
+══════════════════════════════ -->
+<div class="topbar" role="banner">
+
+  <!-- Sosyal Medya -->
+  <div class="tb-social">
+    <a class="tb-soc-link ig" href="https://instagram.com/novahit" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a class="tb-soc-link tw" href="https://twitter.com/novahit" target="_blank" rel="noopener" aria-label="Twitter / X">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="tb-soc-link tk" href="https://tiktok.com/@novahit" target="_blank" rel="noopener" aria-label="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.16 8.16 0 004.77 1.52V6.73a4.85 4.85 0 01-1-.04z"/></svg>
+    </a>
+  </div>
+
+  <!-- Orta -->
+  <div class="tb-center">
+    <span class="tb-center-dot"></span>
+    15 AI Ajan · Canlı Üretim
+    <span class="tb-center-dot"></span>
+  </div>
+
+  <!-- Dil Seçici -->
+  <div class="tb-langs" role="navigation" aria-label="Dil seçimi">
+    <button class="tb-lang on" onclick="setLang(this,'tr')" aria-label="Türkçe"><span class="flag">🇹🇷</span><span>TR</span></button>
+    <button class="tb-lang" onclick="setLang(this,'en')" aria-label="English"><span class="flag">🇬🇧</span><span>EN</span></button>
+    <button class="tb-lang" onclick="setLang(this,'de')" aria-label="Deutsch"><span class="flag">🇩🇪</span><span>DE</span></button>
+    <button class="tb-lang" onclick="setLang(this,'fr')" aria-label="Français"><span class="flag">🇫🇷</span><span>FR</span></button>
+    <button class="tb-lang" onclick="setLang(this,'ar')" aria-label="العربية"><span class="flag">🇸🇦</span><span>AR</span></button>
+    <button class="tb-lang" onclick="setLang(this,'jp')" aria-label="日本語"><span class="flag">🇯🇵</span><span>JP</span></button>
+    <button class="tb-lang" onclick="setLang(this,'kr')" aria-label="한국어"><span class="flag">🇰🇷</span><span>KR</span></button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     NAV
+══════════════════════════════ -->
+<nav class="nav" id="mainNav" role="navigation" aria-label="Ana navigasyon">
+  <a href="#" class="logo" aria-label="Novahit Ana Sayfa">Nova<em>hit</em></a>
+  <div class="nav-links">
+    <a href="#waveform">Deneyim</a>
+    <a href="#stories">Özellikler</a>
+    <a href="#pricing">Fiyatlar</a>
+    <a href="#" onclick="openAI()">AI Destek</a>
+  </div>
+  <div class="nav-r">
+    <button class="btn-outline">Giriş Yap</button>
+    <button class="btn-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">✦ Başla</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     MAIN
+══════════════════════════════ -->
+<main>
+
+<!-- HERO -->
+<section class="hero" id="home" aria-labelledby="hero-title">
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-tag"><span class="hero-tag-dot"></span>15 Uzman AI Ajan · 125 Müzik Türü · 50+ Dil</div>
+    <h1 id="hero-title">Müziğin<br><em>Ruhu</em> Var</h1>
+    <p class="hero-desc">Her nota, her söz — binlerce sanatçının mirasından öğrenmiş 15 AI ajan tarafından özenle yaratılıyor. Sadece müzik değil, sanat.</p>
+    <div class="hero-btns">
+      <button class="btn-hero-main" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">✦ &nbsp;Şimdi Yarat</button>
+      <button class="btn-hero-ghost" onclick="document.getElementById('waveform').scrollIntoView({behavior:'smooth'})">▶ &nbsp;Demo Dinle</button>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="scroll-line"></div>
+    <span>Kaydır</span>
+  </div>
+</section>
+
+<!-- WAVEFORM -->
+<section class="wf-section" id="waveform" aria-label="Müzik çalar">
+  <div class="wf-eyebrow">Canlı Deneyim</div>
+  <h2 class="wf-title">Sesi <em>Hisset</em></h2>
+  <div class="waveform" id="waveform-bars" onclick="togglePlay()" role="button" aria-label="Çal/Duraklat" tabindex="0"></div>
+  <div class="wf-time" id="wfTime">0:00 / 3:45</div>
+  <div class="wf-track-info">
+    <div class="wf-track-name">Anahtarı Masaya Bıraktım</div>
+    <div class="wf-track-artist">NOVAHIT AI · TÜRKÇE POP · 118 BPM</div>
+  </div>
+  <div class="wf-controls">
+    <button class="wf-btn wf-vol" aria-label="Ses">🔊</button>
+    <button class="wf-btn wf-skip" onclick="prevTrack()" aria-label="Önceki">⏮</button>
+    <button class="wf-btn wf-play" id="playBtn" onclick="togglePlay()" aria-label="Oynat/Duraklat">▶</button>
+    <button class="wf-btn wf-skip" onclick="nextTrack()" aria-label="Sonraki">⏭</button>
+    <button class="wf-btn wf-vol" aria-label="Karıştır">⇄</button>
+  </div>
+</section>
+
+<!-- STORIES -->
+<section class="stories" id="stories" aria-label="Özellikler">
+
+  <article class="story">
+    <div class="story-visual">
+      <div class="story-bg" style="background:linear-gradient(135deg,#1a0a2e,#2d1b69)">🎼</div>
+      <div class="story-glass"></div>
+      <div class="story-badge">125 TÜR</div>
+    </div>
+    <div>
+      <div class="story-label">Dünya Müziği</div>
+      <h2>Her Kültürden<br><em>Her Dilden</em></h2>
+      <p>Türkçe pop'tan K-Pop'a, Arabeskten Bossa Nova'ya — her kültürün müzik ruhunu bilen sistemimiz, o dilin içinden üretir. Rusça arabesk, Japonca folk, Almanca pop.</p>
+      <div class="story-nums">
+        <div class="story-num"><div class="n">125</div><div class="l">Müzik Türü</div></div>
+        <div class="story-num"><div class="n">50+</div><div class="l">Şarkı Dili</div></div>
+      </div>
+      <button class="btn-story">Tüm Türleri Keşfet →</button>
+    </div>
+  </article>
+
+  <article class="story reverse">
+    <div class="story-visual">
+      <div class="story-bg" style="background:linear-gradient(135deg,#2a0a0a,#6b1a1a)">🎤</div>
+      <div class="story-glass"></div>
+      <div class="story-badge">SES KLONLAMA</div>
+    </div>
+    <div>
+      <div class="story-label">Kendi Sesinle</div>
+      <h2>Sesini<br><em>Ölümsüzleştir</em></h2>
+      <p>30 saniye ses yükle. ElevenLabs teknolojisiyle sesin klonlanır, 15 ajan şarkıyı yazar ve besteler — kendi sesinle söyler. Doğum günü, yıldönümü, sevgiliye özel.</p>
+      <div class="story-nums">
+        <div class="story-num"><div class="n">30s</div><div class="l">Yeterli Ses</div></div>
+        <div class="story-num"><div class="n">15</div><div class="l">AI Ajan</div></div>
+      </div>
+      <button class="btn-story">Voice Studio →</button>
+    </div>
+  </article>
+
+  <article class="story">
+    <div class="story-visual">
+      <div class="story-bg" style="background:linear-gradient(135deg,#0a2a1a,#1a6b2a)">🎬</div>
+      <div class="story-glass"></div>
+      <div class="story-badge">OTOMATİK KLİP</div>
+    </div>
+    <div>
+      <div class="story-label">Video Prodüksiyon</div>
+      <h2>Şarkı Bitti,<br><em>Klip Hazır</em></h2>
+      <p>Müzik üretilirken AI otomatik görsel klip oluşturur. YouTube, TikTok, Instagram Reels için ayrı formatlar. MP4 kalitesinde, telif hakkı serbest.</p>
+      <div class="story-nums">
+        <div class="story-num"><div class="n">MP4</div><div class="l">Format</div></div>
+        <div class="story-num"><div class="n">4K</div><div class="l">Çözünürlük</div></div>
+      </div>
+      <button class="btn-story">Klip Üret →</button>
+    </div>
+  </article>
+
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing" aria-label="Fiyatlandırma">
+  <div class="pricing-head">
+    <div class="pricing-eyebrow">Fiyatlandırma</div>
+    <h2>Sanat İçin<br><em>Adil Fiyat</em></h2>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-name">Ücretsiz</div>
+      <div class="plan-price"><sup>$</sup>0</div>
+      <div class="plan-per">/ ay · Kredi kartı gerekmez</div>
+      <ul class="plan-features">
+        <li>Ayda 3 şarkı</li>
+        <li>5 müzik türü</li>
+        <li>MP3 indirme</li>
+        <li>Temel platform paketi</li>
+      </ul>
+      <button class="plan-btn">Ücretsiz Başla</button>
+    </div>
+    <div class="plan featured" aria-label="En popüler plan">
+      <div class="plan-badge">En Popüler</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price"><sup>$</sup>9.99</div>
+      <div class="plan-per">/ ay · İptal garantili</div>
+      <ul class="plan-features">
+        <li>Günde 10 şarkı</li>
+        <li>125 müzik türü · 50+ dil</li>
+        <li>Ticari haklar dahil</li>
+        <li>Gelir projeksiyonu</li>
+        <li>Tam platform paketi</li>
+      </ul>
+      <button class="plan-btn">Pro'ya Geç →</button>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Voice Studio</div>
+      <div class="plan-price"><sup>$</sup>24.99</div>
+      <div class="plan-per">/ ay · Tüm özellikler</div>
+      <ul class="plan-features">
+        <li>10 ses klonlama / ay</li>
+        <li>10 şarkı + 10 klip</li>
+        <li>Özel gün şarkıları</li>
+        <li>MP4 klip indirme</li>
+        <li>Ticari haklar dahil</li>
+      </ul>
+      <button class="plan-btn">Voice Studio →</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="ft-trust" aria-label="Güvenlik sertifikaları">
+    <div class="ft-badge">🔒 256-bit SSL</div>
+    <div class="ft-badge">✅ PCI DSS Uyumlu</div>
+    <div class="ft-badge">🛡️ 3D Secure</div>
+    <div class="ft-badge">↩️ 30 Gün İade</div>
+    <div class="ft-badge">🏆 Ticari Lisans</div>
+  </div>
+  <div class="footer-top">
+    <div>
+      <div class="ft-logo">Nova<em>hit</em></div>
+      <p class="ft-desc">125 müzik türü, 50+ dil, 15 uzman AI ajan. Sanatı yapay zeka ile yeniden keşfet.</p>
+      <div class="ft-social" aria-label="Sosyal medya">
+        <a class="ft-soc ig" href="https://instagram.com/novahit" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a class="ft-soc tw" href="https://twitter.com/novahit" target="_blank" rel="noopener" aria-label="Twitter">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a class="ft-soc tk" href="https://tiktok.com/@novahit" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.16 8.16 0 004.77 1.52V6.73a4.85 4.85 0 01-1-.04z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="ft-col"><h4>Ürün</h4><ul><li><a href="#">Nasıl Çalışır</a></li><li><a href="#">Voice Studio</a></li><li><a href="#">Klip Üretimi</a></li><li><a href="#">Müzik Türleri</a></li><li><a href="#">API</a></li></ul></div>
+    <div class="ft-col"><h4>Şirket</h4><ul><li><a href="#">Hakkımızda</a></li><li><a href="#">Blog</a></li><li><a href="#">Kariyer</a></li><li><a href="#">İletişim</a></li><li><a href="#">Basın</a></li></ul></div>
+    <div class="ft-col"><h4>Yasal</h4><ul><li><a href="#">Gizlilik Politikası</a></li><li><a href="#">Kullanım Koşulları</a></li><li><a href="#">Telif Hakları</a></li><li><a href="#">KVKK</a></li><li><a href="#">Çerez Politikası</a></li></ul></div>
+  </div>
+  <div class="ft-bottom">
+    <span>© 2025 Novahit. Tüm hakları saklıdır.</span>
+    <span>Powered by Claude AI & ElevenLabs</span>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════
+     AI ASISTAN
+══════════════════════════════ -->
+<button class="ai-btn" id="aiBtn" onclick="toggleAI()" aria-label="AI Asistan Aç">
+  <span class="ai-btn-icon">✦</span>
+  <div class="ai-notif" id="aiNotif">1</div>
+</button>
+
+<div class="ai-window" id="aiWindow" role="dialog" aria-label="AI Destek Asistanı" aria-modal="true">
+  <div class="ai-head">
+    <div class="ai-agent">
+      <div class="ai-avatar">✦</div>
+      <div>
+        <div class="ai-name">Nova AI</div>
+        <div class="ai-status">Çevrimiçi · Ortalama yanıt: 2s</div>
+      </div>
+    </div>
+    <button class="ai-close" onclick="toggleAI()" aria-label="Kapat">✕</button>
+  </div>
+
+  <div class="ai-msgs" id="aiMsgs">
+    <div class="ai-msg bot">
+      <div class="ai-bubble">Merhaba! 👋 Ben Nova, Novahit'in AI asistanıyım. Müzik üretimi, fiyatlar veya teknik sorularında yardımcı olabilirim.</div>
+      <div class="ai-time">Şimdi</div>
+    </div>
+  </div>
+
+  <div class="ai-quick" id="aiQuick">
+    <button class="ai-q" onclick="quickAI('Fiyatlar neler?')">💰 Fiyatlar</button>
+    <button class="ai-q" onclick="quickAI('Kendi sesimle üretebilir miyim?')">🎤 Ses Klonu</button>
+    <button class="ai-q" onclick="quickAI('Klip üretimi nasıl çalışıyor?')">🎬 Klip</button>
+    <button class="ai-q" onclick="quickAI('API var mı?')">⚡ API</button>
+    <button class="ai-q" onclick="quickAI('Ticari kullanım hakkı var mı?')">📄 Lisans</button>
+  </div>
+
+  <div class="ai-input-area">
+    <input class="ai-input" id="aiInput" placeholder="Sorunuzu yazın..." onkeypress="if(event.key==='Enter')sendAI()">
+    <button class="ai-send" onclick="sendAI()" aria-label="Gönder">➤</button>
+  </div>
+</div>
+
+<script>
+// ══ NAV SCROLL ══
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>10);
+});
+
+// ══ PARTICLES ══
+const pEl=document.getElementById('particles');
+for(let i=0;i<40;i++){
+  const p=document.createElement('div');p.className='particle';
+  p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*10+6}s;--dl:${Math.random()*8}s;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;`;
+  pEl.appendChild(p);
+}
+
+// ══ WAVEFORM ══
+const wfEl=document.getElementById('waveform-bars');
+for(let i=0;i<90;i++){
+  const b=document.createElement('div');b.className='wf-bar';
+  const min=Math.random()*8+3,max=Math.random()*72+18;
+  b.style.cssText=`--min:${min}px;--max:${max}px;--d:${Math.random()*1.6+0.3}s;--dl:${Math.random()*1.6}s;height:${min}px;`;
+  wfEl.appendChild(b);
+}
+
+const tracks=[
+  {name:'Anahtarı Masaya Bıraktım',artist:'NOVAHIT AI · TÜRKÇE POP · 118 BPM',dur:'3:45'},
+  {name:'Kader Beni Böyle Yazdı',artist:'NOVAHIT AI · ARABESK · 76 BPM',dur:'4:12'},
+  {name:'Neon Galaxy',artist:'NOVAHIT AI · K-POP · 128 BPM',dur:'3:28'},
+  {name:'Saudade do Mar',artist:'NOVAHIT AI · BOSSA NOVA · 82 BPM',dur:'4:30'},
+];
+let curTrack=0,playing=false,elapsed=0,timer=null;
+
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('playBtn').textContent=playing?'⏸':'▶';
+  wfEl.classList.toggle('playing',playing);
+  if(playing){timer=setInterval(()=>{elapsed++;updateTime();},1000);}
+  else{clearInterval(timer);}
+}
+function updateTime(){
+  const m=Math.floor(elapsed/60),s=elapsed%60;
+  document.getElementById('wfTime').textContent=`${m}:${s<10?'0'+s:s} / ${tracks[curTrack].dur}`;
+}
+function setTrack(i){
+  curTrack=(i+tracks.length)%tracks.length;
+  elapsed=0;clearInterval(timer);playing=false;
+  document.getElementById('playBtn').textContent='▶';
+  wfEl.classList.remove('playing');
+  document.querySelector('.wf-track-name').textContent=tracks[curTrack].name;
+  document.querySelector('.wf-track-artist').textContent=tracks[curTrack].artist;
+  document.getElementById('wfTime').textContent=`0:00 / ${tracks[curTrack].dur}`;
+}
+function nextTrack(){setTrack(curTrack+1);}
+function prevTrack(){setTrack(curTrack-1);}
+
+// ══ LANG ══
+function setLang(el,lang){
+  document.querySelectorAll('.tb-lang').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// ══ AI ASISTAN ══
+let aiOpen=false;
+const aiResponses={
+  'fiyat':['Pro planımız $9.99/ay — günde 10 şarkı, 125 tür, 50+ dil, ticari haklar. Ücretsiz başlamak ister misiniz? İlk 3 şarkı tamamen bedava!','Voice Studio planımız $24.99/ay — kendi sesinizle 10 şarkı + 10 klip. Özel gün şarkıları da dahil.'],
+  'ses':['Evet! Sadece 30 saniye ses yüklemeniz yeterli. ElevenLabs teknolojisiyle sesiniz klonlanır, 15 ajan şarkıyı kendi sesinizle söyler. Voice Studio planında mevcut.','Ses klonlama harikaçalışıyor. 30 saniye WAV veya MP3 yükleyin, sistem sesinizi öğrenir ve şarkıyı birebir sesinizle söyler.'],
+  'klip':['Klip üretimi tamamen otomatik! Şarkı üretilince AI müziğe uygun görsel klip oluşturur. MP4 formatında, YouTube 16:9, TikTok 9:16 ve Reels için ayrı versiyonlar.','Klipler 4K kalitesinde. Müzik üretimi tamamlanınca klip de hazır oluyor — ek işlem gerekmez.'],
+  'api':['Evet, API erişimimiz var! Pro ve Voice Studio planlarında API anahtarı alabilirsiniz. Tüm 15 ajanı kendi uygulamanıza entegre edebilirsiniz.','API dokümantasyonumuz developers.novahit.com adresinde. REST API, webhook desteği ve gerçek zamanlı üretim mümkün.'],
+  'lisans':['Tüm üretilen müzikler ticari lisanslı. Spotify, YouTube, reklam, film müziği — herhangi bir amaçla kullanabilirsiniz. Telif talepleri yok.','Ticari haklar Pro planından itibaren dahil. Ücretsiz planda kişisel kullanım hakkı verilir.'],
+  'default':['Anladım! Bu konuda size yardımcı olmak isterim. Müzik üretimi, fiyatlar, API veya teknik konularda daha detaylı bilgi verebilirim.','Harika soru! Novahit ile 125 müzik türünde, 50+ dilde profesyonel şarkı üretebilirsiniz. Başka merak ettiğiniz var mı?','Size en iyi şekilde yardımcı olmak için biraz daha detay verebilir misiniz?'],
+};
+
+function toggleAI(){
+  aiOpen=!aiOpen;
+  document.getElementById('aiWindow').classList.toggle('open',aiOpen);
+  document.getElementById('aiNotif').style.display=aiOpen?'none':'flex';
+  if(aiOpen)document.getElementById('aiInput').focus();
+}
+function openAI(){if(!aiOpen)toggleAI();}
+
+function quickAI(msg){document.getElementById('aiInput').value=msg;sendAI();}
+
+function sendAI(){
+  const inp=document.getElementById('aiInput');
+  const msg=inp.value.trim();if(!msg)return;
+  const msgs=document.getElementById('aiMsgs');
+  msgs.innerHTML+=`<div class="ai-msg user"><div class="ai-bubble">${msg}</div><div class="ai-time">Şimdi</div></div>`;
+  inp.value='';
+  document.getElementById('aiQuick').style.display='none';
+  msgs.scrollTop=msgs.scrollHeight;
+
+  // Typing indicator
+  const typingId='typing_'+Date.now();
+  msgs.innerHTML+=`<div class="ai-msg bot ai-typing" id="${typingId}"><div class="ai-bubble"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+
+  setTimeout(()=>{
+    document.getElementById(typingId)?.remove();
+    const key=Object.keys(aiResponses).find(k=>msg.toLowerCase().includes(k))||'default';
+    const rs=aiResponses[key];
+    const reply=rs[Math.floor(Math.random()*rs.length)];
+    msgs.innerHTML+=`<div class="ai-msg bot"><div class="ai-bubble">${reply}</div><div class="ai-time">Şimdi</div></div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+  },900+Math.random()*600);
+}
+
+// IntersectionObserver (animasyon)
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='translateY(0)';}});},{threshold:0.08});
+document.querySelectorAll('.story,.plan,.wf-section').forEach(el=>{
+  el.style.cssText='opacity:0;transform:translateY(32px);transition:all 0.9s cubic-bezier(0.16,1,0.3,1);';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>
