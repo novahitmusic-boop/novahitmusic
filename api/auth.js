@@ -54,7 +54,9 @@ async function getOrCreateUser(email) {
 }
 
 async function incrementUsage(email) {
-  await fetch(
+  const user = await getOrCreateUser(email);
+  const newCount = (user.songs_used || 0) + 1;
+  const res = await fetch(
     `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
     {
       method: 'PATCH',
@@ -63,19 +65,12 @@ async function incrementUsage(email) {
         Authorization: `Bearer ${SUPABASE_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ songs_used: undefined })  // raw sql ile artır
+      body: JSON.stringify({ songs_used: newCount })
     }
   );
-  // Doğrudan RPC ile artır
-  await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_songs`, {
-    method: 'POST',
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ user_email: email })
-  });
+  if (!res.ok) {
+    console.error('incrementUsage failed:', res.status, await res.text());
+  }
 }
 
 export default async function handler(req, res) {
