@@ -40,7 +40,7 @@ async function getUser(email) {
 }
 
 async function incrementUsage(email, currentUsed) {
-  await fetch(
+  const res = await fetch(
     `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
     {
       method: 'PATCH',
@@ -52,6 +52,10 @@ async function incrementUsage(email, currentUsed) {
       body: JSON.stringify({ songs_used: currentUsed + 1 })
     }
   );
+  if (!res.ok) {
+    console.error('incrementUsage failed:', res.status, await res.text());
+  }
+  return res.ok;
 }
 
 export default async function handler(req, res) {
@@ -91,7 +95,12 @@ export default async function handler(req, res) {
       });
     }
     // Kullanımı artır
-    if (user) await incrementUsage(email, user.songs_used);
+    if (user) {
+      const updated = await incrementUsage(email, user.songs_used);
+      if (!updated) {
+        console.warn(`Quota update failed for ${email}`);
+      }
+    }
   }
 
   try {
