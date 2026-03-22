@@ -44,6 +44,7 @@ async function getOrCreateUser(email) {
   }
 
   // Yoksa oluştur
+  console.log(`DEBUG: getOrCreateUser creating new user for ${email}`);
   const ins = await fetch(`${SUPABASE_URL}/rest/v1/quotas`, {
     method: 'POST',
     headers: {
@@ -54,10 +55,13 @@ async function getOrCreateUser(email) {
     },
     body: JSON.stringify({ email, songs_used: 0, songs_limit: 3, plan: 'free' })
   });
+  console.log(`DEBUG: POST status: ${ins.status}`);
   const created = await ins.json();
-  console.log(`DEBUG: getOrCreateUser POST response:`, JSON.stringify(created));
+  console.log(`DEBUG: POST raw response:`, JSON.stringify(created));
+  console.log(`DEBUG: POST is array? ${Array.isArray(created)}, length: ${created?.length}`);
   const user = Array.isArray(created) ? created[0] : created;
-  console.log(`DEBUG: getOrCreateUser returning:`, JSON.stringify(user));
+  console.log(`DEBUG: getOrCreateUser extracted user:`, JSON.stringify(user));
+  console.log(`DEBUG: user has email? ${user?.email}, songs_used? ${user?.songs_used}`);
   return user;
 }
 
