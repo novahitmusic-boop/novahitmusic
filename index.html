@@ -2874,9 +2874,10 @@
 
         // taskId varsa polling başlat
         var taskId = data && data.data && data.data.taskId;
+        var provider = (data && data.data && data.data.provider) || 'kie';
         if (taskId) {
-          showResult(data, email);  // Pass email for server quota check
-          pollSongStatus(taskId);
+          showResult(data, email);
+          pollSongStatus(taskId, provider);
         } else {
           // No taskId and no error = unexpected response structure
           console.error('No taskId in response:', data);
@@ -2904,7 +2905,8 @@
     }
 
     var _pollInterval = null;
-    function pollSongStatus(taskId) {
+    function pollSongStatus(taskId, provider) {
+      provider = provider || 'kie';
       var attempts = 0;
       // Adaptive: ilk 15 poll 3s, sonraki 20 poll 5s, sonrası 8s → max ~5 dk
       var maxAttempts = 55;
@@ -2945,7 +2947,7 @@
       async function doPoll() {
         attempts++;
         try {
-          var r = await fetch('/api/status?taskId=' + encodeURIComponent(taskId));
+          var r = await fetch('/api/status?taskId=' + encodeURIComponent(taskId) + '&provider=' + provider);
           var d = await r.json();
 
           if (!r.ok || d.error) {
