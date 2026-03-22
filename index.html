@@ -2793,7 +2793,31 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         } catch(e) { /* kota API çalışmıyorsa devam et */ }
 
         var bar = document.getElementById('loading-bar');
-        requestAnimationFrame(function() { bar.style.width = '85%'; });
+        // Zamanla yumuşak ilerleme: 0→20→50→70→82→90
+        var _barStages = [
+          { ms: 0,      pct: 5  },
+          { ms: 8000,   pct: 20 },
+          { ms: 25000,  pct: 45 },
+          { ms: 55000,  pct: 68 },
+          { ms: 90000,  pct: 80 },
+          { ms: 130000, pct: 88 },
+        ];
+        var _barStart = Date.now();
+        bar.style.transition = 'width 6s ease-out';
+        bar.style.width = '5%';
+        var _barTimer = setInterval(function() {
+          var elapsed = Date.now() - _barStart;
+          for (var si = _barStages.length - 1; si >= 0; si--) {
+            if (elapsed >= _barStages[si].ms) {
+              var target = _barStages[si].pct;
+              if (parseFloat(bar.style.width) < target) {
+                bar.style.width = target + '%';
+              }
+              break;
+            }
+          }
+        }, 5000);
+        window._barTimer = _barTimer;
 
         // Loading mesaj döngüsü + akıllı timeout yönetimi
         var loadMsgs = [
@@ -2859,7 +2883,7 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         var genError = null;
         try {
           var controller = new AbortController();
-          var timeoutId = setTimeout(function() { controller.abort(); }, 30000);
+          var timeoutId = setTimeout(function() { controller.abort(); }, 55000);
           var response = await fetch('/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -2883,9 +2907,12 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
           await new Promise(function(r) { setTimeout(r, 2800); });
         }
 
-        // Clear loading spinner
+        // Clear loading
         clearInterval(window._loadingMsgTimer);
-        document.getElementById('loading-state').style.display = 'none';
+        clearInterval(window._barTimer);
+        var _doneBar = document.getElementById('loading-bar');
+        if (_doneBar) { _doneBar.style.transition = 'width 0.4s ease'; _doneBar.style.width = '100%'; }
+        setTimeout(function() { document.getElementById('loading-state').style.display = 'none'; }, 400);
 
         // If error occurred, show error message
         if (genError) {
@@ -2935,8 +2962,9 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
     var _pollInterval = null;
     function pollSongStatus(taskId) {
       var attempts = 0;
-      var maxAttempts = 240; // 12 dakika (240 * 3000ms)
-      // Butonları devre dışı bırak
+      // Adaptive: ilk 15 poll 3s, sonraki 20 poll 5s, sonrası 8s → max ~5 dk
+      var maxAttempts = 55;
+
       document.querySelectorAll('#versionsWrap .btn-version.play').forEach(function(b){
         b.textContent = '⏳ Hazırlanıyor';
         b.disabled = true;
@@ -2944,55 +2972,70 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
       });
       document.getElementById('result-genre').textContent = 'Şarkın hazırlanıyor... ⏳';
 
-      _pollInterval = setInterval(async function() {
-        attempts++;
-        if (attempts > maxAttempts) { // 12 dk timeout
-          clearInterval(_pollInterval);
+      function getInterval(att) {
+        if (att <= 15) return 3000;
+        if (att <= 35) return 5000;
+        return 8000;
+      }
+
+      function scheduleNext() {
+        if (attempts >= maxAttempts) {
           document.getElementById('result-genre').textContent = '❌ Üretim çok uzun sürüyor. Lütfen tekrar deneyin.';
           var retryBtn = document.createElement('button');
           retryBtn.textContent = '🔄 Tekrar Dene';
           retryBtn.style.cssText = 'padding:10px 20px; background:#ff6b6b; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px; margin-top:10px;';
           retryBtn.onclick = function() { generateMusic(); };
-          document.getElementById('result-genre').parentElement.appendChild(retryBtn);
+          var genreEl = document.getElementById('result-genre');
+          if (!genreEl.parentElement.querySelector('.retry-btn')) {
+            retryBtn.className = 'retry-btn';
+            genreEl.parentElement.appendChild(retryBtn);
+          }
           document.querySelectorAll('#versionsWrap .btn-version.play').forEach(function(b){
             b.textContent = '▶ Dinle'; b.disabled = false; b.style.opacity = '';
           });
           return;
         }
+        _pollInterval = setTimeout(doPoll, getInterval(attempts));
+      }
+
+      async function doPoll() {
+        attempts++;
         try {
           var r = await fetch('/api/status?taskId=' + encodeURIComponent(taskId));
           var d = await r.json();
 
-          // Check for API error
           if (!r.ok || d.error) {
-            console.error('Status API error:', d.error || r.status);
-            // Don't fail immediately, keep polling
+            console.warn('Status hatası:', d.error || r.status, '— polling devam ediyor');
+            scheduleNext();
             return;
           }
 
-          // kie.ai response yapısı: d.data.response.sunoData[] veya d.data.yanıt.sunoData[] (SUCCESS durumunda)
           var resp = d && d.data && (d.data.response || d.data['yanıt'] || d.data.yant);
           var audioList = resp && (resp.sunoData || resp.audioList || resp.songs);
-          // Alternatif: d.data doğrudan array
           if (!audioList && d && d.data && Array.isArray(d.data)) audioList = d.data;
-          // Alternatif: d.data.sunoData
           if (!audioList && d && d.data && d.data.sunoData) audioList = d.data.sunoData;
 
           if (audioList && audioList.length > 0) {
             var firstUrl = audioList[0].audioUrl || audioList[0].audio_url || audioList[0].url;
             if (firstUrl) {
-              clearInterval(_pollInterval);
+              // Başarı — bar'ı tamamla
+              var _pollBar = document.getElementById('loading-bar');
+              if (_pollBar) { _pollBar.style.transition = 'width 0.3s ease'; _pollBar.style.width = '100%'; }
               setSongAudioUrls(audioList);
               var title = audioList[0].title || audioList[0].songName;
               if (title) document.getElementById('result-title').textContent = title;
               document.getElementById('result-genre').textContent = (wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu');
+              return; // polling bitti
             }
           }
+          scheduleNext();
         } catch(e) {
-          console.log('Poll error:', e.message);
-          // Keep polling on transient errors
+          console.warn('Poll hatası:', e.message);
+          scheduleNext();
         }
-      }, 3000);
+      }
+
+      scheduleNext();
     }
 
     var _currentAudio = null;

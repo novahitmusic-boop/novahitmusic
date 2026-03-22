@@ -15,7 +15,6 @@ async function redisIncr(key, ex = 86400) {
   return j.result;
 }
 
-// Call /api/auth to check and update quota
 async function checkQuota(email) {
   const res = await fetch('https://novahitmusic.vercel.app/api/auth', {
     method: 'POST',
@@ -34,6 +33,63 @@ async function useQuota(email) {
   return await res.json();
 }
 
+// Exponential backoff retry — 429 ve 5xx için
+async function kieAIGenerate(payload) {
+  const maxAttempts = 3;
+  let lastErr;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 50000);
+
+    try {
+      const response = await fetch('https://api.kie.ai/api/v1/generate', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${KIE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      // 429 → backoff
+      if (response.status === 429) {
+        const retryAfter = parseInt(response.headers.get('retry-after') || '0') || 0;
+        const waitMs = retryAfter > 0 ? retryAfter * 1000 : Math.pow(2, attempt) * 1500;
+        console.warn(`kie.ai 429 — deneme ${attempt}/${maxAttempts}, ${waitMs}ms bekleniyor`);
+        if (attempt < maxAttempts) {
+          await new Promise(r => setTimeout(r, waitMs));
+          continue;
+        }
+        return { ok: false, status: 429, data: { msg: 'Sunucu meşgul, lütfen 1-2 dakika sonra tekrar dene.' } };
+      }
+
+      // 5xx → backoff
+      if (response.status >= 500 && attempt < maxAttempts) {
+        console.warn(`kie.ai ${response.status} — deneme ${attempt}/${maxAttempts}`);
+        await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
+        continue;
+      }
+
+      const data = await response.json();
+      console.log(`kie.ai yanıt (deneme ${attempt}):`, JSON.stringify(data), 'status:', response.status);
+      return { ok: response.ok, status: response.status, data };
+
+    } catch (err) {
+      clearTimeout(timeoutId);
+      lastErr = err;
+      console.warn(`kie.ai bağlantı hatası (deneme ${attempt}/${maxAttempts}):`, err.message);
+      if (attempt < maxAttempts) {
+        await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
+      }
+    }
+  }
+
+  throw lastErr || new Error('kie.ai bağlantı hatası');
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -43,7 +99,6 @@ export default async function handler(req, res) {
           emotion, power, lyrics, chorusLevel, lyricsBy, chorus,
           genres, mood, language } = req.body;
 
-  // Wizard alanlarından prompt/style oluştur
   const prompt = rawPrompt || lyrics || emotion || 'Duygusal Türkçe şarkı';
   const styleParts = [rawStyle, genres, mood, emotion, power].filter(Boolean);
   const style = styleParts.length > 0 ? styleParts.join(', ') : 'Türkçe Pop';
@@ -59,7 +114,6 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Günlük limit aşıldı. Yarın tekrar dene.' });
   }
 
-  // Email ile kota kontrolü (opsiyonel — email gönderilmişse)
   if (email) {
     const quotaCheck = await checkQuota(email);
     if (!quotaCheck.allowed) {
@@ -73,33 +127,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log('Sending to kie.ai:', JSON.stringify({ prompt, style, title, customMode: true }));
-
-    const response = await fetch('https://api.kie.ai/api/v1/generate', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${KIE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        prompt,
-        style,
-        title: title || 'Novahit AI',
-        customMode: true,
-        instrumental: false,
-        model: 'V4_5',
-        callBackUrl: 'https://novahitmusic.vercel.app/api/callback',
-      }),
+    const { ok, status, data } = await kieAIGenerate({
+      prompt,
+      style,
+      title: title || 'Novahit AI',
+      customMode: true,
+      instrumental: false,
+      model: 'V4_5',
+      callBackUrl: 'https://novahitmusic.vercel.app/api/callback',
     });
 
-    const data = await response.json();
-
-    console.log('kie.ai raw response:', JSON.stringify(data), 'status:', response.status);
-
-    // Check for kie.ai errors
-    if (!response.ok || (data.code && data.code !== 200)) {
-      const errMsg = data.msg || data.message || data.error || ('kie.ai hata: ' + (data.code || response.status));
-      console.error('kie.ai error:', errMsg, 'full response:', data);
+    if (!ok || (data.code && data.code !== 200)) {
+      const errMsg = data.msg || data.message || data.error || ('kie.ai hata: ' + (data.code || status));
+      console.error('kie.ai hata:', errMsg, data);
       return res.status(400).json({
         error: 'Müzik üretimi başarısız: ' + errMsg,
         code: data.code,
@@ -107,24 +147,22 @@ export default async function handler(req, res) {
       });
     }
 
-    // Verify taskId exists in response
     if (!data.data || !data.data.taskId) {
-      console.error('No taskId in kie.ai response:', data);
+      console.error('taskId yok:', data);
       return res.status(400).json({
         error: 'kie.ai taskId döndürmedi (yanıt formatı sorunlu)',
         raw: data
       });
     }
 
-    // Success - increment quota after successful generation
     if (email) {
       const quotaUse = await useQuota(email);
-      console.log('Quota incremented:', quotaUse.songs_used);
+      console.log('Kota artırıldı:', quotaUse.songs_used);
     }
 
     return res.status(200).json(data);
   } catch (err) {
-    console.error('Generate API error:', err.message, err.stack);
+    console.error('Generate API hatası:', err.message);
     return res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
   }
 }
