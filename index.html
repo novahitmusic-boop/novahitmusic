@@ -2795,7 +2795,7 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         var bar = document.getElementById('loading-bar');
         requestAnimationFrame(function() { bar.style.width = '85%'; });
 
-        // Loading mesaj döngüsü
+        // Loading mesaj döngüsü + akıllı timeout yönetimi
         var loadMsgs = [
           '🎹 Melodi yazılıyor…',
           '🎸 Akorlar ayarlanıyor…',
@@ -2807,9 +2807,38 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         ];
         var _msgIdx = 0;
         var _msgEl = document.getElementById('loadingMsg');
+        var _startTime = Date.now();
+        var _timeoutMsgs = {
+          180000: '⏳ Hala çalışıyor… Biraz daha sabır.',
+          300000: '🎵 Yüksek kalite işleniyor. Çok yakında hazır!',
+          480000: '⏰ Sunucular meşgul, bu normaldir. Bekleyin...',
+          600000: 'Çok uzun sürüyorsa "Yeniden Dene" butonuna basın.'
+        };
+
         var _msgTimer = setInterval(function() {
+          var elapsed = Date.now() - _startTime;
+          var sec = Math.floor(elapsed / 1000);
+          var min = Math.floor(sec / 60);
+          var secMod = sec % 60;
+          var timeStr = (min < 10 ? '0' : '') + min + ':' + (secMod < 10 ? '0' : '') + secMod;
+
+          // Check timeout messages
+          for (var ms in _timeoutMsgs) {
+            if (parseInt(ms) === elapsed) {
+              if (_msgEl) _msgEl.textContent = _timeoutMsgs[ms] + ' (' + timeStr + ')';
+              return;
+            }
+          }
+
+          // Regular message cycling
           _msgIdx = (_msgIdx + 1) % loadMsgs.length;
-          if (_msgEl) _msgEl.textContent = loadMsgs[_msgIdx];
+          if (_msgEl) {
+            var baseMsg = loadMsgs[_msgIdx];
+            if (elapsed > 120000) {
+              baseMsg += ' (' + timeStr + ' / ~120 saniye)';
+            }
+            _msgEl.textContent = baseMsg;
+          }
         }, 6000);
         window._loadingMsgTimer = _msgTimer;
 
@@ -2848,15 +2877,15 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         // taskId varsa polling başlat
         var taskId = data && data.data && data.data.taskId;
         if (taskId) {
-          showResult(data);
+          showResult(data, email);  // Pass email for server quota check
           pollSongStatus(taskId);
         } else {
-          showResult(data);
+          showResult(data, email);  // Pass email for server quota check
         }
       });
     }
 
-    function showResult(data) {
+    function showResult(data, email) {
       var titles = ['Yalnız Değilim', 'Tutsak Değil', 'Alevler İçinde', 'Kalbim Seninle'];
       var title = (data && data.title) ? data.title : titles[Math.floor(Math.random() * titles.length)];
       var genre = (data && data.genre) ? data.genre : ((wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu') + ' · 3:24');
@@ -2865,7 +2894,7 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
       clearInterval(window._loadingMsgTimer);
       document.getElementById('loading-state').style.display = 'none';
       document.getElementById('result-state').style.display = 'block';
-      applyVersionLocks();
+      applyVersionLocks(email);  // Pass email to use server quota
       setTimeout(showKlipStudio, 1500);
     }
 
@@ -3209,42 +3238,55 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
     }
 
     // ─── V1/V2/V3 İLK ÜRETİM SİSTEMİ ──────────────────────────
-    function applyVersionLocks() {
-      var used = parseInt(localStorage.getItem('novahit_songs_used') || '0');
-      var limit = 3;
-      // Sayacı artır
-      used = used + 1;
-      localStorage.setItem('novahit_songs_used', used);
+    function applyVersionLocks(email) {
+      // Fetch server quota (source of truth)
+      fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, action: 'check' })
+      })
+      .then(r => r.json())
+      .then(quotaData => {
+        var used = quotaData.songs_used || 0;
+        var limit = quotaData.songs_limit || 3;
+        var quotaDone = used >= limit;
 
-      var isFirst = used === 1;
-      var quotaDone = used > limit;
+        // Welcome banner (first time user)
+        var isFirst = used === 1;
+        if (isFirst) {
+          document.getElementById('welcomeGiftBanner').style.display = 'flex';
+        } else {
+          document.getElementById('welcomeGiftBanner').style.display = 'none';
+        }
 
-      if (isFirst) {
-        document.getElementById('welcomeGiftBanner').style.display = 'flex';
-      } else {
-        document.getElementById('welcomeGiftBanner').style.display = 'none';
-      }
-
-      if (quotaDone) {
-        // 3 hakkı bitti — V2/V3 kilitle
-        document.getElementById('v2Lock').style.display = 'flex';
-        document.getElementById('v3Lock').style.display = 'flex';
-        document.getElementById('v2Badge').style.display = 'inline-block';
-        document.getElementById('v3Badge').style.display = 'inline-block';
-        document.getElementById('versionCard2').classList.add('locked-card');
-        document.getElementById('versionCard3').classList.add('locked-card');
-        document.querySelectorAll('#versionCard2 .version-wf-bar, #versionCard3 .version-wf-bar').forEach(function(b){
-          b.classList.remove('free'); b.classList.add('locked-bar');
-        });
-      } else {
-        // Hak var — V2/V3 açık
+        // Version locks based on SERVER quota (not localStorage)
+        if (quotaDone) {
+          // Quota done — Lock V2/V3
+          document.getElementById('v2Lock').style.display = 'flex';
+          document.getElementById('v3Lock').style.display = 'flex';
+          document.getElementById('v2Badge').style.display = 'inline-block';
+          document.getElementById('v3Badge').style.display = 'inline-block';
+          document.getElementById('versionCard2').classList.add('locked-card');
+          document.getElementById('versionCard3').classList.add('locked-card');
+          document.querySelectorAll('#versionCard2 .version-wf-bar, #versionCard3 .version-wf-bar').forEach(function(b){
+            b.classList.remove('free'); b.classList.add('locked-bar');
+          });
+        } else {
+          // Quota available — Unlock V2/V3
+          document.getElementById('v2Lock').style.display = 'none';
+          document.getElementById('v3Lock').style.display = 'none';
+          document.getElementById('v2Badge').style.display = 'none';
+          document.getElementById('v3Badge').style.display = 'none';
+          document.getElementById('versionCard2').classList.remove('locked-card');
+          document.getElementById('versionCard3').classList.remove('locked-card');
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching quota:', err);
+        // Fallback: show V2/V3 (don't lock on error)
         document.getElementById('v2Lock').style.display = 'none';
         document.getElementById('v3Lock').style.display = 'none';
-        document.getElementById('v2Badge').style.display = 'none';
-        document.getElementById('v3Badge').style.display = 'none';
-        document.getElementById('versionCard2').classList.remove('locked-card');
-        document.getElementById('versionCard3').classList.remove('locked-card');
-      }
+      });
     }
 
     // ─── KLİP STÜDYOSU ───────────────────────────────────────────
