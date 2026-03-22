@@ -1727,14 +1727,14 @@
           <div class="step-block">
             <div class="step-label"><span class="step-num">1</span> Şarkın neyle ilgili?</div>
             <div class="topic-chips" id="topicChips">
-              <button class="topic-chip" data-topic="ayrılık ve hasret">💔 Ayrılık</button>
-              <button class="topic-chip" data-topic="özlem ve geçmiş">🌙 Özlem</button>
-              <button class="topic-chip" data-topic="aşk ve tutku">❤️ Aşk</button>
-              <button class="topic-chip" data-topic="yalnızlık ve hüzün">😔 Yalnızlık</button>
-              <button class="topic-chip" data-topic="umut ve yeni başlangıç">✨ Umut</button>
-              <button class="topic-chip" data-topic="güç ve özgürlük">⚡ Güç</button>
-              <button class="topic-chip" data-topic="neşe ve eğlence">🎉 Neşe</button>
-              <button class="topic-chip" data-topic="ihanet ve öfke">🔥 İhanet</button>
+              <button type="button" class="topic-chip" data-topic="ayrılık ve hasret" onclick="selectTopicChip(this)">💔 Ayrılık</button>
+              <button type="button" class="topic-chip" data-topic="özlem ve geçmiş" onclick="selectTopicChip(this)">🌙 Özlem</button>
+              <button type="button" class="topic-chip" data-topic="aşk ve tutku" onclick="selectTopicChip(this)">❤️ Aşk</button>
+              <button type="button" class="topic-chip" data-topic="yalnızlık ve hüzün" onclick="selectTopicChip(this)">😔 Yalnızlık</button>
+              <button type="button" class="topic-chip" data-topic="umut ve yeni başlangıç" onclick="selectTopicChip(this)">✨ Umut</button>
+              <button type="button" class="topic-chip" data-topic="güç ve özgürlük" onclick="selectTopicChip(this)">⚡ Güç</button>
+              <button type="button" class="topic-chip" data-topic="neşe ve eğlence" onclick="selectTopicChip(this)">🎉 Neşe</button>
+              <button type="button" class="topic-chip" data-topic="ihanet ve öfke" onclick="selectTopicChip(this)">🔥 İhanet</button>
             </div>
             <input class="topic-custom-input" id="topicCustom" type="text" placeholder="ya da kendin yaz: anneme dair, İstanbul geceleri…">
           </div>
@@ -1743,14 +1743,14 @@
           <div class="step-block">
             <div class="step-label"><span class="step-num">2</span> Müzik tarzı</div>
             <div class="genre-chips" id="genreChips">
-              <button class="genre-chip active" data-genre="arabesk, Turkish arabesque, saz, oud, emotional">🎭 Arabesk</button>
-              <button class="genre-chip" data-genre="Turkish pop, modern, catchy, upbeat">🇹🇷 Türkçe Pop</button>
-              <button class="genre-chip" data-genre="slow ballad, piano, emotional, heartfelt">🎹 Ballad</button>
-              <button class="genre-chip" data-genre="R&B, soul, smooth, groove">🎤 R&B Soul</button>
-              <button class="genre-chip" data-genre="trap, hip-hop, Turkish rap, hard beat">💣 Trap</button>
-              <button class="genre-chip" data-genre="acoustic folk, guitar, intimate, warm">🎸 Akustik</button>
-              <button class="genre-chip" data-genre="90s Turkish pop, nostalgic, retro, saz">📻 90'lar</button>
-              <button class="genre-chip" data-genre="rock, electric guitar, powerful, energetic">🎸 Rock</button>
+              <button type="button" class="genre-chip active" data-genre="arabesk, Turkish arabesque, saz, oud, emotional" onclick="selectGenreChip(this)">🎭 Arabesk</button>
+              <button type="button" class="genre-chip" data-genre="Turkish pop, modern, catchy, upbeat" onclick="selectGenreChip(this)">🇹🇷 Türkçe Pop</button>
+              <button type="button" class="genre-chip" data-genre="slow ballad, piano, emotional, heartfelt" onclick="selectGenreChip(this)">🎹 Ballad</button>
+              <button type="button" class="genre-chip" data-genre="R&B, soul, smooth, groove" onclick="selectGenreChip(this)">🎤 R&B Soul</button>
+              <button type="button" class="genre-chip" data-genre="trap, hip-hop, Turkish rap, hard beat" onclick="selectGenreChip(this)">💣 Trap</button>
+              <button type="button" class="genre-chip" data-genre="acoustic folk, guitar, intimate, warm" onclick="selectGenreChip(this)">🎸 Akustik</button>
+              <button type="button" class="genre-chip" data-genre="90s Turkish pop, nostalgic, retro, saz" onclick="selectGenreChip(this)">📻 90'lar</button>
+              <button type="button" class="genre-chip" data-genre="rock, electric guitar, powerful, energetic" onclick="selectGenreChip(this)">🎸 Rock</button>
             </div>
           </div>
 
@@ -2636,27 +2636,16 @@
     // ─── WIZARD ──────────────────────────────────────────────────
     var wizardState = { emotion: null, power: null, lyricsBy: 'novahit', chorus: null };
 
-    // Topic chip seçimi
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.topic-chip').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.topic-chip').forEach(function(b){ b.classList.remove('active'); });
-          btn.classList.add('active');
-          document.getElementById('topicCustom').value = '';
-        });
-      });
-      document.querySelectorAll('.genre-chip').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.genre-chip').forEach(function(b){ b.classList.remove('active'); });
-          btn.classList.add('active');
-        });
-      });
-      document.getElementById('topicCustom').addEventListener('input', function() {
-        if (this.value.trim()) {
-          document.querySelectorAll('.topic-chip').forEach(function(b){ b.classList.remove('active'); });
-        }
-      });
-    });
+    function selectTopicChip(btn) {
+      document.querySelectorAll('.topic-chip').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('topicCustom').value = '';
+    }
+
+    function selectGenreChip(btn) {
+      document.querySelectorAll('.genre-chip').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
 
     var _selectedVocal = 'male';
     function selectVocal(gender) {
