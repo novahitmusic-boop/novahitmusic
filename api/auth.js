@@ -96,21 +96,27 @@ export default async function handler(req, res) {
   console.log(`DEBUG: handler received user:`, JSON.stringify(user), `action: ${action}`);
 
   if (action === 'check') {
-    var limit = user.songs_limit || 3;
+    const currUsed = user.songs_used || 0;
+    const currLimit = user.songs_limit || 3;
+    const currPlan = user.plan || 'free';
     return res.json({
-      allowed: user.plan !== 'free' || user.songs_used < limit,
-      songs_used: user.songs_used || 0,
-      songs_limit: limit,
-      plan: user.plan || 'free'
+      allowed: currPlan !== 'free' || currUsed < currLimit,
+      songs_used: currUsed,
+      songs_limit: currLimit,
+      plan: currPlan
     });
   }
 
   if (action === 'use') {
-    console.log(`DEBUG: use action - songs_used: ${user.songs_used}, limit: ${user.songs_limit}, plan: ${user.plan}`);
-    if (user.songs_used >= user.songs_limit && user.plan === 'free') {
-      return res.json({ allowed: false, songs_used: user.songs_used, songs_limit: user.songs_limit, plan: user.plan });
+    const currUsed = user.songs_used || 0;
+    const currLimit = user.songs_limit || 3;
+    const currPlan = user.plan || 'free';
+    console.log(`DEBUG: use action - songs_used: ${currUsed}, limit: ${currLimit}, plan: ${currPlan}`);
+    if (currUsed >= currLimit && currPlan === 'free') {
+      return res.json({ allowed: false, songs_used: currUsed, songs_limit: currLimit, plan: currPlan });
     }
     // songs_used artır
+    const newUsed = currUsed + 1;
     const patchRes = await fetch(
       `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
       {
@@ -120,14 +126,17 @@ export default async function handler(req, res) {
           Authorization: `Bearer ${SUPABASE_KEY}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ songs_used: user.songs_used + 1 })
+        body: JSON.stringify({ songs_used: newUsed })
       }
     );
     console.log(`DEBUG: PATCH status: ${patchRes.status}`);
-    const responseBody = { allowed: true, songs_used: user.songs_used + 1, songs_limit: user.songs_limit, plan: user.plan };
+    const responseBody = { allowed: true, songs_used: newUsed, songs_limit: currLimit, plan: currPlan };
     console.log(`DEBUG: sending response:`, JSON.stringify(responseBody));
     return res.json(responseBody);
   }
 
-  return res.json({ songs_used: user.songs_used, songs_limit: user.songs_limit, plan: user.plan });
+  const currUsed = user.songs_used || 0;
+  const currLimit = user.songs_limit || 3;
+  const currPlan = user.plan || 'free';
+  return res.json({ songs_used: currUsed, songs_limit: currLimit, plan: currPlan });
 }
