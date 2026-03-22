@@ -3293,7 +3293,8 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
     function showKlipStudio() {
       var ks = document.getElementById('klipStudio');
       ks.style.display = 'block';
-      setTimeout(function(){ ks.scrollIntoView({behavior:'smooth', block:'center'}); }, 100);
+      // Don't auto-scroll - let user stay where they are
+      // Removed: ks.scrollIntoView({behavior:'smooth', block:'center'});
     }
 
     function selectKlipChoice(el, type) {
