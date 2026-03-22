@@ -40,6 +40,8 @@ async function getUser(email) {
 }
 
 async function incrementUsage(email, currentUsed) {
+  const newCount = currentUsed + 1;
+  console.log(`DEBUG: PATCH to Supabase - email: ${email}, newCount: ${newCount}`);
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
     {
@@ -49,11 +51,13 @@ async function incrementUsage(email, currentUsed) {
         Authorization: `Bearer ${SUPABASE_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ songs_used: currentUsed + 1 })
+      body: JSON.stringify({ songs_used: newCount })
     }
   );
+  console.log(`DEBUG: PATCH response status: ${res.status}`);
   if (!res.ok) {
-    console.error('incrementUsage failed:', res.status, await res.text());
+    const errText = await res.text();
+    console.error('incrementUsage failed:', res.status, errText);
   }
   return res.ok;
 }
@@ -96,10 +100,14 @@ export default async function handler(req, res) {
     }
     // Kullanımı artır
     if (user) {
+      console.log(`DEBUG: Incrementing quota for ${email}, current: ${user.songs_used}`);
       const updated = await incrementUsage(email, user.songs_used);
+      console.log(`DEBUG: Increment result: ${updated}`);
       if (!updated) {
-        console.warn(`Quota update failed for ${email}`);
+        console.error(`Quota update failed for ${email}`);
       }
+    } else {
+      console.error(`DEBUG: User not found after getUser for ${email}`);
     }
   }
 
