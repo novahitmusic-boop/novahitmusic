@@ -107,14 +107,20 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'prompt gerekli' });
   }
 
-  // IP rate limit: günde 50 üretim
-  const ip = req.headers['x-forwarded-for']?.split(',')[0] || 'unknown';
-  const ipCount = await redisIncr(`gen:ip:${ip}`);
-  if (ipCount > 50) {
-    return res.status(429).json({ error: 'Günlük limit aşıldı. Yarın tekrar dene.' });
+  // Sahip emaili — IP limiti ve kota atlama
+  const OWNER_EMAILS = ['muratakbal@hotmail.com'];
+  const isOwner = OWNER_EMAILS.includes((email || '').toLowerCase().trim());
+
+  if (!isOwner) {
+    // IP rate limit: günde 50 üretim
+    const ip = req.headers['x-forwarded-for']?.split(',')[0] || 'unknown';
+    const ipCount = await redisIncr(`gen:ip:${ip}`);
+    if (ipCount > 50) {
+      return res.status(429).json({ error: 'Günlük limit aşıldı. Yarın tekrar dene.' });
+    }
   }
 
-  if (email) {
+  if (email && !isOwner) {
     const quotaCheck = await checkQuota(email);
     if (!quotaCheck.allowed) {
       return res.status(403).json({
@@ -155,7 +161,7 @@ export default async function handler(req, res) {
       });
     }
 
-    if (email) {
+    if (email && !isOwner) {
       const quotaUse = await useQuota(email);
       console.log('Kota artırıldı:', quotaUse.songs_used);
     }
