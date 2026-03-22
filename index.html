@@ -3066,7 +3066,8 @@
     function showResult(data, email) {
       var titles = ['Yalnız Değilim', 'Tutsak Değil', 'Alevler İçinde', 'Kalbim Seninle'];
       var title = (data && data.title) ? data.title : titles[Math.floor(Math.random() * titles.length)];
-      var promptSnippet = (document.getElementById('mainPrompt').value || '').split(',')[0].trim() || 'Türkçe Pop';
+      var mainPromptEl = document.getElementById('mainPrompt');
+      var promptSnippet = (mainPromptEl ? mainPromptEl.value : getWizardPrompt()).split(',')[0].trim() || 'Türkçe Pop';
       var genre = (data && data.genre) ? data.genre : (promptSnippet + ' · AI Üretim · 3:24');
       document.getElementById('result-title').textContent = title;
       document.getElementById('result-genre').textContent = genre;
