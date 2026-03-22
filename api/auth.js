@@ -1,6 +1,5 @@
-// Kullanıcı kayıt + kota kontrolü
-// POST /api/auth  { email }
-// Döner: { allowed: true/false, songs_used, songs_limit, plan }
+// Kota sistemi - Redis based (daha hızlı, esnek)
+// POST /api/auth { email, action: "check"|"use" }
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -29,60 +28,85 @@ async function redisIncr(key) {
   return j.result;
 }
 
-async function getOrCreateUser(email) {
-  // Önce oku
-  console.log(`DEBUG: getOrCreateUser querying for email: ${email}`);
+// Get user quota from Redis, fallback to Supabase
+async function getUserQuota(email) {
+  const quotaKey = `quota:${email}`;
+
+  // Try Redis first
+  const cachedQuota = await redisGet(quotaKey);
+  if (cachedQuota) {
+    try {
+      return JSON.parse(cachedQuota);
+    } catch (e) {
+      console.error('Redis quota parse error:', e.message);
+    }
+  }
+
+  // Fallback: read from Supabase
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}&select=*`,
+    `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}&select=*&limit=1`,
     { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
   );
   const rows = await res.json();
-  console.log(`DEBUG: getOrCreateUser query status: ${res.status}, rows length: ${rows?.length || 0}`);
+
   if (rows && rows.length > 0) {
-    console.log(`DEBUG: getOrCreateUser found existing user:`, JSON.stringify(rows[0]));
-    return rows[0];
+    const user = rows[0];
+    // Cache in Redis for 24 hours
+    await redisSet(quotaKey, JSON.stringify({
+      email: user.email,
+      songs_used: user.songs_used || 0,
+      songs_limit: user.songs_limit || 3,
+      plan: user.plan || 'free'
+    }), 86400);
+    return user;
   }
 
-  // Yoksa oluştur
-  console.log(`DEBUG: getOrCreateUser creating new user for ${email}`);
+  // New user - create in Supabase and cache in Redis
+  const newUser = { email, songs_used: 0, songs_limit: 3, plan: 'free' };
   const ins = await fetch(`${SUPABASE_URL}/rest/v1/quotas`, {
     method: 'POST',
     headers: {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=representation'
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ email, songs_used: 0, songs_limit: 3, plan: 'free' })
+    body: JSON.stringify(newUser)
   });
-  console.log(`DEBUG: POST status: ${ins.status}`);
-  const created = await ins.json();
-  console.log(`DEBUG: POST raw response:`, JSON.stringify(created));
-  console.log(`DEBUG: POST is array? ${Array.isArray(created)}, length: ${created?.length}`);
-  const user = Array.isArray(created) ? created[0] : created;
-  console.log(`DEBUG: getOrCreateUser extracted user:`, JSON.stringify(user));
-  console.log(`DEBUG: user has email? ${user?.email}, songs_used? ${user?.songs_used}`);
-  return user;
+
+  if (!ins.ok) {
+    console.error('Failed to create user:', await ins.text());
+  }
+
+  // Cache in Redis
+  await redisSet(quotaKey, JSON.stringify(newUser), 86400);
+  return newUser;
 }
 
-async function incrementUsage(email) {
-  const user = await getOrCreateUser(email);
-  const newCount = (user.songs_used || 0) + 1;
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
-    {
-      method: 'PATCH',
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ songs_used: newCount })
-    }
-  );
-  if (!res.ok) {
-    console.error('incrementUsage failed:', res.status, await res.text());
-  }
+// Update quota in Redis (source of truth) + Supabase (backup)
+async function updateQuota(email, newCount) {
+  const quotaKey = `quota:${email}`;
+  const quota = {
+    email,
+    songs_used: newCount,
+    songs_limit: 3,
+    plan: 'free'
+  };
+
+  // Update Redis (fast, immediate)
+  await redisSet(quotaKey, JSON.stringify(quota), 86400);
+
+  // Update Supabase async (backup persistence)
+  fetch(`${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`, {
+    method: 'PATCH',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ songs_used: newCount })
+  }).catch(err => console.error('Supabase sync failed:', err.message));
+
+  return quota;
 }
 
 export default async function handler(req, res) {
@@ -98,60 +122,39 @@ export default async function handler(req, res) {
   if (count === 1) await redisSet(ratKey, 1, 86400);
   if (count > 100) return res.status(429).json({ error: 'rate limit' });
 
-  const user = await getOrCreateUser(email);
-  console.log(`DEBUG: handler received user:`, JSON.stringify(user), `action: ${action}`);
+  const quota = await getUserQuota(email);
+  const used = quota.songs_used || 0;
+  const limit = quota.songs_limit || 3;
+  const plan = quota.plan || 'free';
 
   if (action === 'check') {
-    const currUsed = user.songs_used || 0;
-    const currLimit = user.songs_limit || 3;
-    const currPlan = user.plan || 'free';
     return res.json({
-      allowed: currPlan !== 'free' || currUsed < currLimit,
-      songs_used: currUsed,
-      songs_limit: currLimit,
-      plan: currPlan
+      allowed: plan !== 'free' || used < limit,
+      songs_used: used,
+      songs_limit: limit,
+      plan: plan
     });
   }
 
   if (action === 'use') {
-    const currUsed = user.songs_used || 0;
-    const currLimit = user.songs_limit || 3;
-    const currPlan = user.plan || 'free';
-    console.log(`DEBUG: use action - songs_used: ${currUsed}, limit: ${currLimit}, plan: ${currPlan}`);
-    if (currUsed >= currLimit && currPlan === 'free') {
-      return res.json({ allowed: false, songs_used: currUsed, songs_limit: currLimit, plan: currPlan });
+    if (used >= limit && plan === 'free') {
+      return res.json({
+        allowed: false,
+        songs_used: used,
+        songs_limit: limit,
+        plan: plan,
+        error: 'quota_exceeded'
+      });
     }
-    // songs_used artır
-    const newUsed = currUsed + 1;
-    const patchRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
-      {
-        method: 'PATCH',
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ songs_used: newUsed })
-      }
-    );
-    console.log(`DEBUG: PATCH status: ${patchRes.status}`);
-    const patchBody = await patchRes.text();
-    console.log(`DEBUG: PATCH response body: ${patchBody}`);
-    if (!patchRes.ok) {
-      console.error(`DEBUG: PATCH failed - ${patchRes.status}: ${patchBody}`);
-      return res.status(500).json({ error: 'Failed to update quota', details: patchBody });
-    }
-    if (!patchBody || patchBody === '') {
-      console.warn(`DEBUG: PATCH succeeded but returned no data (may not have updated any rows)`);
-    }
-    const responseBody = { allowed: true, songs_used: newUsed, songs_limit: currLimit, plan: currPlan };
-    console.log(`DEBUG: sending response:`, JSON.stringify(responseBody));
-    return res.json(responseBody);
+
+    const updated = await updateQuota(email, used + 1);
+    return res.json({
+      allowed: true,
+      songs_used: updated.songs_used,
+      songs_limit: updated.songs_limit,
+      plan: updated.plan
+    });
   }
 
-  const currUsed = user.songs_used || 0;
-  const currLimit = user.songs_limit || 3;
-  const currPlan = user.plan || 'free';
-  return res.json({ songs_used: currUsed, songs_limit: currLimit, plan: currPlan });
+  return res.json({ songs_used: used, songs_limit: limit, plan: plan });
 }

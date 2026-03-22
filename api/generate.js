@@ -1,5 +1,4 @@
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const KIE_API_KEY = process.env.KIE_API_KEY;
 const UPSTASH_URL  = process.env.UPSTASH_REDIS_URL;
 const UPSTASH_TOK  = process.env.UPSTASH_REDIS_TOKEN;
 
@@ -16,50 +15,23 @@ async function redisIncr(key, ex = 86400) {
   return j.result;
 }
 
-async function getUser(email) {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}&select=*`,
-    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-  );
-  const rows = await res.json();
-  if (rows && rows.length > 0) return rows[0];
-
-  // Kullanıcı yoksa oluştur (3 hediye şarkı)
-  const ins = await fetch(`${SUPABASE_URL}/rest/v1/quotas`, {
+// Call /api/auth to check and update quota
+async function checkQuota(email) {
+  const res = await fetch('https://novahitmusic.vercel.app/api/auth', {
     method: 'POST',
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=representation'
-    },
-    body: JSON.stringify({ email, songs_used: 0, songs_limit: 3, plan: 'free' })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, action: 'check' })
   });
-  const created = await ins.json();
-  return Array.isArray(created) ? created[0] : created;
+  return await res.json();
 }
 
-async function incrementUsage(email, currentUsed) {
-  const newCount = currentUsed + 1;
-  console.log(`DEBUG: PATCH to Supabase - email: ${email}, newCount: ${newCount}`);
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/quotas?email=eq.${encodeURIComponent(email)}`,
-    {
-      method: 'PATCH',
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ songs_used: newCount })
-    }
-  );
-  console.log(`DEBUG: PATCH response status: ${res.status}`);
-  if (!res.ok) {
-    const errText = await res.text();
-    console.error('incrementUsage failed:', res.status, errText);
-  }
-  return res.ok;
+async function useQuota(email) {
+  const res = await fetch('https://novahitmusic.vercel.app/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, action: 'use' })
+  });
+  return await res.json();
 }
 
 export default async function handler(req, res) {
@@ -89,25 +61,14 @@ export default async function handler(req, res) {
 
   // Email ile kota kontrolü (opsiyonel — email gönderilmişse)
   if (email) {
-    const user = await getUser(email);
-    if (user && user.plan === 'free' && user.songs_used >= (user.songs_limit || 3)) {
+    const quotaCheck = await checkQuota(email);
+    if (!quotaCheck.allowed) {
       return res.status(403).json({
         error: 'quota_exceeded',
         message: 'Ücretsiz limitin doldu. Pro\'ya geç, sınırsız üret!',
-        songs_used: user.songs_used,
-        songs_limit: user.songs_limit
+        songs_used: quotaCheck.songs_used,
+        songs_limit: quotaCheck.songs_limit
       });
-    }
-    // Kullanımı artır
-    if (user) {
-      console.log(`DEBUG: Incrementing quota for ${email}, current: ${user.songs_used}`);
-      const updated = await incrementUsage(email, user.songs_used);
-      console.log(`DEBUG: Increment result: ${updated}`);
-      if (!updated) {
-        console.error(`Quota update failed for ${email}`);
-      }
-    } else {
-      console.error(`DEBUG: User not found after getUser for ${email}`);
     }
   }
 
@@ -115,7 +76,7 @@ export default async function handler(req, res) {
     const response = await fetch('https://api.kie.ai/api/v1/generate', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.KIE_API_KEY}`,
+        'Authorization': `Bearer ${KIE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -135,6 +96,12 @@ export default async function handler(req, res) {
 
     if (!response.ok || data.code !== 200) {
       return res.status(200).json({ error: data.msg || data.message || ('kie.ai hata kodu: ' + data.code), raw: data });
+    }
+
+    // Success - increment quota after successful generation
+    if (email) {
+      const quotaUse = await useQuota(email);
+      console.log('Quota incremented:', quotaUse.songs_used);
     }
 
     return res.status(200).json(data);
