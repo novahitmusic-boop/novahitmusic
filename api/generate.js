@@ -73,6 +73,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    console.log('Sending to kie.ai:', JSON.stringify({ prompt, style, title, customMode: true }));
+
     const response = await fetch('https://api.kie.ai/api/v1/generate', {
       method: 'POST',
       headers: {
@@ -92,10 +94,26 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    console.log('kie.ai response:', JSON.stringify(data));
+    console.log('kie.ai raw response:', JSON.stringify(data), 'status:', response.status);
 
-    if (!response.ok || data.code !== 200) {
-      return res.status(200).json({ error: data.msg || data.message || ('kie.ai hata kodu: ' + data.code), raw: data });
+    // Check for kie.ai errors
+    if (!response.ok || (data.code && data.code !== 200)) {
+      const errMsg = data.msg || data.message || data.error || ('kie.ai hata: ' + (data.code || response.status));
+      console.error('kie.ai error:', errMsg, 'full response:', data);
+      return res.status(400).json({
+        error: 'Müzik üretimi başarısız: ' + errMsg,
+        code: data.code,
+        raw: data
+      });
+    }
+
+    // Verify taskId exists in response
+    if (!data.data || !data.data.taskId) {
+      console.error('No taskId in kie.ai response:', data);
+      return res.status(400).json({
+        error: 'kie.ai taskId döndürmedi (yanıt formatı sorunlu)',
+        raw: data
+      });
     }
 
     // Success - increment quota after successful generation
@@ -106,6 +124,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (err) {
+    console.error('Generate API error:', err.message, err.stack);
     return res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
   }
 }

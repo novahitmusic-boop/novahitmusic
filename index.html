@@ -2856,6 +2856,7 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         };
 
         var data = null;
+        var genError = null;
         try {
           var controller = new AbortController();
           var timeoutId = setTimeout(function() { controller.abort(); }, 30000);
@@ -2866,12 +2867,39 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
             signal: controller.signal,
           });
           clearTimeout(timeoutId);
-          if (response.ok) {
-            data = await response.json();
-            if (data.error === 'quota_exceeded') { openPaywall(); return; }
+
+          data = await response.json();
+
+          // Handle API errors
+          if (!response.ok) {
+            genError = data.error || 'API hata: ' + response.status;
+          } else if (data.error === 'quota_exceeded') {
+            openPaywall();
+            return;
           }
         } catch (err) {
+          genError = err.message || 'Bağlantı hatası';
+          console.error('Generate error:', err);
           await new Promise(function(r) { setTimeout(r, 2800); });
+        }
+
+        // Clear loading spinner
+        clearInterval(window._loadingMsgTimer);
+        document.getElementById('loading-state').style.display = 'none';
+
+        // If error occurred, show error message
+        if (genError) {
+          var errorEl = document.getElementById('result-title');
+          if (errorEl) {
+            errorEl.textContent = '❌ Müzik Üretilemedi';
+          }
+          var descEl = document.getElementById('result-genre');
+          if (descEl) {
+            descEl.textContent = genError + '. Lütfen tekrar deneyin.';
+          }
+          document.getElementById('result-state').style.display = 'block';
+          setTimeout(showKlipStudio, 1500);
+          return;
         }
 
         // taskId varsa polling başlat
@@ -2880,7 +2908,12 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
           showResult(data, email);  // Pass email for server quota check
           pollSongStatus(taskId);
         } else {
-          showResult(data, email);  // Pass email for server quota check
+          // No taskId and no error = unexpected response structure
+          console.error('No taskId in response:', data);
+          document.getElementById('result-title').textContent = '⚠️ Beklenmedik Yanıt';
+          document.getElementById('result-genre').textContent = 'Lütfen tekrar deneyin.';
+          document.getElementById('result-state').style.display = 'block';
+          setTimeout(showKlipStudio, 1500);
         }
       });
     }
@@ -2891,8 +2924,9 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
       var genre = (data && data.genre) ? data.genre : ((wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu') + ' · 3:24');
       document.getElementById('result-title').textContent = title;
       document.getElementById('result-genre').textContent = genre;
-      clearInterval(window._loadingMsgTimer);
-      document.getElementById('loading-state').style.display = 'none';
+      // Note: loading spinner is now cleared before calling this
+      // clearInterval(window._loadingMsgTimer);
+      // document.getElementById('loading-state').style.display = 'none';
       document.getElementById('result-state').style.display = 'block';
       applyVersionLocks(email);  // Pass email to use server quota
       setTimeout(showKlipStudio, 1500);
@@ -2901,6 +2935,7 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
     var _pollInterval = null;
     function pollSongStatus(taskId) {
       var attempts = 0;
+      var maxAttempts = 240; // 12 dakika (240 * 3000ms)
       // Butonları devre dışı bırak
       document.querySelectorAll('#versionsWrap .btn-version.play').forEach(function(b){
         b.textContent = '⏳ Hazırlanıyor';
@@ -2911,9 +2946,14 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
 
       _pollInterval = setInterval(async function() {
         attempts++;
-        if (attempts > 60) { // 3 dk timeout
+        if (attempts > maxAttempts) { // 12 dk timeout
           clearInterval(_pollInterval);
-          document.getElementById('result-genre').textContent = 'Üretim tamamlandı — ses kaydedildi';
+          document.getElementById('result-genre').textContent = '❌ Üretim çok uzun sürüyor. Lütfen tekrar deneyin.';
+          var retryBtn = document.createElement('button');
+          retryBtn.textContent = '🔄 Tekrar Dene';
+          retryBtn.style.cssText = 'padding:10px 20px; background:#ff6b6b; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px; margin-top:10px;';
+          retryBtn.onclick = function() { generateMusic(); };
+          document.getElementById('result-genre').parentElement.appendChild(retryBtn);
           document.querySelectorAll('#versionsWrap .btn-version.play').forEach(function(b){
             b.textContent = '▶ Dinle'; b.disabled = false; b.style.opacity = '';
           });
@@ -2922,6 +2962,14 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         try {
           var r = await fetch('/api/status?taskId=' + encodeURIComponent(taskId));
           var d = await r.json();
+
+          // Check for API error
+          if (!r.ok || d.error) {
+            console.error('Status API error:', d.error || r.status);
+            // Don't fail immediately, keep polling
+            return;
+          }
+
           // kie.ai response yapısı: d.data.response.sunoData[] veya d.data.yanıt.sunoData[] (SUCCESS durumunda)
           var resp = d && d.data && (d.data.response || d.data['yanıt'] || d.data.yant);
           var audioList = resp && (resp.sunoData || resp.audioList || resp.songs);
@@ -2940,7 +2988,10 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
               document.getElementById('result-genre').textContent = (wizardState.emotion || 'Türkçe Pop') + ' · ' + (wizardState.power || 'Hit Modu');
             }
           }
-        } catch(e) { console.log('poll error', e); }
+        } catch(e) {
+          console.log('Poll error:', e.message);
+          // Keep polling on transient errors
+        }
       }, 3000);
     }
 
