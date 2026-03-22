@@ -2775,22 +2775,25 @@ Seni bulmak için yıldızlara baktım" aria-label="Şarkı sözleri"></textarea
         document.getElementById('wizard-fill').style.width = '100%';
         document.getElementById('step-indicator').textContent = 'Üretiliyor…';
 
-        // Kota kontrolü (async, doesn't block UI)
-        try {
-          var checkRes = await fetch('/api/auth', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, action: 'check' })
-          });
-          var checkData = await checkRes.json();
-          if (checkData.allowed === false) {
-            // Hide loading and show paywall
-            document.getElementById('loading-state').style.display = 'none';
-            document.getElementById('step-4').classList.add('active');
-            openPaywall();
-            return;
-          }
-        } catch(e) { /* kota API çalışmıyorsa devam et */ }
+        // Kota kontrolü — sahip emaili her zaman geçer
+        var OWNER_EMAILS = ['muratakbal@hotmail.com'];
+        var isOwner = OWNER_EMAILS.includes((email || '').toLowerCase().trim());
+        if (!isOwner) {
+          try {
+            var checkRes = await fetch('/api/auth', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, action: 'check' })
+            });
+            var checkData = await checkRes.json();
+            if (checkData.allowed === false) {
+              document.getElementById('loading-state').style.display = 'none';
+              document.getElementById('step-4').classList.add('active');
+              openPaywall();
+              return;
+            }
+          } catch(e) { /* kota API çalışmıyorsa devam et */ }
+        }
 
         var bar = document.getElementById('loading-bar');
         // Zamanla yumuşak ilerleme: 0→20→50→70→82→90
